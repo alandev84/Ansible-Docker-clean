@@ -1,0 +1,94 @@
+version: '3'
+
+networks:
+  custom:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
+
+services:
+  control:
+    container_name: control
+    hostname: control
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu
+    volumes:
+      - /home/jessenuc/Docker_Volume/control:/Ansible_proj
+      - /home/jessenuc/Docker_Volume/control/keys:/root/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.2
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped
+
+  lb:
+    container_name: lb
+    hostname: lb
+    privileged: true
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
+    volumes:
+      - /home/jessenuc/Docker_Volume/lb:/Ansible_proj
+      - /home/jessenuc/Docker_Volume/lb/keys:/home/devops/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.3
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped
+
+  app1:
+    container_name: app1
+    hostname: app1
+    privileged: true
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
+    volumes:
+      - /home/jessenuc/Docker_Volume/app1:/Ansible_proj
+      - /home/jessenuc/Docker_Volume/app1/keys:/home/devops/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.4
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped
+
+  app2:
+    container_name: app2
+    hostname: app2
+    privileged: true
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
+    volumes:
+      - /home/jessenuc/Docker_Volume/app2:/Ansible_proj
+      - /home/jessenuc/Docker_Volume/app2/keys:/home/devops/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.5
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped
+
+  db:
+    container_name: db
+    hostname: db
+    privileged: true
+    build:
+      context: .
+      dockerfile: Dockerfile.centos
+    volumes:
+      - /home/jessenuc/Docker_Volume/db:/Ansible_proj
+      - /home/jessenuc/Docker_Volume/db/keys:/home/devops/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.6
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped

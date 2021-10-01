@@ -1,0 +1,2 @@
+#crontab to run as root for docker container
+* * * * * (cd /scripts; ./run_ssh.sh)
