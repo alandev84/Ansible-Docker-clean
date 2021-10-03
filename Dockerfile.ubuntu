@@ -4,6 +4,7 @@ FROM ubuntu:latest
 #installation and update
 RUN apt-get update
 RUN apt-get upgrade -y
+RUN apt-get install sshpass -y
 RUN apt-get install net-tools -y
 RUN apt-get install sudo -y
 RUN apt-get install tree -y
