@@ -76,6 +76,23 @@ services:
     domainname: alan.io
     restart: unless-stopped
 
+  app3:
+    container_name: app3
+    hostname: app3
+    privileged: true
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu.client
+    volumes:
+      - /home/jessenuc/Docker_Proj/work_test/Docker_Volume/app3:/Ansible_proj
+      - /home/jessenuc/Docker_Proj/work_test/Docker_Volume/app3/keys:/home/devops/.ssh
+    networks:
+      custom:
+        ipv4_address: 192.168.2.6
+    dns: 8.8.8.8
+    domainname: alan.io
+    restart: unless-stopped
+
   db:
     container_name: db
     hostname: db
@@ -88,7 +105,7 @@ services:
       - /home/jessenuc/Docker_Proj/work_test/Docker_Volume/db/keys:/home/devops/.ssh
     networks:
       custom:
-        ipv4_address: 192.168.2.6
+        ipv4_address: 192.168.2.7
     dns: 8.8.8.8
     domainname: alan.io
     restart: unless-stopped
