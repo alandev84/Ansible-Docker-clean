@@ -1,7 +1,7 @@
 ---
 all:
   children:
-    prod:
+    uat:
       children:
         Application:
           hosts:
@@ -9,8 +9,6 @@ all:
               ansible_host: app1
             app2:
               ansible_host: app2
-            app3:
-              ansible_host: app3
         Loadbalancer:
           hosts:
             lb:

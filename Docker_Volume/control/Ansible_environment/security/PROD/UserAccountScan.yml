@@ -1,0 +1,8 @@
+---
+  - name: playbook for User Account scan for all BCS Nodes
+    hosts: prod
+    become: true
+    roles:
+      - Wintel
+      - Linux
+      - Network

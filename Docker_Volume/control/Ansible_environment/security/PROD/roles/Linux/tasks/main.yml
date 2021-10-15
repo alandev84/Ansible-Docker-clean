@@ -1,0 +1,10 @@
+---
+# tasks file for systems
+  - import_tasks: Ubuntu_Baseline.yml
+  - import_tasks: RHEL_Baseline.yml
+  - import_tasks: Centos_Baseline.yml
+  - import_tasks: Solaris_Baseline.yml
+  - import_tasks: Ubuntu_UAR.yml
+  - import_tasks: RHEL_UAR.yml
+  - import_tasks: Centos_UAR.yml
+  - import_tasks: Solaris_UAR.yml

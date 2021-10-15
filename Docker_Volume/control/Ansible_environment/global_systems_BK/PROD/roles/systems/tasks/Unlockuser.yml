@@ -1,0 +1,7 @@
+---
+  - name: Unlock users
+    user:
+      name: test1
+      password_lock: False
+      state: present
+      uid: 5003

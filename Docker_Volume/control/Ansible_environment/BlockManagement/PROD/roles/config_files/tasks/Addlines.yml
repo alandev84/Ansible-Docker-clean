@@ -1,0 +1,9 @@
+---
+  - name: add lines to config file
+    lineinfile:
+      dest: /tmp/test.conf
+      line: "test"
+      state: present
+      create: true
+    tags:
+      - AddLine

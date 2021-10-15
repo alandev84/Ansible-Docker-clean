@@ -1,0 +1,12 @@
+---
+# tasks file for systems
+  - import_tasks: IOS_Switch_Baseline.yml
+  - import_tasks: IOS_Router_Baseline.yml
+  - import_tasks: Juniper_Router_Baseline.yml
+  - import_tasks: Firewall_Baseline.yml
+  - import_tasks: VPN_Baseline.yml
+  - import_tasks: IOS_Switch_UAR.yml
+  - import_tasks: IOS_Router_UAR.yml
+  - import_tasks: Juniper_Router_UAR.yml
+  - import_tasks: Firewall_UAR.yml
+  - import_tasks: VPN_UAR.yml

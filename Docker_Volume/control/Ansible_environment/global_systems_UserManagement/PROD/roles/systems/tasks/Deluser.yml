@@ -1,0 +1,9 @@
+---
+  - name: Delete users
+    user:
+      name: "{{ uname.0 }}"
+      state: absent
+      remove: true
+    with_items: "{{ uname }}"
+    tags:
+      - DeleteUser

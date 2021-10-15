@@ -1,0 +1,12 @@
+---
+  - name: test var
+    hosts: prod
+    become: true
+    vars:
+      user_name: Alan
+
+    tasks:
+      - name: create user of {{ user_name }}
+        user:
+          name: "{{ user_name }}"
+          state: present

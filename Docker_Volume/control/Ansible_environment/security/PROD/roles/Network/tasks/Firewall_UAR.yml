@@ -1,0 +1,41 @@
+---
+  - name: Create Group
+    group:
+      name: "{{ item }}"
+      state: present
+    loop: "{{ group }}"
+    tags:
+      - AddGroupUser
+
+  - name: Add users to group
+    user:
+      name: "{{ item.0 }}"
+      password: ""
+      group: "{{ item.1 }}"
+      update_password: on_create
+      state: present
+    loop: "{{ users | zip(group) | list }}"
+    tags:
+      - AddGroupUser
+
+  - name: force user change password
+    shell: chage -d 0 "{{ item }}"
+    loop: "{{ users }}"
+    tags:
+      - AddGroupUser
+
+  - name: Add users
+    user:
+      name: "{{ item }}"
+      password: ""
+      update_password: on_create
+      state: present
+    loop: "{{ users }}"
+    tags:
+      - AddUser
+
+  - name: force user change password
+    shell: chage -d 0 "{{ item }}"
+    loop: "{{ users }}"
+    tags:
+      - AddUser

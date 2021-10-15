@@ -1,0 +1,9 @@
+---
+  - name: Unlock users
+    user:
+      name: "{{ uname.0 }}"
+      password_lock: False
+      state: present
+    with_items: "{{ uname }}"
+    tags:
+      - UnlockUser

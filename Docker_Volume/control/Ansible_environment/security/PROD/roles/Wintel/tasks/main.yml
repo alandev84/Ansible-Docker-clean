@@ -1,0 +1,10 @@
+---
+# tasks file for systems
+  - import_tasks: WinSer2012_Baseline.yml
+  - import_tasks: WinSer2016_Baseline.yml
+  - import_tasks: WinSer2019_Baseline.yml
+  - import_tasks: WinSer2021_Baseline.yml
+  - import_tasks: WinSer2012_UAR.yml
+  - import_tasks: WinSer2016_UAR.yml
+  - import_tasks: WinSer2019_UAR.yml
+  - import_tasks: WinSer2021_UAR.yml

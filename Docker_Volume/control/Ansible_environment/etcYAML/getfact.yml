@@ -1,0 +1,12 @@
+---
+  - name: Get all facts
+    hosts: all
+
+    tasks:
+      - name: display all facts
+        debug:
+          var: ansible_facts
+
+      - name: display a list of all ipv4
+        debug:
+          var: ansible_facts['os_family']

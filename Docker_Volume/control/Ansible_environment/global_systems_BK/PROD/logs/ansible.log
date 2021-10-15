@@ -1,0 +1,507 @@
+2021-10-04 01:08:40,907 p=134 u=root n=ansible | Encryption successful
+2021-10-04 01:10:05,090 p=143 u=root n=ansible | Encryption successful
+2021-10-04 01:14:49,235 p=177 u=root n=ansible | app1 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+2021-10-04 01:14:49,239 p=177 u=root n=ansible | lb | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+2021-10-04 01:14:49,244 p=177 u=root n=ansible | app2 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+2021-10-04 01:14:49,246 p=177 u=root n=ansible | db | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "ping": "pong"
+}
+2021-10-04 01:15:39,610 p=286 u=root n=ansible | PLAY [add user] ********************************************************************************************************************************************
+2021-10-04 01:15:39,619 p=286 u=root n=ansible | TASK [Gathering Facts] *************************************************************************************************************************************
+2021-10-04 01:15:42,647 p=286 u=root n=ansible | ok: [db]
+2021-10-04 01:15:42,650 p=286 u=root n=ansible | ok: [app1]
+2021-10-04 01:15:42,869 p=286 u=root n=ansible | ok: [app2]
+2021-10-04 01:15:42,906 p=286 u=root n=ansible | ok: [lb]
+2021-10-04 01:15:42,920 p=286 u=root n=ansible | TASK [user A] **********************************************************************************************************************************************
+2021-10-04 01:15:43,776 p=286 u=root n=ansible | changed: [app1]
+2021-10-04 01:15:43,779 p=286 u=root n=ansible | changed: [lb]
+2021-10-04 01:15:43,784 p=286 u=root n=ansible | changed: [app2]
+2021-10-04 01:15:43,789 p=286 u=root n=ansible | changed: [db]
+2021-10-04 01:15:43,806 p=286 u=root n=ansible | PLAY RECAP *************************************************************************************************************************************************
+2021-10-04 01:15:43,807 p=286 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:15:43,807 p=286 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:15:43,807 p=286 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:15:43,807 p=286 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:22:53,946 p=501 u=root n=ansible | - Role systems was created successfully
+2021-10-04 01:35:46,763 p=600 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:35:46,772 p=600 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:35:51,062 p=600 u=root n=ansible | ok: [app2]
+2021-10-04 01:35:51,138 p=600 u=root n=ansible | ok: [db]
+2021-10-04 01:35:51,286 p=600 u=root n=ansible | ok: [app1]
+2021-10-04 01:35:51,298 p=600 u=root n=ansible | ok: [lb]
+2021-10-04 01:35:51,311 p=600 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:35:52,075 p=600 u=root n=ansible | ok: [db]
+2021-10-04 01:35:52,092 p=600 u=root n=ansible | ok: [lb]
+2021-10-04 01:35:52,137 p=600 u=root n=ansible | ok: [app1]
+2021-10-04 01:35:52,155 p=600 u=root n=ansible | ok: [app2]
+2021-10-04 01:35:52,164 p=600 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 01:35:52,897 p=600 u=root n=ansible | changed: [db]
+2021-10-04 01:35:52,920 p=600 u=root n=ansible | changed: [app2]
+2021-10-04 01:35:52,927 p=600 u=root n=ansible | changed: [app1]
+2021-10-04 01:35:52,955 p=600 u=root n=ansible | changed: [lb]
+2021-10-04 01:35:52,992 p=600 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:35:52,992 p=600 u=root n=ansible | app1                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:35:52,992 p=600 u=root n=ansible | app2                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:35:52,992 p=600 u=root n=ansible | db                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:35:52,992 p=600 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:43:50,856 p=887 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:43:50,864 p=887 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:43:54,151 p=887 u=root n=ansible | ok: [app1]
+2021-10-04 01:43:54,175 p=887 u=root n=ansible | ok: [db]
+2021-10-04 01:43:54,246 p=887 u=root n=ansible | ok: [lb]
+2021-10-04 01:43:54,275 p=887 u=root n=ansible | ok: [app2]
+2021-10-04 01:43:54,290 p=887 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:43:55,099 p=887 u=root n=ansible | changed: [lb]
+2021-10-04 01:43:55,106 p=887 u=root n=ansible | changed: [app2]
+2021-10-04 01:43:55,213 p=887 u=root n=ansible | changed: [app1]
+2021-10-04 01:43:55,213 p=887 u=root n=ansible | changed: [db]
+2021-10-04 01:43:55,249 p=887 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:43:55,249 p=887 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:43:55,249 p=887 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:43:55,249 p=887 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:43:55,249 p=887 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:48:47,866 p=1084 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:48:47,874 p=1084 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:48:52,083 p=1084 u=root n=ansible | ok: [lb]
+2021-10-04 01:48:52,164 p=1084 u=root n=ansible | ok: [app2]
+2021-10-04 01:48:52,369 p=1084 u=root n=ansible | ok: [app1]
+2021-10-04 01:48:52,377 p=1084 u=root n=ansible | ok: [db]
+2021-10-04 01:48:52,392 p=1084 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:48:53,135 p=1084 u=root n=ansible | ok: [db]
+2021-10-04 01:48:53,156 p=1084 u=root n=ansible | ok: [lb]
+2021-10-04 01:48:53,240 p=1084 u=root n=ansible | ok: [app1]
+2021-10-04 01:48:53,248 p=1084 u=root n=ansible | ok: [app2]
+2021-10-04 01:48:53,260 p=1084 u=root n=ansible | TASK [systems : Unlock users] ************************************************************************************************************
+2021-10-04 01:48:53,893 p=1084 u=root n=ansible | ok: [app1]
+2021-10-04 01:48:53,934 p=1084 u=root n=ansible | ok: [app2]
+2021-10-04 01:48:53,956 p=1084 u=root n=ansible | ok: [db]
+2021-10-04 01:48:54,068 p=1084 u=root n=ansible | changed: [lb]
+2021-10-04 01:48:54,106 p=1084 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:48:54,106 p=1084 u=root n=ansible | app1                       : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:48:54,106 p=1084 u=root n=ansible | app2                       : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:48:54,106 p=1084 u=root n=ansible | db                         : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:48:54,106 p=1084 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:50:39,040 p=1333 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:50:39,048 p=1333 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:50:42,585 p=1333 u=root n=ansible | ok: [db]
+2021-10-04 01:50:42,636 p=1333 u=root n=ansible | ok: [app1]
+2021-10-04 01:50:42,688 p=1333 u=root n=ansible | ok: [lb]
+2021-10-04 01:50:42,725 p=1333 u=root n=ansible | ok: [app2]
+2021-10-04 01:50:42,741 p=1333 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:50:43,489 p=1333 u=root n=ansible | ok: [db]
+2021-10-04 01:50:43,492 p=1333 u=root n=ansible | ok: [lb]
+2021-10-04 01:50:43,501 p=1333 u=root n=ansible | ok: [app1]
+2021-10-04 01:50:43,510 p=1333 u=root n=ansible | ok: [app2]
+2021-10-04 01:50:43,518 p=1333 u=root n=ansible | TASK [systems : Unlock users] ************************************************************************************************************
+2021-10-04 01:50:44,279 p=1333 u=root n=ansible | fatal: [app1]: FAILED! => {"changed": false, "msg": "usermod: unlocking the user's password would result in a passwordless account.\nYou should set a password with usermod -p to unlock this user's password.\n", "name": "test1", "rc": 1}
+2021-10-04 01:50:44,301 p=1333 u=root n=ansible | fatal: [app2]: FAILED! => {"changed": false, "msg": "usermod: unlocking the user's password would result in a passwordless account.\nYou should set a password with usermod -p to unlock this user's password.\n", "name": "test1", "rc": 1}
+2021-10-04 01:50:44,367 p=1333 u=root n=ansible | fatal: [db]: FAILED! => {"changed": false, "msg": "usermod: unlocking the user's password would result in a passwordless account.\nYou should set a password with usermod -p to unlock this user's password.\n", "name": "test1", "rc": 1}
+2021-10-04 01:50:44,378 p=1333 u=root n=ansible | changed: [lb]
+2021-10-04 01:50:44,401 p=1333 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:50:44,401 p=1333 u=root n=ansible | app1                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:50:44,401 p=1333 u=root n=ansible | app2                       : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:50:44,401 p=1333 u=root n=ansible | db                         : ok=2    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:50:44,402 p=1333 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:52:56,321 p=1575 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:52:56,330 p=1575 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:52:59,533 p=1575 u=root n=ansible | ok: [app2]
+2021-10-04 01:52:59,824 p=1575 u=root n=ansible | ok: [db]
+2021-10-04 01:52:59,877 p=1575 u=root n=ansible | ok: [lb]
+2021-10-04 01:52:59,889 p=1575 u=root n=ansible | ok: [app1]
+2021-10-04 01:52:59,904 p=1575 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:53:00,688 p=1575 u=root n=ansible | ok: [app1]
+2021-10-04 01:53:00,760 p=1575 u=root n=ansible | ok: [db]
+2021-10-04 01:53:00,764 p=1575 u=root n=ansible | ok: [app2]
+2021-10-04 01:53:00,815 p=1575 u=root n=ansible | changed: [lb]
+2021-10-04 01:53:00,824 p=1575 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 01:53:01,463 p=1575 u=root n=ansible | changed: [app1]
+2021-10-04 01:53:01,509 p=1575 u=root n=ansible | fatal: [lb]: FAILED! => {"changed": false, "msg": "userdel: user test1 is currently used by process 1636\n", "name": "test1", "rc": 8}
+2021-10-04 01:53:01,530 p=1575 u=root n=ansible | changed: [app2]
+2021-10-04 01:53:01,581 p=1575 u=root n=ansible | changed: [db]
+2021-10-04 01:53:01,615 p=1575 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:53:01,615 p=1575 u=root n=ansible | app1                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:01,615 p=1575 u=root n=ansible | app2                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:01,615 p=1575 u=root n=ansible | db                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:01,615 p=1575 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:21,448 p=1808 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:53:21,458 p=1808 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:53:25,666 p=1808 u=root n=ansible | ok: [app1]
+2021-10-04 01:53:25,714 p=1808 u=root n=ansible | ok: [db]
+2021-10-04 01:53:25,771 p=1808 u=root n=ansible | ok: [app2]
+2021-10-04 01:53:25,783 p=1808 u=root n=ansible | ok: [lb]
+2021-10-04 01:53:25,799 p=1808 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:53:26,613 p=1808 u=root n=ansible | ok: [lb]
+2021-10-04 01:53:26,683 p=1808 u=root n=ansible | changed: [app1]
+2021-10-04 01:53:26,710 p=1808 u=root n=ansible | changed: [db]
+2021-10-04 01:53:26,723 p=1808 u=root n=ansible | changed: [app2]
+2021-10-04 01:53:26,733 p=1808 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 01:53:27,410 p=1808 u=root n=ansible | changed: [app1]
+2021-10-04 01:53:27,446 p=1808 u=root n=ansible | changed: [app2]
+2021-10-04 01:53:27,478 p=1808 u=root n=ansible | changed: [lb]
+2021-10-04 01:53:27,501 p=1808 u=root n=ansible | changed: [db]
+2021-10-04 01:53:27,543 p=1808 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:53:27,543 p=1808 u=root n=ansible | app1                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:27,543 p=1808 u=root n=ansible | app2                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:27,543 p=1808 u=root n=ansible | db                         : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:27,544 p=1808 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:49,455 p=2024 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:53:49,465 p=2024 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:53:53,273 p=2024 u=root n=ansible | ok: [db]
+2021-10-04 01:53:53,349 p=2024 u=root n=ansible | ok: [app2]
+2021-10-04 01:53:53,446 p=2024 u=root n=ansible | ok: [lb]
+2021-10-04 01:53:53,473 p=2024 u=root n=ansible | ok: [app1]
+2021-10-04 01:53:53,488 p=2024 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:53:54,272 p=2024 u=root n=ansible | changed: [db]
+2021-10-04 01:53:54,278 p=2024 u=root n=ansible | changed: [app1]
+2021-10-04 01:53:54,318 p=2024 u=root n=ansible | changed: [lb]
+2021-10-04 01:53:54,329 p=2024 u=root n=ansible | changed: [app2]
+2021-10-04 01:53:54,368 p=2024 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:53:54,368 p=2024 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:54,368 p=2024 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:54,369 p=2024 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:53:54,369 p=2024 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:56:22,238 p=2195 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:56:22,247 p=2195 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:56:26,525 p=2195 u=root n=ansible | ok: [lb]
+2021-10-04 01:56:26,740 p=2195 u=root n=ansible | ok: [app1]
+2021-10-04 01:56:26,799 p=2195 u=root n=ansible | ok: [db]
+2021-10-04 01:56:26,954 p=2195 u=root n=ansible | ok: [app2]
+2021-10-04 01:56:26,969 p=2195 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 01:56:27,783 p=2195 u=root n=ansible | changed: [lb]
+2021-10-04 01:56:27,798 p=2195 u=root n=ansible | changed: [db]
+2021-10-04 01:56:27,800 p=2195 u=root n=ansible | changed: [app1]
+2021-10-04 01:56:27,830 p=2195 u=root n=ansible | changed: [app2]
+2021-10-04 01:56:27,869 p=2195 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:56:27,870 p=2195 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:56:27,870 p=2195 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:56:27,870 p=2195 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:56:27,871 p=2195 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:57:13,550 p=2365 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 01:57:13,558 p=2365 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 01:57:16,696 p=2365 u=root n=ansible | ok: [app1]
+2021-10-04 01:57:16,728 p=2365 u=root n=ansible | ok: [db]
+2021-10-04 01:57:16,758 p=2365 u=root n=ansible | ok: [lb]
+2021-10-04 01:57:16,805 p=2365 u=root n=ansible | ok: [app2]
+2021-10-04 01:57:16,820 p=2365 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 01:57:17,466 p=2365 u=root n=ansible | fatal: [app2]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: command. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 01:57:17,470 p=2365 u=root n=ansible | fatal: [db]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: command. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 01:57:17,480 p=2365 u=root n=ansible | fatal: [lb]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: command. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 01:57:17,484 p=2365 u=root n=ansible | fatal: [app1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: command. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 01:57:17,486 p=2365 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 01:57:17,487 p=2365 u=root n=ansible | app1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:57:17,487 p=2365 u=root n=ansible | app2                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:57:17,488 p=2365 u=root n=ansible | db                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 01:57:17,488 p=2365 u=root n=ansible | lb                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:00:11,982 p=2535 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:00:11,991 p=2535 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:00:16,136 p=2535 u=root n=ansible | ok: [app1]
+2021-10-04 02:00:16,188 p=2535 u=root n=ansible | ok: [lb]
+2021-10-04 02:00:16,263 p=2535 u=root n=ansible | ok: [db]
+2021-10-04 02:00:16,267 p=2535 u=root n=ansible | ok: [app2]
+2021-10-04 02:00:16,281 p=2535 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:00:17,043 p=2535 u=root n=ansible | fatal: [app2]: FAILED! => {"changed": false, "msg": "useradd: invalid shell 'chage -d 0 test1'\n", "name": "test1", "rc": 3}
+2021-10-04 02:00:17,044 p=2535 u=root n=ansible | fatal: [app1]: FAILED! => {"changed": false, "msg": "useradd: invalid shell 'chage -d 0 test1'\n", "name": "test1", "rc": 3}
+2021-10-04 02:00:17,050 p=2535 u=root n=ansible | fatal: [lb]: FAILED! => {"changed": false, "msg": "useradd: invalid shell 'chage -d 0 test1'\n", "name": "test1", "rc": 3}
+2021-10-04 02:00:17,053 p=2535 u=root n=ansible | fatal: [db]: FAILED! => {"changed": false, "msg": "useradd: invalid shell 'chage -d 0 test1'\n", "name": "test1", "rc": 3}
+2021-10-04 02:00:17,056 p=2535 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:00:17,056 p=2535 u=root n=ansible | app1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:00:17,056 p=2535 u=root n=ansible | app2                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:00:17,056 p=2535 u=root n=ansible | db                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:00:17,056 p=2535 u=root n=ansible | lb                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:07:57,062 p=2741 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:07:57,071 p=2741 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:08:00,349 p=2741 u=root n=ansible | ok: [lb]
+2021-10-04 02:08:00,405 p=2741 u=root n=ansible | ok: [db]
+2021-10-04 02:08:00,409 p=2741 u=root n=ansible | ok: [app1]
+2021-10-04 02:08:00,436 p=2741 u=root n=ansible | ok: [app2]
+2021-10-04 02:08:00,452 p=2741 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:08:01,265 p=2741 u=root n=ansible | changed: [app1]
+2021-10-04 02:08:01,269 p=2741 u=root n=ansible | changed: [app2]
+2021-10-04 02:08:01,370 p=2741 u=root n=ansible | changed: [lb]
+2021-10-04 02:08:01,381 p=2741 u=root n=ansible | changed: [db]
+2021-10-04 02:08:01,420 p=2741 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:08:01,420 p=2741 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:08:01,420 p=2741 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:08:01,420 p=2741 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:08:01,420 p=2741 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:08:58,070 p=2911 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:08:58,078 p=2911 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:09:01,839 p=2911 u=root n=ansible | ok: [app2]
+2021-10-04 02:09:01,970 p=2911 u=root n=ansible | ok: [app1]
+2021-10-04 02:09:01,992 p=2911 u=root n=ansible | ok: [db]
+2021-10-04 02:09:02,039 p=2911 u=root n=ansible | ok: [lb]
+2021-10-04 02:09:02,053 p=2911 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:09:02,824 p=2911 u=root n=ansible | ok: [app2]
+2021-10-04 02:09:02,825 p=2911 u=root n=ansible | ok: [app1]
+2021-10-04 02:09:02,838 p=2911 u=root n=ansible | ok: [lb]
+2021-10-04 02:09:02,847 p=2911 u=root n=ansible | ok: [db]
+2021-10-04 02:09:02,855 p=2911 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 02:09:03,543 p=2911 u=root n=ansible | changed: [app2]
+2021-10-04 02:09:03,584 p=2911 u=root n=ansible | changed: [db]
+2021-10-04 02:09:03,597 p=2911 u=root n=ansible | changed: [app1]
+2021-10-04 02:09:03,622 p=2911 u=root n=ansible | changed: [lb]
+2021-10-04 02:09:03,658 p=2911 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:09:03,658 p=2911 u=root n=ansible | app1                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:03,658 p=2911 u=root n=ansible | app2                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:03,658 p=2911 u=root n=ansible | db                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:03,659 p=2911 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:21,847 p=3133 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:09:21,856 p=3133 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:09:24,028 p=3133 u=root n=ansible | ok: [app2]
+2021-10-04 02:09:24,057 p=3133 u=root n=ansible | ok: [lb]
+2021-10-04 02:09:24,115 p=3133 u=root n=ansible | ok: [db]
+2021-10-04 02:09:24,135 p=3133 u=root n=ansible | ok: [app1]
+2021-10-04 02:09:24,166 p=3133 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:09:24,935 p=3133 u=root n=ansible | changed: [lb]
+2021-10-04 02:09:24,978 p=3133 u=root n=ansible | changed: [app1]
+2021-10-04 02:09:24,998 p=3133 u=root n=ansible | changed: [app2]
+2021-10-04 02:09:25,009 p=3133 u=root n=ansible | changed: [db]
+2021-10-04 02:09:25,048 p=3133 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:09:25,048 p=3133 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:25,048 p=3133 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:25,048 p=3133 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:09:25,048 p=3133 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:30,530 p=3329 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:16:30,538 p=3329 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:16:33,758 p=3329 u=root n=ansible | ok: [app2]
+2021-10-04 02:16:33,791 p=3329 u=root n=ansible | ok: [lb]
+2021-10-04 02:16:33,853 p=3329 u=root n=ansible | ok: [db]
+2021-10-04 02:16:33,898 p=3329 u=root n=ansible | ok: [app1]
+2021-10-04 02:16:33,915 p=3329 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 02:16:34,706 p=3329 u=root n=ansible | changed: [lb]
+2021-10-04 02:16:34,714 p=3329 u=root n=ansible | changed: [app1]
+2021-10-04 02:16:34,793 p=3329 u=root n=ansible | changed: [app2]
+2021-10-04 02:16:34,810 p=3329 u=root n=ansible | changed: [db]
+2021-10-04 02:16:34,846 p=3329 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:16:34,846 p=3329 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:34,846 p=3329 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:34,846 p=3329 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:34,847 p=3329 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:50,371 p=3493 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:16:50,379 p=3493 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:16:52,563 p=3493 u=root n=ansible | ok: [app1]
+2021-10-04 02:16:52,573 p=3493 u=root n=ansible | ok: [db]
+2021-10-04 02:16:52,635 p=3493 u=root n=ansible | ok: [app2]
+2021-10-04 02:16:52,682 p=3493 u=root n=ansible | ok: [lb]
+2021-10-04 02:16:52,709 p=3493 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:16:53,289 p=3493 u=root n=ansible | fatal: [app2]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: force_pwchange. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 02:16:53,291 p=3493 u=root n=ansible | fatal: [lb]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: force_pwchange. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 02:16:53,294 p=3493 u=root n=ansible | fatal: [db]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: force_pwchange. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 02:16:53,311 p=3493 u=root n=ansible | fatal: [app1]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (user) module: force_pwchange. Supported parameters include: comment, ssh_key_bits, update_password, non_unique, force, skeleton, create_home (createhome), password_lock, ssh_key_passphrase, uid, home, append, ssh_key_type, ssh_key_comment, group, system, state, role, hidden, local, authorization, profile, shell, expires, password_expire_max, groups, move_home, password, password_expire_min, seuser, name (user), remove, ssh_key_file, login_class, generate_ssh_key."}
+2021-10-04 02:16:53,313 p=3493 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:16:53,314 p=3493 u=root n=ansible | app1                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:53,314 p=3493 u=root n=ansible | app2                       : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:53,314 p=3493 u=root n=ansible | db                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:16:53,315 p=3493 u=root n=ansible | lb                         : ok=1    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:19:49,690 p=3666 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:19:49,698 p=3666 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:19:53,865 p=3666 u=root n=ansible | ok: [db]
+2021-10-04 02:19:53,901 p=3666 u=root n=ansible | ok: [lb]
+2021-10-04 02:19:53,971 p=3666 u=root n=ansible | ok: [app2]
+2021-10-04 02:19:54,015 p=3666 u=root n=ansible | ok: [app1]
+2021-10-04 02:19:54,029 p=3666 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:19:54,830 p=3666 u=root n=ansible | changed: [db]
+2021-10-04 02:19:54,833 p=3666 u=root n=ansible | changed: [app1]
+2021-10-04 02:19:54,861 p=3666 u=root n=ansible | changed: [lb]
+2021-10-04 02:19:54,868 p=3666 u=root n=ansible | changed: [app2]
+2021-10-04 02:19:54,877 p=3666 u=root n=ansible | TASK [systems : force user change password] **********************************************************************************************
+2021-10-04 02:19:55,563 p=3666 u=root n=ansible | changed: [db]
+2021-10-04 02:19:55,568 p=3666 u=root n=ansible | changed: [lb]
+2021-10-04 02:19:55,569 p=3666 u=root n=ansible | changed: [app1]
+2021-10-04 02:19:55,577 p=3666 u=root n=ansible | changed: [app2]
+2021-10-04 02:19:55,617 p=3666 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:19:55,617 p=3666 u=root n=ansible | app1                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:19:55,617 p=3666 u=root n=ansible | app2                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:19:55,617 p=3666 u=root n=ansible | db                         : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:19:55,617 p=3666 u=root n=ansible | lb                         : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:24:04,809 p=3930 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:24:04,817 p=3930 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:24:08,051 p=3930 u=root n=ansible | ok: [db]
+2021-10-04 02:24:08,137 p=3930 u=root n=ansible | ok: [lb]
+2021-10-04 02:24:08,164 p=3930 u=root n=ansible | ok: [app2]
+2021-10-04 02:24:08,184 p=3930 u=root n=ansible | ok: [app1]
+2021-10-04 02:24:08,199 p=3930 u=root n=ansible | TASK [systems : Force user to change password when login] ********************************************************************************
+2021-10-04 02:24:09,652 p=3930 u=root n=ansible | changed: [app1]
+2021-10-04 02:24:09,683 p=3930 u=root n=ansible | changed: [app2]
+2021-10-04 02:24:09,692 p=3930 u=root n=ansible | changed: [db]
+2021-10-04 02:24:09,705 p=3930 u=root n=ansible | changed: [lb]
+2021-10-04 02:24:09,741 p=3930 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:24:09,742 p=3930 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:24:09,742 p=3930 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:24:09,742 p=3930 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:24:09,742 p=3930 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:26:38,186 p=4106 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:26:38,193 p=4106 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:26:40,493 p=4106 u=root n=ansible | ok: [app1]
+2021-10-04 02:26:40,512 p=4106 u=root n=ansible | ok: [app2]
+2021-10-04 02:26:40,580 p=4106 u=root n=ansible | ok: [db]
+2021-10-04 02:26:40,635 p=4106 u=root n=ansible | ok: [lb]
+2021-10-04 02:26:40,647 p=4106 u=root n=ansible | TASK [systems : Force user to change password when login] ********************************************************************************
+2021-10-04 02:26:41,501 p=4106 u=root n=ansible | changed: [db]
+2021-10-04 02:26:41,510 p=4106 u=root n=ansible | changed: [app2]
+2021-10-04 02:26:41,511 p=4106 u=root n=ansible | changed: [lb]
+2021-10-04 02:26:41,523 p=4106 u=root n=ansible | changed: [app1]
+2021-10-04 02:26:41,562 p=4106 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:26:41,562 p=4106 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:26:41,562 p=4106 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:26:41,562 p=4106 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:26:41,563 p=4106 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:08,154 p=4282 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:28:08,162 p=4282 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:28:10,477 p=4282 u=root n=ansible | ok: [app1]
+2021-10-04 02:28:10,488 p=4282 u=root n=ansible | ok: [lb]
+2021-10-04 02:28:10,497 p=4282 u=root n=ansible | ok: [db]
+2021-10-04 02:28:10,581 p=4282 u=root n=ansible | ok: [app2]
+2021-10-04 02:28:10,593 p=4282 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:28:11,336 p=4282 u=root n=ansible | ok: [app1]
+2021-10-04 02:28:11,356 p=4282 u=root n=ansible | ok: [app2]
+2021-10-04 02:28:11,358 p=4282 u=root n=ansible | ok: [lb]
+2021-10-04 02:28:11,359 p=4282 u=root n=ansible | ok: [db]
+2021-10-04 02:28:11,371 p=4282 u=root n=ansible | TASK [systems : force user change password] **********************************************************************************************
+2021-10-04 02:28:12,100 p=4282 u=root n=ansible | changed: [app1]
+2021-10-04 02:28:12,109 p=4282 u=root n=ansible | changed: [lb]
+2021-10-04 02:28:12,121 p=4282 u=root n=ansible | changed: [app2]
+2021-10-04 02:28:12,130 p=4282 u=root n=ansible | changed: [db]
+2021-10-04 02:28:12,140 p=4282 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 02:28:12,855 p=4282 u=root n=ansible | changed: [app2]
+2021-10-04 02:28:12,886 p=4282 u=root n=ansible | changed: [app1]
+2021-10-04 02:28:12,916 p=4282 u=root n=ansible | changed: [lb]
+2021-10-04 02:28:12,945 p=4282 u=root n=ansible | changed: [db]
+2021-10-04 02:28:12,986 p=4282 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:28:12,986 p=4282 u=root n=ansible | app1                       : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:12,986 p=4282 u=root n=ansible | app2                       : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:12,986 p=4282 u=root n=ansible | db                         : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:12,987 p=4282 u=root n=ansible | lb                         : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:29,187 p=4574 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:28:29,196 p=4574 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:28:31,400 p=4574 u=root n=ansible | ok: [app2]
+2021-10-04 02:28:31,507 p=4574 u=root n=ansible | ok: [app1]
+2021-10-04 02:28:31,609 p=4574 u=root n=ansible | ok: [lb]
+2021-10-04 02:28:31,656 p=4574 u=root n=ansible | ok: [db]
+2021-10-04 02:28:31,670 p=4574 u=root n=ansible | TASK [systems : Add users] ***************************************************************************************************************
+2021-10-04 02:28:32,471 p=4574 u=root n=ansible | changed: [app1]
+2021-10-04 02:28:32,478 p=4574 u=root n=ansible | changed: [db]
+2021-10-04 02:28:32,524 p=4574 u=root n=ansible | changed: [app2]
+2021-10-04 02:28:32,534 p=4574 u=root n=ansible | changed: [lb]
+2021-10-04 02:28:32,543 p=4574 u=root n=ansible | TASK [systems : force user change password] **********************************************************************************************
+2021-10-04 02:28:33,226 p=4574 u=root n=ansible | changed: [app2]
+2021-10-04 02:28:33,232 p=4574 u=root n=ansible | changed: [app1]
+2021-10-04 02:28:33,240 p=4574 u=root n=ansible | changed: [db]
+2021-10-04 02:28:33,250 p=4574 u=root n=ansible | changed: [lb]
+2021-10-04 02:28:33,290 p=4574 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:28:33,290 p=4574 u=root n=ansible | app1                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:33,290 p=4574 u=root n=ansible | app2                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:33,290 p=4574 u=root n=ansible | db                         : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:28:33,290 p=4574 u=root n=ansible | lb                         : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:39:40,867 p=4857 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:39:40,875 p=4857 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:39:43,508 p=4857 u=root n=ansible | ok: [lb]
+2021-10-04 02:39:43,635 p=4857 u=root n=ansible | ok: [app2]
+2021-10-04 02:39:43,665 p=4857 u=root n=ansible | ok: [db]
+2021-10-04 02:39:43,687 p=4857 u=root n=ansible | ok: [app1]
+2021-10-04 02:39:43,703 p=4857 u=root n=ansible | TASK [systems : Force user to change password when login] ********************************************************************************
+2021-10-04 02:39:44,519 p=4857 u=root n=ansible | ok: [app1]
+2021-10-04 02:39:44,567 p=4857 u=root n=ansible | ok: [db]
+2021-10-04 02:39:44,598 p=4857 u=root n=ansible | ok: [lb]
+2021-10-04 02:39:44,689 p=4857 u=root n=ansible | changed: [app2]
+2021-10-04 02:39:44,731 p=4857 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:39:44,731 p=4857 u=root n=ansible | app1                       : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:39:44,731 p=4857 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:39:44,731 p=4857 u=root n=ansible | db                         : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:39:44,731 p=4857 u=root n=ansible | lb                         : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:42:42,657 p=5042 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:42:42,665 p=5042 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:42:44,538 p=5042 u=root n=ansible | ok: [app1]
+2021-10-04 02:42:44,638 p=5042 u=root n=ansible | ok: [db]
+2021-10-04 02:42:45,541 p=5042 u=root n=ansible | ok: [app2]
+2021-10-04 02:42:45,725 p=5042 u=root n=ansible | ok: [lb]
+2021-10-04 02:42:45,741 p=5042 u=root n=ansible | TASK [systems : Force user to change password when login] ********************************************************************************
+2021-10-04 02:42:46,508 p=5042 u=root n=ansible | ok: [db]
+2021-10-04 02:42:46,515 p=5042 u=root n=ansible | ok: [lb]
+2021-10-04 02:42:46,592 p=5042 u=root n=ansible | ok: [app1]
+2021-10-04 02:42:46,616 p=5042 u=root n=ansible | ok: [app2]
+2021-10-04 02:42:46,628 p=5042 u=root n=ansible | TASK [systems : force user change password] **********************************************************************************************
+2021-10-04 02:42:47,377 p=5042 u=root n=ansible | changed: [lb]
+2021-10-04 02:42:47,383 p=5042 u=root n=ansible | changed: [app2]
+2021-10-04 02:42:47,385 p=5042 u=root n=ansible | changed: [db]
+2021-10-04 02:42:47,394 p=5042 u=root n=ansible | changed: [app1]
+2021-10-04 02:42:47,434 p=5042 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:42:47,434 p=5042 u=root n=ansible | app1                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:42:47,434 p=5042 u=root n=ansible | app2                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:42:47,434 p=5042 u=root n=ansible | db                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:42:47,434 p=5042 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:43:35,354 p=5275 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 02:43:35,365 p=5275 u=root n=ansible | TASK [Gathering Facts] *******************************************************************************************************************
+2021-10-04 02:43:37,664 p=5275 u=root n=ansible | ok: [db]
+2021-10-04 02:43:37,684 p=5275 u=root n=ansible | ok: [app1]
+2021-10-04 02:43:37,723 p=5275 u=root n=ansible | ok: [lb]
+2021-10-04 02:43:37,848 p=5275 u=root n=ansible | ok: [app2]
+2021-10-04 02:43:37,861 p=5275 u=root n=ansible | TASK [systems : Force user to change password when login] ********************************************************************************
+2021-10-04 02:43:38,635 p=5275 u=root n=ansible | ok: [app1]
+2021-10-04 02:43:38,655 p=5275 u=root n=ansible | ok: [lb]
+2021-10-04 02:43:38,680 p=5275 u=root n=ansible | ok: [db]
+2021-10-04 02:43:38,836 p=5275 u=root n=ansible | changed: [app2]
+2021-10-04 02:43:38,845 p=5275 u=root n=ansible | TASK [systems : force user change password] **********************************************************************************************
+2021-10-04 02:43:39,569 p=5275 u=root n=ansible | changed: [lb]
+2021-10-04 02:43:39,598 p=5275 u=root n=ansible | changed: [db]
+2021-10-04 02:43:39,618 p=5275 u=root n=ansible | changed: [app2]
+2021-10-04 02:43:39,633 p=5275 u=root n=ansible | changed: [app1]
+2021-10-04 02:43:39,671 p=5275 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 02:43:39,671 p=5275 u=root n=ansible | app1                       : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:43:39,671 p=5275 u=root n=ansible | app2                       : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:43:39,672 p=5275 u=root n=ansible | db                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 02:43:39,672 p=5275 u=root n=ansible | lb                         : ok=3    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:39:20,292 p=5889 u=root n=ansible | playbook: UserManagement.yml
+2021-10-04 05:39:20,293 p=5889 u=root n=ansible |   play #1 (prod): playbook for usermanagement for all systems	TAGS: []
+2021-10-04 05:39:20,294 p=5889 u=root n=ansible |       TASK TAGS: []
+
+2021-10-04 05:42:31,428 p=5915 u=root n=ansible | playbook: UserManagement.yml
+2021-10-04 05:42:31,428 p=5915 u=root n=ansible |   play #1 (prod): playbook for usermanagement for all systems	TAGS: [prod]
+2021-10-04 05:42:31,430 p=5915 u=root n=ansible |       TASK TAGS: [Centos, CreateUser, prod]
+
+2021-10-04 05:43:24,740 p=5926 u=root n=ansible |  [ERROR]: User interrupted execution
+
+2021-10-04 05:43:28,879 p=5929 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 05:43:28,889 p=5929 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 05:43:29,907 p=5929 u=root n=ansible | fatal: [app2]: FAILED! => {"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python"}, "changed": false, "msg": "userdel: user test1 is currently used by process 6273\n", "name": "test1", "rc": 8}
+2021-10-04 05:43:29,976 p=5929 u=root n=ansible | changed: [app1]
+2021-10-04 05:43:29,979 p=5929 u=root n=ansible | changed: [db]
+2021-10-04 05:43:29,990 p=5929 u=root n=ansible | changed: [lb]
+2021-10-04 05:43:30,001 p=5929 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 05:43:30,001 p=5929 u=root n=ansible | app1                       : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:43:30,001 p=5929 u=root n=ansible | app2                       : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:43:30,001 p=5929 u=root n=ansible | db                         : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:43:30,001 p=5929 u=root n=ansible | lb                         : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:44:32,628 p=6035 u=root n=ansible | PLAY [playbook for usermanagement for all systems] ***************************************************************************************
+2021-10-04 05:44:32,639 p=6035 u=root n=ansible | TASK [systems : Delete users] ************************************************************************************************************
+2021-10-04 05:44:33,486 p=6035 u=root n=ansible | ok: [db]
+2021-10-04 05:44:33,517 p=6035 u=root n=ansible | ok: [app1]
+2021-10-04 05:44:33,519 p=6035 u=root n=ansible | ok: [lb]
+2021-10-04 05:44:33,682 p=6035 u=root n=ansible | changed: [app2]
+2021-10-04 05:44:33,697 p=6035 u=root n=ansible | PLAY RECAP *******************************************************************************************************************************
+2021-10-04 05:44:33,697 p=6035 u=root n=ansible | app1                       : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:44:33,697 p=6035 u=root n=ansible | app2                       : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:44:33,697 p=6035 u=root n=ansible | db                         : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+2021-10-04 05:44:33,698 p=6035 u=root n=ansible | lb                         : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   

@@ -1,0 +1,6 @@
+---
+# tasks file for systems
+  - import_tasks: Adduser.yml
+  - import_tasks: Unlockuser.yml
+  - import_tasks: Deluser.yml
+  - import_tasks: Forcechangepassword.yml

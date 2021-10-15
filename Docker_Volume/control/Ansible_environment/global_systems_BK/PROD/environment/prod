@@ -1,0 +1,23 @@
+---
+all:
+  children:
+    prod:
+      children:
+        Application:
+          hosts:
+            app1:
+              ansible_host: app1
+            app2:
+              ansible_host: app2
+            app3:
+              ansible_host: app3
+        Loadbalancer:
+          hosts:
+            lb:
+              ansible_host: lb
+        Database:
+          hosts:
+            db:
+              ansible_host: db
+      vars:
+        ansible_user: devops

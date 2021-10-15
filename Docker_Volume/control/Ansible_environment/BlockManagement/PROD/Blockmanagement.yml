@@ -1,0 +1,6 @@
+---
+  - name: playbook for usermanagement for all systems
+    hosts: prod
+    become: true
+    roles:
+      - systems

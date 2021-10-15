@@ -1,0 +1,32 @@
+---
+  - name: Update DB
+    tags:
+      - block
+    block:
+      - name: Display update message
+        debug:
+          msg: "update database"
+
+      - name: update psql server to latest version
+        yum:
+          name: postgresql-server
+          state: latest
+          #when: ansible_distribution == "CentOS"
+    rescue:
+      - name: Display error message that database fail
+        debug:
+          msg: "Update failed. restarting DB"
+
+      - name: Restarting DB
+        service:
+          name: postgresql
+          state: restarted
+    always:
+      - name: Notify user of reboot after update
+        debug:
+          msg: "update has completed"
+
+      - name: restart service
+        service:
+          name: postgresql
+          state: restarted

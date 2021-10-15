@@ -1,0 +1,19 @@
+---
+  - name: Modify lines to config file
+    lineinfile:
+      dest: /tmp/test.conf
+      line: "test updated"
+      regexp: "^test$"
+      state: present
+      create: true
+    tags:
+      - ModLine
+
+  - name: Modify line but retain part of previous data
+    lineinfile:
+      dest: /tmp/test.conf
+      regexp: "^# top line"
+      state: absent
+      backup: yes
+    tags:
+      - ModRetainLine

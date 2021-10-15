@@ -1,0 +1,8 @@
+---
+  - name: playbook for Security Scans for all nodes
+    hosts: prod
+    become: true
+    roles:
+      - Wintel
+      - Linux
+      - Network

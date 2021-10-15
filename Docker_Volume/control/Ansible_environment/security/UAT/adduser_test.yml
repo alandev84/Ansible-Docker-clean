@@ -1,0 +1,10 @@
+---
+  - name: add user
+    become: True
+    hosts: prod
+    tasks:
+      - name: user A
+        user:
+          name: test1
+          state: present
+          uid: 5003

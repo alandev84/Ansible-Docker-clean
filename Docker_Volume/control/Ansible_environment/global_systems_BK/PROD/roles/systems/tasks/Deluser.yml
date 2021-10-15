@@ -1,0 +1,7 @@
+---
+  - name: Delete users
+    user:
+      name: test1
+      state: absent
+      remove: true
+      uid: 5003

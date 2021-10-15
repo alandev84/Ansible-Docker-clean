@@ -1,0 +1,14 @@
+/Test/PROD/logs/* {
+	create 0755 root
+	daily
+	missingok
+	rotate 4
+	compress
+	notifempty
+	copytruncate
+	sharedscripts
+	dateext
+	lastaction
+		mv /Test/PROD/logs/*.gz /tmp/
+	endscript
+}
