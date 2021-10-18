@@ -29,6 +29,7 @@ RUN yum install vim -y
 #create ansible service account
 RUN adduser devops
 RUN usermod -aG wheel devops
+RUN echo 'devops:devops' | chpasswd
 
 #run command when start
 VOLUME [ "/run", "/sys/fs/cgroup" ]

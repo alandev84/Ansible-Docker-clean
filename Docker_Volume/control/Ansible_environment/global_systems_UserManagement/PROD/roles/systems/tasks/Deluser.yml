@@ -1,9 +1,9 @@
 ---
   - name: Delete users
     user:
-      name: "{{ uname.0 }}"
+      name: "{{ item }}"
       state: absent
       remove: true
-    with_items: "{{ uname }}"
+    loop: "{{ users }}"
     tags:
       - DeleteUser

@@ -17,6 +17,7 @@ RUN mkdir -p /scripts
 #create ansible service account
 RUN adduser devops
 RUN usermod -aG sudo devops
+RUN echo 'devops:devops' | chpasswd
 
 #run command when start
 CMD service cron start && service ssh start && tail -f /dev/null

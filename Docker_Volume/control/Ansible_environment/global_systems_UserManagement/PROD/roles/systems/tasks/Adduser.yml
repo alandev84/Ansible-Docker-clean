@@ -10,8 +10,12 @@
   - name: Add users to group
     user:
       name: "{{ item.0 }}"
-      password: ""
+      password: "{{ default_user_password | password_hash('sha512', 'A512') }}" 
       group: "{{ item.1 }}"
+      system: no
+      shell: /bin/bash
+      create_home: yes
+      home: /home/{{ item.0 }}
       update_password: on_create
       state: present
     loop: "{{ users | zip(group) | list }}"
@@ -27,7 +31,12 @@
   - name: Add users
     user:
       name: "{{ item }}"
-      password: ""
+      password: "{{ default_user_password | password_hash('sha512', 'A512') }}"
+      password_lock: False
+      shell: /bin/bash
+      create_home: yes
+      system: no
+      home: /home/{{ item }}
       update_password: on_create
       state: present
     loop: "{{ users }}"
