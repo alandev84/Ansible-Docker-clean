@@ -1,0 +1,19 @@
+[local]
+#connection for localhost
+localhost ansible_connection=local
+
+#host name itself eg, lb, app1 etc
+[Loadbalancer]
+lb
+
+[Application]
+app1
+app2
+
+[Database]
+db
+
+[prod:children]
+Loadbalancer
+Application
+Database

@@ -1,0 +1,5 @@
+---
+# tasks file for systems
+  - import_tasks: UpdateOS.yml
+  - import_tasks: RemoveSW.yml
+  - import_tasks: InstallSW.yml

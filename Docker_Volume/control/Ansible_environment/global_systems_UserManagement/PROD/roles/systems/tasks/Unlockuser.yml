@@ -1,9 +1,17 @@
 ---
-  - name: Unlock users
+  - name: Unlock Users In RedHat/Debian
     user:
-      name: "{{ item }}"
+      name: "{{ item.name }}"
       password_lock: False
       state: present
     loop: "{{ users }}"
     tags:
       - UnlockUser
+    when: ansible_os_family != "Solaris"
+
+  - name: Unlock Users In Solaris
+    command: 'passwd -u {{ item.name }}'
+    loop: "{{ users }}"
+    tags:
+      - UnlockUser
+    when: ansible_os_family == "Solaris"

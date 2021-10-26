@@ -1,0 +1,110 @@
+---
+# FOR RH
+  - name: Update Cache For RedHat
+    yum:
+      update_cache: yes
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateRH
+      - OSUpdateCache
+    when: ansible_os_family == "RedHat"
+
+  - name: Upgrade Existing Packages In RedHat
+    yum:
+      name: '*'
+      state: latest
+      update_only: yes
+    ignore_errors: yes
+    register: yum_update_status
+    tags:
+      - OSUpdateAll
+      - OSUpdateRH
+    when: ansible_os_family == "RedHat"
+
+  - name: Remove Packages Not Needed After Upgrading RedHat
+    yum:
+      autoremove: yes
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateRH
+    when: ansible_os_family == "RedHat"
+
+  - name: Reboot RedHat After Upgrade OS
+    reboot:
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateRH
+    when: ansible_os_family == "RedHat" and yum_update_status.changed
+
+# FOR DEB
+  - name: Update Cache For Debian
+    apt:
+      update_cache: yes
+      state: latest
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateDeb
+      - OSUpdateCache
+    when: ansible_os_family == "Debian"
+
+  - name: Upgrade Existing Packages In Debian
+    apt:
+      name: '*'
+      state: latest
+      only_upgrade: yes
+    ignore_errors: yes
+    register: apt_update_status
+    tags:
+      - OSUpdateAll
+      - OSUpdateDeb
+    when: ansible_os_family == "Debian"
+ 
+  - name: Remove Packages Not Needed After Upgrading Debian
+    apt:
+      autoremove: yes
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateDeb
+    when: ansible_os_family == "Debian"
+
+  - name: Reboot Debian After Upgrade OS
+    reboot:
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateDeb
+    when: ansible_os_family == "Debian" and apt_update_status.changed
+ 
+# FOR SOLARIS
+  - name: OS Patch For Solaris 11.3
+    command: '/usr/bin/pkg update -v --accept --be-name {{ solpkg["BE3Name"] }} > {{ logfile }} 2>&1'
+    ignore_errors: yes
+    register: solBE3_update_status
+    tags:
+      - OSUpdateAll
+      - OSUpdateSolaris
+      - OSUpdateSolBE3
+    when: ansible_os_family == "Solaris" and ansible_distribution_version == "11.3"
+ 
+  - name: OS Patch For Solaris 11.4
+    command: '/usr/bin/pkg update -v --accept --be-name {{ solpkg["BE4Name"] }} > {{ logfile }} 2>&1'
+    ignore_errors: yes
+    register: solBE4_update_status
+    tags:
+      - OSUpdateAll
+      - OSUpdateSolaris
+      - OSUpdateSolBE4
+    when: ansible_os_family == "Solaris" and ansible_distribution_version == "11.4"
+
+  - name: Reboot Solaris After Upgrade OS
+    command: 'reboot'
+    ignore_errors: yes
+    tags:
+      - OSUpdateAll
+      - OSUpdateSolaris
+    when: ansible_os_family == "Solaris" and solBE3_update_status.changed or solBE4_update_status.changed

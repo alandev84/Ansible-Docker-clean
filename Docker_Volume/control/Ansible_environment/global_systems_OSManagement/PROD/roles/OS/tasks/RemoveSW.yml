@@ -1,0 +1,34 @@
+---
+# FOR RH
+  - name: Remove Packages For RedHat
+    yum:
+      name: "{{ item }}"
+      state: absent
+    ignore_errors: yes
+    tags:
+      - OSUninstallSWAll
+      - OSUninstallSWRH
+    loop: "{{ redhatsoftware }}"
+    when: ansible_os_family == "RedHat"
+
+# FOR DEB
+  - name: Remove Packages In Debian
+    apt:
+      name: "{{ item }}"
+      state: absent
+    ignore_errors: yes
+    tags:
+      - OSUninstallSWAll
+      - OSUninstallSWDeb
+    loop: "{{ debiansoftware }}"
+    when: ansible_os_family == "Debian"
+ 
+# FOR SOLARIS
+  - name:  Remove Packages In Solaris
+    command: '/usr/bin/pkgrm -v --accept --be-name {{ item }} > {{ logfile }} 2>&1'
+    ignore_errors: yes
+    tags:
+      - OSUninstallSWAll
+      - OSUninstallSol
+    loop: "{{ solarissoftware }}"
+    when: ansible_os_family == "Solaris"

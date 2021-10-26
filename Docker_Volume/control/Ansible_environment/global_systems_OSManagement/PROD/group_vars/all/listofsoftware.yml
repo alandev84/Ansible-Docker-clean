@@ -1,0 +1,11 @@
+redhatsoftware:
+  - tree
+  - gimp
+
+debiansoftware:
+  - tree
+  - gimp
+
+solarissoftware:
+  - tree
+  - gimp

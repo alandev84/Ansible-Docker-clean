@@ -1,0 +1,6 @@
+---
+  - name: playbook for OSManagement for all systems
+    hosts: prod
+    become: true
+    roles:
+      - OS
