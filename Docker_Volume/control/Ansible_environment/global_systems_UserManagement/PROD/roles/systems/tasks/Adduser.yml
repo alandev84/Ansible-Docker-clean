@@ -1,20 +1,20 @@
 ---
-  - name: Create Group For Users in RedHat/Debian
+  - name: Create Group in RedHat/Debian
     group:
       name: "{{ item.groups }}"
       gid: "{{ item.gid }}"
       state: present
-    loop: "{{ users }}"
+    loop: "{{ newgroup }}"
     ignore_errors: yes
     tags:
-      - AddGroupUser
+      - CreateGroup
     when: ansible_os_family != "Solaris"
 
-  - name: Add Users into Group in RedHat/Debian
+  - name: Add Users into Group in RedHat/Debian [1/3]
     user:
       name: "{{ item.name }}"
       password: "{{ default_user_password | password_hash('sha512', 'A512') }}" 
-      group: "{{ item.groups }}"
+      groups: "{{ item.groups }}"
       comment: "{{ item.comment }}"
       uid: "{{ item.uid }}"
       system: no
@@ -25,9 +25,33 @@
       state: present
     loop: "{{ users }}"
     ignore_errors: yes
+    register: Add_User_Succeed_RH
     tags:
       - AddGroupUser
     when: ansible_os_family != "Solaris"
+
+  - name: Add Users into Group in RedHat/Debian [2/3]
+    lineinfile:
+      dest: /etc/group
+      regexp: "^{{ item.name }}:x:"
+      state: absent
+    loop: "{{ users }}"
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
+  - name: Add Users into Group in RedHat/Debian [3/3]
+    replace:
+      path: /etc/passwd
+      regexp: "^{{ item.name }}:x:{{ item.uid }}:{{ item.uid }}"
+      replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.gid }}'
+    loop: "{{ users }}"
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
 
   - name: Force Password Change On First Login in RedHat/Debian
     shell: chage -d 0 "{{ item.name }}"
@@ -35,23 +59,32 @@
     ignore_errors: yes
     tags:
       - AddGroupUser
-    when: ansible_os_family != "Solaris"
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
 
-  - name: Create Group For Users in Solaris
+  - name: Create Group in Solaris
     command: 'groupadd -g {{ item.gid }} {{ item.groups }}'
+    loop: "{{ newgroup }}"
+    ignore_errors: yes
+    tags:
+      - CreateGroup
+    when: ansible_os_family == "Solaris"
+
+  - name: Create Users into Group in Solaris [1/2]
+    command: 'useradd -u {{ item.uid }} -g {{ item.gid }} -c "{{ item.comment }}" -s /bin/sh -d /export/home/{{ item.name }} -m {{ item.name }}'
     loop: "{{ users }}"
     ignore_errors: yes
+    register: Add_User_Succeed_Sol
     tags:
       - AddGroupUser
     when: ansible_os_family == "Solaris"
 
-  - name: Create Users into Group in Solaris
-    command: 'useradd -u {{ item.uid }} -g {{ item.gid }} -c "{{ item.comment }}" -s /bin/sh -d /home/{{ item.name }} -m {{ item.name }}'
+  - name: Create Users into Group in Solaris [2/2]
+    command: 'usermod -a -G {{ item.groups }} {{ item.name }}'
     loop: "{{ users }}"
     ignore_errors: yes
     tags:
       - AddGroupUser
-    when: ansible_os_family == "Solaris"
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
 
   - name: Update Default Password For User Login in Solaris
     lineinfile:
@@ -62,7 +95,7 @@
     ignore_errors: yes
     tags:
       - AddGroupUser
-    when: ansible_os_family == "Solaris"
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
 
   - name: Force Password Change On First Login in Solaris
     command: 'passwd -e {{ item.name }}'
@@ -70,4 +103,4 @@
     ignore_errors: yes
     tags:
       - AddGroupUser
-    when: ansible_os_family == "Solaris"
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed

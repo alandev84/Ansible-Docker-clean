@@ -29,14 +29,6 @@
     tags:
       - OSUpdateAll
       - OSUpdateRH
-    when: ansible_os_family == "RedHat"
-
-  - name: Reboot RedHat After Upgrade OS
-    reboot:
-    ignore_errors: yes
-    tags:
-      - OSUpdateAll
-      - OSUpdateRH
     when: ansible_os_family == "RedHat" and yum_update_status.changed
 
 # FOR DEB
@@ -70,21 +62,12 @@
     tags:
       - OSUpdateAll
       - OSUpdateDeb
-    when: ansible_os_family == "Debian"
-
-  - name: Reboot Debian After Upgrade OS
-    reboot:
-    ignore_errors: yes
-    tags:
-      - OSUpdateAll
-      - OSUpdateDeb
     when: ansible_os_family == "Debian" and apt_update_status.changed
- 
+
 # FOR SOLARIS
   - name: OS Patch For Solaris 11.3
     command: '/usr/bin/pkg update -v --accept --be-name {{ solpkg["BE3Name"] }} > {{ logfile }} 2>&1'
     ignore_errors: yes
-    register: solBE3_update_status
     tags:
       - OSUpdateAll
       - OSUpdateSolaris
@@ -94,17 +77,8 @@
   - name: OS Patch For Solaris 11.4
     command: '/usr/bin/pkg update -v --accept --be-name {{ solpkg["BE4Name"] }} > {{ logfile }} 2>&1'
     ignore_errors: yes
-    register: solBE4_update_status
     tags:
       - OSUpdateAll
       - OSUpdateSolaris
       - OSUpdateSolBE4
     when: ansible_os_family == "Solaris" and ansible_distribution_version == "11.4"
-
-  - name: Reboot Solaris After Upgrade OS
-    command: 'reboot'
-    ignore_errors: yes
-    tags:
-      - OSUpdateAll
-      - OSUpdateSolaris
-    when: ansible_os_family == "Solaris" and solBE3_update_status.changed or solBE4_update_status.changed

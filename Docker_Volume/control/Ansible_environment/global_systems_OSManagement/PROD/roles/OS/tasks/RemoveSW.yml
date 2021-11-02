@@ -25,7 +25,7 @@
  
 # FOR SOLARIS
   - name:  Remove Packages In Solaris
-    command: '/usr/bin/pkgrm -v --accept --be-name {{ item }} > {{ logfile }} 2>&1'
+    command: '/usr/sbin/pkgrm {{ item }} > {{ logfile }} 2>&1'
     ignore_errors: yes
     tags:
       - OSUninstallSWAll

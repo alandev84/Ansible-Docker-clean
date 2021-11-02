@@ -3,3 +3,4 @@
   - import_tasks: UpdateOS.yml
   - import_tasks: RemoveSW.yml
   - import_tasks: InstallSW.yml
+  - import_tasks: RebootOS.yml

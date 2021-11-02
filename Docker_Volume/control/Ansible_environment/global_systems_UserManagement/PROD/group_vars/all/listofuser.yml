@@ -1,3 +1,3 @@
 users:
-  - { name: Alan, uid: 1001, groups: "group1", gid: 1001, comment: "System Admin ID" }
-  - { name: Jesse, uid: 1002, groups: "group2", gid: 1002, comment: "System Admin ID" }
+  - { name: Alan, uid: 1051, groups: "group1", gid: 1001, comment: "System Admin ID" }
+  - { name: Jesse, uid: 1052, groups: "group1", gid: 1001, comment: "System Admin ID" }

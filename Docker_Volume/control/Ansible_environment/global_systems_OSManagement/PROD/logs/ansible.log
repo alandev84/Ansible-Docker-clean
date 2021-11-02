@@ -7714,3 +7714,313 @@ The offending line appears to be:
 2021-10-26 05:59:33,248 p=1914 u=root n=ansible |   play #1 (prod): playbook for OSManagement for all systems	TAGS: []
 2021-10-26 05:59:33,258 p=1914 u=root n=ansible |       TASK TAGS: [OSInstallSWAll, OSInstallSWCache, OSInstallSWDeb, OSInstallSWRH, OSInstallSWSol, OSUninstallSWAll, OSUninstallSWDeb, OSUninstallSWRH, OSUninstallSol, OSUpdateAll, OSUpdateCache, OSUpdateDeb, OSUpdateRH, OSUpdateSolBE3, OSUpdateSolBE4, OSUpdateSolaris]
 
+2021-11-02 06:40:42,366 p=13063 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ************************************************************************************************************************************************************************************************
+2021-11-02 06:40:42,384 p=13063 u=root n=ansible | TASK [Gathering Facts] **************************************************************************************************************************************************************************************************************************
+2021-11-02 06:40:43,851 p=13063 u=root n=ansible | ok: [app3]
+2021-11-02 06:40:48,872 p=13063 u=root n=ansible | ok: [lb]
+2021-11-02 06:40:48,928 p=13063 u=root n=ansible | ok: [app2]
+2021-11-02 06:40:48,939 p=13063 u=root n=ansible | ok: [db]
+2021-11-02 06:40:48,962 p=13063 u=root n=ansible | ok: [app1]
+2021-11-02 06:40:48,979 p=13063 u=root n=ansible | TASK [OS : Update Cache For RedHat] *************************************************************************************************************************************************************************************************************
+2021-11-02 06:40:49,114 p=13063 u=root n=ansible | skipping: [app3]
+2021-11-02 06:40:51,648 p=13063 u=root n=ansible | ok: [lb]
+2021-11-02 06:40:51,654 p=13063 u=root n=ansible | ok: [app2]
+2021-11-02 06:40:51,655 p=13063 u=root n=ansible | ok: [db]
+2021-11-02 06:40:51,658 p=13063 u=root n=ansible | ok: [app1]
+2021-11-02 06:40:51,666 p=13063 u=root n=ansible | TASK [OS : Upgrade Existing Packages In RedHat] *************************************************************************************************************************************************************************************************
+2021-11-02 06:40:51,782 p=13063 u=root n=ansible | skipping: [app3]
+2021-11-02 06:41:31,494 p=13063 u=root n=ansible | changed: [db]
+2021-11-02 06:41:31,497 p=13063 u=root n=ansible | changed: [app2]
+2021-11-02 06:41:31,499 p=13063 u=root n=ansible | changed: [lb]
+2021-11-02 06:41:31,511 p=13063 u=root n=ansible | changed: [app1]
+2021-11-02 06:41:31,520 p=13063 u=root n=ansible | TASK [OS : Remove Packages Not Needed After Upgrading RedHat] ***********************************************************************************************************************************************************************************
+2021-11-02 06:41:31,704 p=13063 u=root n=ansible | skipping: [app3]
+2021-11-02 06:41:32,145 p=13063 u=root n=ansible | ok: [app2]
+2021-11-02 06:41:32,158 p=13063 u=root n=ansible | ok: [app1]
+2021-11-02 06:41:32,204 p=13063 u=root n=ansible | ok: [lb]
+2021-11-02 06:41:32,246 p=13063 u=root n=ansible | ok: [db]
+2021-11-02 06:41:32,288 p=13063 u=root n=ansible | RUNNING HANDLER [OS : RH_Reboot] ****************************************************************************************************************************************************************************************************************
+2021-11-02 06:47:08,084 p=13063 u=root n=ansible |  [ERROR]: User interrupted execution
+
+2021-11-02 07:02:49,111 p=14413 u=root n=ansible | playbook: OSManagement.yml
+2021-11-02 07:02:49,111 p=14413 u=root n=ansible |   play #1 (prod): playbook for OSManagement for all systems	TAGS: []
+2021-11-02 07:02:49,119 p=14413 u=root n=ansible |       TASK TAGS: [OSInstallSWAll, OSInstallSWCache, OSInstallSWDeb, OSInstallSWRH, OSInstallSWSol, OSRebootAll, OSRebootDeb, OSRebootRH, OSRebootSol, OSUninstallSWAll, OSUninstallSWDeb, OSUninstallSWRH, OSUninstallSol, OSUpdateAll, OSUpdateCache, OSUpdateDeb, OSUpdateRH, OSUpdateSolBE3, OSUpdateSolBE4, OSUpdateSolaris]
+
+2021-11-02 07:03:11,518 p=14423 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ************************************************************************************************************************************************************************************************
+2021-11-02 07:03:11,538 p=14423 u=root n=ansible | TASK [Gathering Facts] **************************************************************************************************************************************************************************************************************************
+2021-11-02 07:03:12,922 p=14423 u=root n=ansible | ok: [app3]
+2021-11-02 07:03:17,915 p=14423 u=root n=ansible | ok: [lb]
+2021-11-02 07:03:18,238 p=14423 u=root n=ansible | ok: [app2]
+2021-11-02 07:03:18,270 p=14423 u=root n=ansible | ok: [app1]
+2021-11-02 07:03:18,371 p=14423 u=root n=ansible | ok: [db]
+2021-11-02 07:03:18,393 p=14423 u=root n=ansible | TASK [OS : Update Cache For RedHat] *************************************************************************************************************************************************************************************************************
+2021-11-02 07:03:18,595 p=14423 u=root n=ansible | skipping: [app3]
+2021-11-02 07:03:19,995 p=14423 u=root n=ansible | ok: [app2]
+2021-11-02 07:03:19,999 p=14423 u=root n=ansible | ok: [app1]
+2021-11-02 07:03:20,013 p=14423 u=root n=ansible | ok: [lb]
+2021-11-02 07:03:20,064 p=14423 u=root n=ansible | ok: [db]
+2021-11-02 07:03:20,071 p=14423 u=root n=ansible | TASK [OS : Upgrade Existing Packages In RedHat] *************************************************************************************************************************************************************************************************
+2021-11-02 07:03:20,199 p=14423 u=root n=ansible | skipping: [app3]
+2021-11-02 07:03:22,909 p=14423 u=root n=ansible | ok: [app2]
+2021-11-02 07:03:22,941 p=14423 u=root n=ansible | ok: [db]
+2021-11-02 07:03:23,116 p=14423 u=root n=ansible | ok: [lb]
+2021-11-02 07:03:23,214 p=14423 u=root n=ansible | ok: [app1]
+2021-11-02 07:03:23,224 p=14423 u=root n=ansible | TASK [OS : Remove Packages Not Needed After Upgrading RedHat] ***********************************************************************************************************************************************************************************
+2021-11-02 07:03:23,343 p=14423 u=root n=ansible | skipping: [app3]
+2021-11-02 07:03:23,345 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:23,351 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:23,376 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:23,400 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:23,426 p=14423 u=root n=ansible | TASK [OS : Update Cache For Debian] *************************************************************************************************************************************************************************************************************
+2021-11-02 07:03:23,561 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:23,568 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:23,598 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:23,601 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:34,474 p=14423 u=root n=ansible | ok: [app3]
+2021-11-02 07:03:34,483 p=14423 u=root n=ansible | TASK [OS : Upgrade Existing Packages In Debian] *************************************************************************************************************************************************************************************************
+2021-11-02 07:03:34,617 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:34,641 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:34,656 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:34,701 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:47,266 p=14423 u=root n=ansible | changed: [app3]
+2021-11-02 07:03:47,274 p=14423 u=root n=ansible | TASK [OS : Remove Packages Not Needed After Upgrading Debian] ***********************************************************************************************************************************************************************************
+2021-11-02 07:03:47,382 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:47,390 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:47,418 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:47,492 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:49,946 p=14423 u=root n=ansible | ok: [app3]
+2021-11-02 07:03:49,956 p=14423 u=root n=ansible | TASK [OS : OS Patch For Solaris 11.3] ***********************************************************************************************************************************************************************************************************
+2021-11-02 07:03:50,055 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:50,072 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:50,091 p=14423 u=root n=ansible | skipping: [app3]
+2021-11-02 07:03:50,143 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:50,153 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:50,161 p=14423 u=root n=ansible | TASK [OS : OS Patch For Solaris 11.4] ***********************************************************************************************************************************************************************************************************
+2021-11-02 07:03:50,259 p=14423 u=root n=ansible | skipping: [app1]
+2021-11-02 07:03:50,298 p=14423 u=root n=ansible | skipping: [app3]
+2021-11-02 07:03:50,318 p=14423 u=root n=ansible | skipping: [app2]
+2021-11-02 07:03:50,323 p=14423 u=root n=ansible | skipping: [db]
+2021-11-02 07:03:50,350 p=14423 u=root n=ansible | skipping: [lb]
+2021-11-02 07:03:50,394 p=14423 u=root n=ansible | PLAY RECAP **************************************************************************************************************************************************************************************************************************************
+2021-11-02 07:03:50,394 p=14423 u=root n=ansible | app1                       : ok=3    changed=0    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+2021-11-02 07:03:50,395 p=14423 u=root n=ansible | app2                       : ok=3    changed=0    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+2021-11-02 07:03:50,395 p=14423 u=root n=ansible | app3                       : ok=4    changed=1    unreachable=0    failed=0    skipped=5    rescued=0    ignored=0   
+2021-11-02 07:03:50,395 p=14423 u=root n=ansible | db                         : ok=3    changed=0    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+2021-11-02 07:03:50,395 p=14423 u=root n=ansible | lb                         : ok=3    changed=0    unreachable=0    failed=0    skipped=6    rescued=0    ignored=0   
+2021-11-02 07:04:05,867 p=14784 u=root n=ansible | playbook: OSManagement.yml
+2021-11-02 07:04:05,868 p=14784 u=root n=ansible |   play #1 (prod): playbook for OSManagement for all systems	TAGS: []
+2021-11-02 07:04:05,876 p=14784 u=root n=ansible |       TASK TAGS: [OSInstallSWAll, OSInstallSWCache, OSInstallSWDeb, OSInstallSWRH, OSInstallSWSol, OSRebootAll, OSRebootDeb, OSRebootRH, OSRebootSol, OSUninstallSWAll, OSUninstallSWDeb, OSUninstallSWRH, OSUninstallSol, OSUpdateAll, OSUpdateCache, OSUpdateDeb, OSUpdateRH, OSUpdateSolBE3, OSUpdateSolBE4, OSUpdateSolaris]
+
+2021-11-02 07:04:35,812 p=14789 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ************************************************************************************************************************************************************************************************
+2021-11-02 07:04:35,831 p=14789 u=root n=ansible | TASK [Gathering Facts] **************************************************************************************************************************************************************************************************************************
+2021-11-02 07:04:36,897 p=14789 u=root n=ansible | ok: [app3]
+2021-11-02 07:04:41,210 p=14789 u=root n=ansible | ok: [app1]
+2021-11-02 07:04:41,523 p=14789 u=root n=ansible | ok: [lb]
+2021-11-02 07:04:42,513 p=14789 u=root n=ansible | ok: [app2]
+2021-11-02 07:04:42,620 p=14789 u=root n=ansible | ok: [db]
+2021-11-02 07:04:42,637 p=14789 u=root n=ansible | TASK [OS : Update Cache For RedHat] *************************************************************************************************************************************************************************************************************
+2021-11-02 07:04:42,769 p=14789 u=root n=ansible | skipping: [app3]
+2021-11-02 07:04:44,205 p=14789 u=root n=ansible | ok: [lb]
+2021-11-02 07:04:44,230 p=14789 u=root n=ansible | ok: [db]
+2021-11-02 07:04:44,303 p=14789 u=root n=ansible | ok: [app1]
+2021-11-02 07:04:44,360 p=14789 u=root n=ansible | ok: [app2]
+2021-11-02 07:04:44,368 p=14789 u=root n=ansible | TASK [OS : Install Packages For RedHat] *********************************************************************************************************************************************************************************************************
+2021-11-02 07:04:44,572 p=14789 u=root n=ansible | skipping: [app3] => (item=tree) 
+2021-11-02 07:04:44,657 p=14789 u=root n=ansible | skipping: [app3] => (item=gimp) 
+2021-11-02 07:04:47,404 p=14789 u=root n=ansible | changed: [app2] => (item=tree)
+2021-11-02 07:04:47,425 p=14789 u=root n=ansible | changed: [db] => (item=tree)
+2021-11-02 07:04:47,542 p=14789 u=root n=ansible | changed: [lb] => (item=tree)
+2021-11-02 07:04:47,738 p=14789 u=root n=ansible | changed: [app1] => (item=tree)
+2021-11-02 07:06:21,112 p=14789 u=root n=ansible | changed: [app2] => (item=gimp)
+2021-11-02 07:06:23,894 p=14789 u=root n=ansible | changed: [lb] => (item=gimp)
+2021-11-02 07:06:24,858 p=14789 u=root n=ansible | changed: [db] => (item=gimp)
+2021-11-02 07:06:24,886 p=14789 u=root n=ansible | changed: [app1] => (item=gimp)
+2021-11-02 07:06:24,896 p=14789 u=root n=ansible | TASK [OS : Remove Packages Not Needed After Installation For RedHat] ****************************************************************************************************************************************************************************
+2021-11-02 07:06:25,075 p=14789 u=root n=ansible | skipping: [app3]
+2021-11-02 07:06:25,557 p=14789 u=root n=ansible | ok: [lb]
+2021-11-02 07:06:25,558 p=14789 u=root n=ansible | ok: [app1]
+2021-11-02 07:06:25,584 p=14789 u=root n=ansible | ok: [app2]
+2021-11-02 07:06:25,613 p=14789 u=root n=ansible | ok: [db]
+2021-11-02 07:06:25,622 p=14789 u=root n=ansible | TASK [OS : Update Cache For Debian] *************************************************************************************************************************************************************************************************************
+2021-11-02 07:06:25,731 p=14789 u=root n=ansible | skipping: [app2]
+2021-11-02 07:06:25,757 p=14789 u=root n=ansible | skipping: [lb]
+2021-11-02 07:06:25,781 p=14789 u=root n=ansible | skipping: [db]
+2021-11-02 07:06:25,781 p=14789 u=root n=ansible | skipping: [app1]
+2021-11-02 07:06:29,588 p=14789 u=root n=ansible | ok: [app3]
+2021-11-02 07:06:29,596 p=14789 u=root n=ansible | TASK [OS : Install Packages In Debian] **********************************************************************************************************************************************************************************************************
+2021-11-02 07:06:29,724 p=14789 u=root n=ansible | skipping: [app1] => (item=tree) 
+2021-11-02 07:06:29,752 p=14789 u=root n=ansible | skipping: [lb] => (item=tree) 
+2021-11-02 07:06:29,757 p=14789 u=root n=ansible | skipping: [app1] => (item=gimp) 
+2021-11-02 07:06:29,795 p=14789 u=root n=ansible | skipping: [app2] => (item=tree) 
+2021-11-02 07:06:29,819 p=14789 u=root n=ansible | skipping: [db] => (item=tree) 
+2021-11-02 07:06:29,830 p=14789 u=root n=ansible | skipping: [lb] => (item=gimp) 
+2021-11-02 07:06:29,863 p=14789 u=root n=ansible | skipping: [db] => (item=gimp) 
+2021-11-02 07:06:29,873 p=14789 u=root n=ansible | skipping: [app2] => (item=gimp) 
+2021-11-02 07:06:32,214 p=14789 u=root n=ansible | ok: [app3] => (item=tree)
+2021-11-02 07:08:00,633 p=14789 u=root n=ansible | changed: [app3] => (item=gimp)
+2021-11-02 07:08:00,644 p=14789 u=root n=ansible | TASK [OS : Remove Packages Not Needed After Installation For Debian] ****************************************************************************************************************************************************************************
+2021-11-02 07:08:00,795 p=14789 u=root n=ansible | skipping: [lb]
+2021-11-02 07:08:00,798 p=14789 u=root n=ansible | skipping: [app1]
+2021-11-02 07:08:00,807 p=14789 u=root n=ansible | skipping: [app2]
+2021-11-02 07:08:00,857 p=14789 u=root n=ansible | skipping: [db]
+2021-11-02 07:08:03,477 p=14789 u=root n=ansible | ok: [app3]
+2021-11-02 07:08:03,486 p=14789 u=root n=ansible | TASK [OS : Install Packages In Solaris] *********************************************************************************************************************************************************************************************************
+2021-11-02 07:08:03,616 p=14789 u=root n=ansible | skipping: [app2] => (item=tree) 
+2021-11-02 07:08:03,641 p=14789 u=root n=ansible | skipping: [app3] => (item=tree) 
+2021-11-02 07:08:03,661 p=14789 u=root n=ansible | skipping: [app1] => (item=tree) 
+2021-11-02 07:08:03,666 p=14789 u=root n=ansible | skipping: [app2] => (item=gimp) 
+2021-11-02 07:08:03,698 p=14789 u=root n=ansible | skipping: [db] => (item=tree) 
+2021-11-02 07:08:03,706 p=14789 u=root n=ansible | skipping: [app3] => (item=gimp) 
+2021-11-02 07:08:03,713 p=14789 u=root n=ansible | skipping: [app1] => (item=gimp) 
+2021-11-02 07:08:03,719 p=14789 u=root n=ansible | skipping: [lb] => (item=tree) 
+2021-11-02 07:08:03,753 p=14789 u=root n=ansible | skipping: [db] => (item=gimp) 
+2021-11-02 07:08:03,791 p=14789 u=root n=ansible | skipping: [lb] => (item=gimp) 
+2021-11-02 07:08:03,838 p=14789 u=root n=ansible | PLAY RECAP **************************************************************************************************************************************************************************************************************************************
+2021-11-02 07:08:03,839 p=14789 u=root n=ansible | app1                       : ok=4    changed=1    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+2021-11-02 07:08:03,839 p=14789 u=root n=ansible | app2                       : ok=4    changed=1    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+2021-11-02 07:08:03,839 p=14789 u=root n=ansible | app3                       : ok=4    changed=1    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+2021-11-02 07:08:03,839 p=14789 u=root n=ansible | db                         : ok=4    changed=1    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+2021-11-02 07:08:03,839 p=14789 u=root n=ansible | lb                         : ok=4    changed=1    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+2021-11-02 07:08:26,528 p=15279 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ************************************************************************************************************************************************************************************************
+2021-11-02 07:08:26,547 p=15279 u=root n=ansible | TASK [Gathering Facts] **************************************************************************************************************************************************************************************************************************
+2021-11-02 07:08:27,969 p=15279 u=root n=ansible | ok: [app3]
+2021-11-02 07:08:33,076 p=15279 u=root n=ansible | ok: [app1]
+2021-11-02 07:08:33,131 p=15279 u=root n=ansible | ok: [db]
+2021-11-02 07:08:33,142 p=15279 u=root n=ansible | ok: [lb]
+2021-11-02 07:08:33,191 p=15279 u=root n=ansible | ok: [app2]
+2021-11-02 07:08:33,206 p=15279 u=root n=ansible | TASK [OS : Remove Packages For RedHat] **********************************************************************************************************************************************************************************************************
+2021-11-02 07:08:33,349 p=15279 u=root n=ansible | skipping: [app3] => (item=tree) 
+2021-11-02 07:08:33,392 p=15279 u=root n=ansible | skipping: [app3] => (item=gimp) 
+2021-11-02 07:08:35,125 p=15279 u=root n=ansible | changed: [app1] => (item=tree)
+2021-11-02 07:08:35,177 p=15279 u=root n=ansible | changed: [db] => (item=tree)
+2021-11-02 07:08:35,188 p=15279 u=root n=ansible | changed: [lb] => (item=tree)
+2021-11-02 07:08:35,196 p=15279 u=root n=ansible | changed: [app2] => (item=tree)
+2021-11-02 07:08:37,672 p=15279 u=root n=ansible | changed: [db] => (item=gimp)
+2021-11-02 07:08:37,747 p=15279 u=root n=ansible | changed: [lb] => (item=gimp)
+2021-11-02 07:08:37,749 p=15279 u=root n=ansible | changed: [app1] => (item=gimp)
+2021-11-02 07:08:37,751 p=15279 u=root n=ansible | changed: [app2] => (item=gimp)
+2021-11-02 07:08:37,759 p=15279 u=root n=ansible | TASK [OS : Remove Packages In Debian] ***********************************************************************************************************************************************************************************************************
+2021-11-02 07:08:37,909 p=15279 u=root n=ansible | skipping: [app2] => (item=tree) 
+2021-11-02 07:08:37,930 p=15279 u=root n=ansible | skipping: [lb] => (item=tree) 
+2021-11-02 07:08:37,940 p=15279 u=root n=ansible | skipping: [app1] => (item=tree) 
+2021-11-02 07:08:37,949 p=15279 u=root n=ansible | skipping: [app2] => (item=gimp) 
+2021-11-02 07:08:37,988 p=15279 u=root n=ansible | skipping: [lb] => (item=gimp) 
+2021-11-02 07:08:38,012 p=15279 u=root n=ansible | skipping: [db] => (item=tree) 
+2021-11-02 07:08:38,020 p=15279 u=root n=ansible | skipping: [app1] => (item=gimp) 
+2021-11-02 07:08:38,060 p=15279 u=root n=ansible | skipping: [db] => (item=gimp) 
+2021-11-02 07:08:41,141 p=15279 u=root n=ansible | changed: [app3] => (item=tree)
+2021-11-02 07:08:44,235 p=15279 u=root n=ansible | changed: [app3] => (item=gimp)
+2021-11-02 07:08:44,244 p=15279 u=root n=ansible | TASK [OS : Remove Packages In Solaris] **********************************************************************************************************************************************************************************************************
+2021-11-02 07:08:44,358 p=15279 u=root n=ansible | skipping: [app1] => (item=tree) 
+2021-11-02 07:08:44,395 p=15279 u=root n=ansible | skipping: [app3] => (item=tree) 
+2021-11-02 07:08:44,406 p=15279 u=root n=ansible | skipping: [app1] => (item=gimp) 
+2021-11-02 07:08:44,412 p=15279 u=root n=ansible | skipping: [lb] => (item=tree) 
+2021-11-02 07:08:44,426 p=15279 u=root n=ansible | skipping: [app2] => (item=tree) 
+2021-11-02 07:08:44,453 p=15279 u=root n=ansible | skipping: [app3] => (item=gimp) 
+2021-11-02 07:08:44,455 p=15279 u=root n=ansible | skipping: [lb] => (item=gimp) 
+2021-11-02 07:08:44,502 p=15279 u=root n=ansible | skipping: [db] => (item=tree) 
+2021-11-02 07:08:44,505 p=15279 u=root n=ansible | skipping: [app2] => (item=gimp) 
+2021-11-02 07:08:44,544 p=15279 u=root n=ansible | skipping: [db] => (item=gimp) 
+2021-11-02 07:08:44,587 p=15279 u=root n=ansible | PLAY RECAP **************************************************************************************************************************************************************************************************************************************
+2021-11-02 07:08:44,587 p=15279 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:08:44,587 p=15279 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:08:44,588 p=15279 u=root n=ansible | app3                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:08:44,588 p=15279 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:08:44,588 p=15279 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:09:01,033 p=15562 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ************************************************************************************************************************************************************************************************
+2021-11-02 07:09:01,055 p=15562 u=root n=ansible | TASK [Gathering Facts] **************************************************************************************************************************************************************************************************************************
+2021-11-02 07:09:02,206 p=15562 u=root n=ansible | ok: [app3]
+2021-11-02 07:09:07,565 p=15562 u=root n=ansible | ok: [app2]
+2021-11-02 07:09:07,629 p=15562 u=root n=ansible | ok: [lb]
+2021-11-02 07:09:07,692 p=15562 u=root n=ansible | ok: [db]
+2021-11-02 07:09:07,701 p=15562 u=root n=ansible | ok: [app1]
+2021-11-02 07:09:07,715 p=15562 u=root n=ansible | TASK [OS : Reboot RedHat] ***********************************************************************************************************************************************************************************************************************
+2021-11-02 07:09:07,835 p=15562 u=root n=ansible | skipping: [app3]
+2021-11-02 07:12:45,794 p=15562 u=root n=ansible |  [ERROR]: User interrupted execution
+
+2021-11-02 07:15:15,603 p=15995 u=root n=ansible | PLAY [playbook for OSManagement for all systems] *******************************************************
+2021-11-02 07:15:15,621 p=15995 u=root n=ansible | TASK [Gathering Facts] *********************************************************************************
+2021-11-02 07:15:17,101 p=15995 u=root n=ansible | ok: [app3]
+2021-11-02 07:15:21,951 p=15995 u=root n=ansible | ok: [db]
+2021-11-02 07:15:22,363 p=15995 u=root n=ansible | ok: [lb]
+2021-11-02 07:15:22,493 p=15995 u=root n=ansible | ok: [app2]
+2021-11-02 07:15:22,594 p=15995 u=root n=ansible | ok: [app1]
+2021-11-02 07:15:22,616 p=15995 u=root n=ansible | TASK [OS : Reboot RedHat] ******************************************************************************
+2021-11-02 07:15:22,801 p=15995 u=root n=ansible | skipping: [app3]
+2021-11-02 07:15:28,808 p=15995 u=root n=ansible | fatal: [db]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Shared connection to db closed.", "unreachable": true}
+2021-11-02 07:15:28,812 p=15995 u=root n=ansible | fatal: [lb]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Shared connection to lb closed.", "unreachable": true}
+2021-11-02 07:15:28,824 p=15995 u=root n=ansible | fatal: [app1]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Shared connection to app1 closed.", "unreachable": true}
+2021-11-02 07:15:28,873 p=15995 u=root n=ansible | fatal: [app2]: UNREACHABLE! => {"changed": false, "msg": "Failed to connect to the host via ssh: Shared connection to app2 closed.", "unreachable": true}
+2021-11-02 07:15:28,894 p=15995 u=root n=ansible | TASK [OS : Reboot Debian] ******************************************************************************
+2021-11-02 07:15:34,383 p=15995 u=root n=ansible | fatal: [app3]: FAILED! => {"changed": true, "cmd": "sleep 5 && reboot", "delta": "0:00:05.008427", "end": "2021-11-02 07:15:34.321266", "msg": "non-zero return code", "rc": 1, "start": "2021-11-02 07:15:29.312839", "stderr": "System has not been booted with systemd as init system (PID 1). Can't operate.\nFailed to connect to bus: Host is down\nFailed to talk to init daemon.", "stderr_lines": ["System has not been booted with systemd as init system (PID 1). Can't operate.", "Failed to connect to bus: Host is down", "Failed to talk to init daemon."], "stdout": "", "stdout_lines": []}
+2021-11-02 07:15:34,383 p=15995 u=root n=ansible | ...ignoring
+2021-11-02 07:15:34,400 p=15995 u=root n=ansible | TASK [OS : Reboot Solaris] *****************************************************************************
+2021-11-02 07:15:34,499 p=15995 u=root n=ansible | skipping: [app3]
+2021-11-02 07:15:34,526 p=15995 u=root n=ansible | PLAY RECAP *********************************************************************************************
+2021-11-02 07:15:34,527 p=15995 u=root n=ansible | app1                       : ok=1    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2021-11-02 07:15:34,527 p=15995 u=root n=ansible | app2                       : ok=1    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2021-11-02 07:15:34,527 p=15995 u=root n=ansible | app3                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=1   
+2021-11-02 07:15:34,527 p=15995 u=root n=ansible | db                         : ok=1    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2021-11-02 07:15:34,527 p=15995 u=root n=ansible | lb                         : ok=1    changed=0    unreachable=1    failed=0    skipped=0    rescued=0    ignored=0   
+2021-11-02 07:20:18,971 p=16230 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ******************************************************
+2021-11-02 07:20:18,990 p=16230 u=root n=ansible | TASK [Gathering Facts] ********************************************************************************
+2021-11-02 07:20:20,302 p=16230 u=root n=ansible | ok: [app3]
+2021-11-02 07:20:25,684 p=16230 u=root n=ansible | ok: [lb]
+2021-11-02 07:20:25,831 p=16230 u=root n=ansible | ok: [db]
+2021-11-02 07:20:25,962 p=16230 u=root n=ansible | ok: [app2]
+2021-11-02 07:20:25,993 p=16230 u=root n=ansible | ok: [app1]
+2021-11-02 07:20:26,006 p=16230 u=root n=ansible | TASK [OS : Reboot RedHat] *****************************************************************************
+2021-11-02 07:20:26,133 p=16230 u=root n=ansible | skipping: [app3]
+2021-11-02 07:20:26,792 p=16230 u=root n=ansible | changed: [app1]
+2021-11-02 07:20:26,796 p=16230 u=root n=ansible | changed: [lb]
+2021-11-02 07:20:26,842 p=16230 u=root n=ansible | changed: [app2]
+2021-11-02 07:20:26,849 p=16230 u=root n=ansible | changed: [db]
+2021-11-02 07:20:26,861 p=16230 u=root n=ansible | TASK [OS : Reboot Debian] *****************************************************************************
+2021-11-02 07:20:27,023 p=16230 u=root n=ansible | skipping: [app1]
+2021-11-02 07:20:27,100 p=16230 u=root n=ansible | skipping: [app2]
+2021-11-02 07:20:27,118 p=16230 u=root n=ansible | skipping: [lb]
+2021-11-02 07:20:27,167 p=16230 u=root n=ansible | skipping: [db]
+2021-11-02 07:20:27,440 p=16230 u=root n=ansible | changed: [app3]
+2021-11-02 07:20:27,454 p=16230 u=root n=ansible | TASK [OS : Reboot Solaris] ****************************************************************************
+2021-11-02 07:20:27,654 p=16230 u=root n=ansible | skipping: [app1]
+2021-11-02 07:20:27,691 p=16230 u=root n=ansible | skipping: [app2]
+2021-11-02 07:20:27,697 p=16230 u=root n=ansible | skipping: [app3]
+2021-11-02 07:20:27,726 p=16230 u=root n=ansible | skipping: [lb]
+2021-11-02 07:20:27,742 p=16230 u=root n=ansible | skipping: [db]
+2021-11-02 07:20:27,810 p=16230 u=root n=ansible | PLAY RECAP ********************************************************************************************
+2021-11-02 07:20:27,810 p=16230 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:20:27,810 p=16230 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:20:27,810 p=16230 u=root n=ansible | app3                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:20:27,810 p=16230 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:20:27,811 p=16230 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:22:04,257 p=16469 u=root n=ansible | PLAY [playbook for OSManagement for all systems] ******************************************************
+2021-11-02 07:22:04,276 p=16469 u=root n=ansible | TASK [Gathering Facts] ********************************************************************************
+2021-11-02 07:22:05,624 p=16469 u=root n=ansible | ok: [app3]
+2021-11-02 07:22:10,547 p=16469 u=root n=ansible | ok: [app1]
+2021-11-02 07:22:11,197 p=16469 u=root n=ansible | ok: [db]
+2021-11-02 07:22:11,254 p=16469 u=root n=ansible | ok: [lb]
+2021-11-02 07:22:11,472 p=16469 u=root n=ansible | ok: [app2]
+2021-11-02 07:22:11,488 p=16469 u=root n=ansible | TASK [OS : Reboot RedHat] *****************************************************************************
+2021-11-02 07:22:11,613 p=16469 u=root n=ansible | skipping: [app3]
+2021-11-02 07:22:12,312 p=16469 u=root n=ansible | changed: [db]
+2021-11-02 07:22:12,321 p=16469 u=root n=ansible | changed: [app2]
+2021-11-02 07:22:12,331 p=16469 u=root n=ansible | changed: [lb]
+2021-11-02 07:22:12,341 p=16469 u=root n=ansible | changed: [app1]
+2021-11-02 07:22:12,355 p=16469 u=root n=ansible | TASK [OS : Reboot Debian] *****************************************************************************
+2021-11-02 07:22:12,552 p=16469 u=root n=ansible | skipping: [app2]
+2021-11-02 07:22:12,596 p=16469 u=root n=ansible | skipping: [app1]
+2021-11-02 07:22:12,638 p=16469 u=root n=ansible | skipping: [lb]
+2021-11-02 07:22:12,670 p=16469 u=root n=ansible | skipping: [db]
+2021-11-02 07:22:13,141 p=16469 u=root n=ansible | changed: [app3]
+2021-11-02 07:22:13,156 p=16469 u=root n=ansible | TASK [OS : Reboot Solaris] ****************************************************************************
+2021-11-02 07:22:13,277 p=16469 u=root n=ansible | skipping: [app1]
+2021-11-02 07:22:13,308 p=16469 u=root n=ansible | skipping: [app2]
+2021-11-02 07:22:13,332 p=16469 u=root n=ansible | skipping: [db]
+2021-11-02 07:22:13,348 p=16469 u=root n=ansible | skipping: [app3]
+2021-11-02 07:22:13,369 p=16469 u=root n=ansible | skipping: [lb]
+2021-11-02 07:22:13,429 p=16469 u=root n=ansible | PLAY RECAP ********************************************************************************************
+2021-11-02 07:22:13,430 p=16469 u=root n=ansible | app1                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:22:13,430 p=16469 u=root n=ansible | app2                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:22:13,430 p=16469 u=root n=ansible | app3                       : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:22:13,430 p=16469 u=root n=ansible | db                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+2021-11-02 07:22:13,430 p=16469 u=root n=ansible | lb                         : ok=2    changed=1    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   

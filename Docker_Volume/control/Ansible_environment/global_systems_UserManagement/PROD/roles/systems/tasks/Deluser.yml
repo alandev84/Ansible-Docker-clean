@@ -9,14 +9,14 @@
       - DeleteUser
     when: ansible_os_family != "Solaris"
 
-  - name: Delete User's Group For RedHat/Debian
+  - name: Delete User From Group For RedHat/Debian
     group:
       name: "{{ item.groups }}"
       gid: "{{ item.gid }}"
       state: absent
-    loop: "{{ users }}"
+    loop: "{{ newgroup }}"
     tags:
-      - DeleteUser
+      - DeleteGroup
     when: ansible_os_family != "Solaris"
 
   - name: Delete User For Solaris
@@ -26,9 +26,9 @@
       - DeleteUser
     when: ansible_os_family == "Solaris"
  
-  - name: Delete User's Group For Solaris
+  - name: Delete User From Group For Solaris
     command: 'groupdel {{ item.groups }}'
-    loop: "{{ users }}"
+    loop: "{{ newgroup }}"
     tags:
-      - DeleteUser
+      - DeleteGroup
     when: ansible_os_family == "Solaris"

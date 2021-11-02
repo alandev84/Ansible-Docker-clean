@@ -29,14 +29,6 @@
     tags:
       - OSInstallSWAll
       - OSInstallSWRH
-    when: ansible_os_family == "RedHat"
-
-  - name: Reboot RedHat After Installation Of Packages
-    reboot:
-    ignore_errors: yes
-    tags:
-      - OSInstallSWAll
-      - OSInstallSWRH
     when: ansible_os_family == "RedHat" and yum_install_status.changed
 
 # FOR DEB
@@ -69,31 +61,14 @@
     tags:
       - OSInstallSWAll
       - OSInstallSWDeb
-    when: ansible_os_family == "Debian"
-
-  - name: Reboot Debian After Installation Of Packages
-    reboot:
-    ignore_errors: yes
-    tags:
-      - OSInstallSWAll
-      - OSInstallSWDeb
     when: ansible_os_family == "Debian" and apt_install_status.changed
  
 # FOR SOLARIS
   - name: Install Packages In Solaris
-    command: '/usr/bin/pkg install -v --accept --be-name {{ item }} > {{ logfile }} 2>&1'
+    command: '/usr/sbin/pkgadd {{ item }} > {{ logfile }} 2>&1'
     ignore_errors: yes
-    register: sol_install_status
     tags:
       - OSInstallSWAll
       - OSInstallSWSol
     loop: "{{ solarissoftware }}"
     when: ansible_os_family == "Solaris"
- 
-  - name: Reboot Solaris After Installation Of Packages
-    command: 'reboot'
-    ignore_errors: yes
-    tags:
-      - OSInstallSWAll
-      - OSInstallSWSol
-    when: ansible_os_family == "Solaris" and sol_install_status.changed
