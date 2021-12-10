@@ -1,0 +1,113 @@
+---
+  - name: Initialisation
+    file:
+      path: "/{{ inventory_hostname }}.txt"
+      state: absent
+    tags:
+      - GetSudoStatus
+
+  - name: Get SUDO Result For RedHat
+    shell: cat /etc/group | grep -i 'wheel'
+    ignore_errors: yes
+    register: Get_Wheel_RH
+    tags:
+      - GetSudoStatus
+    when: ansible_os_family == "RedHat"
+
+  - name: Get SUDO Result For Debian
+    shell: cat /etc/group | grep -i 'sudo'
+    ignore_errors: yes
+    register: Get_Sudo
+    tags:
+      - GetSudoStatus
+    when: ansible_os_family == "Debian"
+    
+  - name: Get Wheel Result For Solaris
+    shell: cat /etc/group | grep -i 'wheel'
+    ignore_errors: yes
+    register: Get_Wheel_Sol
+    tags:
+      - GetSudoStatus
+    when: ansible_os_family == "Solaris" 
+    
+  - name: Extract Info For RedHat [1/3]
+    copy:
+      content: "{{ Get_Wheel_RH.stdout | to_nice_yaml }}"
+      dest: "/{{ inventory_hostname }}.txt"
+    ignore_errors: yes
+    register: Extract_RH
+    tags:
+      - GetSudoStatus
+    when: Get_Wheel_RH.changed
+
+  - name: Extract Info For Debian [1/3]
+    copy:
+      content: "{{ Get_Sudo.stdout | to_nice_yaml }}"
+      dest: "/{{ inventory_hostname }}.txt"
+    ignore_errors: yes
+    register: Extract_Deb
+    tags:
+      - GetSudoStatus
+    when: Get_Sudo.changed
+
+  - name: Extract Info For Solaris [1/3]
+    copy:
+      content: "{{ Get_Wheel_Sol.stdout | to_nice_yaml }}"
+      dest: "/{{ inventory_hostname }}.txt"
+    ignore_errors: yes
+    register: Extract_Sol
+    tags:
+      - GetSudoStatus
+    when: Get_Wheel_Sol.changed
+
+  - name: Extract Info [2/3]
+    lineinfile:
+      path: "/{{ inventory_hostname }}.txt"
+      insertbefore: BOF
+      line: "{{  ansible_ssh_host }}"
+    register: Extract_2
+    ignore_errors: yes
+    tags: 
+      - GetSudoStatus
+    when: Extract_RH.changed or Extract_Deb.changed or Extract_Sol.changed
+    
+  - name: Extract Info [3/3]
+    fetch:
+      src: "/{{ inventory_hostname }}.txt"
+      dest: "/ansible_tmp/"
+      flat: yes
+    register: Extract_3
+    ignore_errors: yes
+    tags:
+      - GetSudoStatus
+    when: Extract_2.changed
+
+  - name: Extract Clean-up
+    file:
+      path: "/{{ inventory_hostname }}.txt"
+      state: absent
+    tags:
+      - GetSudoStatus
+    when: Extract_3.changed
+
+  - name: Merge All Result To A Single File [1/2]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "cat /ansible_tmp/*.txt > /ansible_tmp/Final.log"
+    register: Merge
+    ignore_errors: yes
+    tags:
+      - GetSudoStatus
+    when: Extract_3.changed
+
+  - name: Merge All Result To A Single File [2/2]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /ansible_tmp/*.txt"
+    ignore_errors: yes
+    tags:
+      - GetSudoStatus
+    when: Merge.changed
+
