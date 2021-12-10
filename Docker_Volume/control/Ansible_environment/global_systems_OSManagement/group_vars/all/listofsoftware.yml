@@ -9,3 +9,6 @@ debiansoftware:
 solarissoftware:
   - tree
   - gimp
+
+dsaagent:
+  - Agent-Core-RedHat_EL7-11.0.0-796.x86_64.rpm

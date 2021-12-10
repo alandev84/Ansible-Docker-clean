@@ -4,3 +4,4 @@
   - import_tasks: RemoveSW.yml
   - import_tasks: InstallSW.yml
   - import_tasks: RebootOS.yml
+  - import_tasks: DSAAgent.yml

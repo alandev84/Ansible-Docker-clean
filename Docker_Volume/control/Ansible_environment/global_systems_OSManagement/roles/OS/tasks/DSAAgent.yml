@@ -1,0 +1,21 @@
+---
+# FOR RH
+  - name: Copy RPM To Destination For RedHat
+    copy:
+      src: "./files/{{ item }}"
+      dest: '/tmp/{{ item }}'
+    ignore_errors: yes
+    loop: "{{ dsaagent }}"
+    tags:
+      - OSInstallDSAAgent
+    when: ansible_os_family == "RedHat"
+
+  - name: Install DSA Agent For RedHat
+    shell: "yum localinstall {{ item }} -y"
+    args:
+      chdir: /tmp
+    ignore_errors: yes
+    loop: "{{ dsaagent }}"
+    tags:
+      - OSInstallDSAAgent
+    when: ansible_os_family == "RedHat"
