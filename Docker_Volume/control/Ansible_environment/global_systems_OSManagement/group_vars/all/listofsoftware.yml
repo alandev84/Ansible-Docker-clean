@@ -12,3 +12,6 @@ solarissoftware:
 
 dsaagent:
   - Agent-Core-RedHat_EL7-11.0.0-796.x86_64.rpm
+
+networker:
+  - lgtoxtdclnt-19.1.1.1-1.x86_64.rpm

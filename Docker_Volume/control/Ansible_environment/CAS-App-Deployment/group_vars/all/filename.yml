@@ -1,0 +1,9 @@
+oldname: RF-CASSY-DFA_U01.00.15
+newname: RF-CASSY-DFA_U01.00.16
+newfilepath: RF-CASSY-DFA_U01.00.11
+sachweb_oldpath: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/ROOT
+sachweb_oldfile: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/ROOT.war
+bankweb_oldpath: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/ROOT
+bankweb_oldfile: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/ROOT.war
+sachweb_newpath: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/
+bankweb_newpath: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/

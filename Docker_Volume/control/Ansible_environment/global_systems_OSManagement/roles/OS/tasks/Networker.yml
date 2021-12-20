@@ -4,20 +4,23 @@
     copy:
       src: "./files/{{ item }}"
       dest: '/tmp/{{ item }}'
+      owner: root
+      group: root
+      mode: '0644'
     ignore_errors: yes
-    loop: "{{ dsaagent }}"
+    loop: "{{ networker }}"
     tags:
-      - OSInstallDSAAgent
+      - OSInstallNetworker
     when: ansible_os_family == "RedHat"
 
-  - name: Install DSA Agent For RedHat
+  - name: Install Networker Agent For RedHat
     shell: "yum localinstall {{ item }} -y"
     args:
       chdir: /tmp
     ignore_errors: yes
-    loop: "{{ dsaagent }}"
+    loop: "{{ networker }}"
     tags:
-      - OSInstallDSAAgent
+      - OSInstallNetworker
     when: ansible_os_family == "RedHat"
 
 # For Solaris

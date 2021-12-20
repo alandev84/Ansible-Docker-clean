@@ -5,3 +5,5 @@
   - import_tasks: InstallSW.yml
   - import_tasks: RebootOS.yml
   - import_tasks: DSAAgent.yml
+  - import_tasks: SatelliteRegistration.yml
+  - import_tasks: UpdateHostFile.yml

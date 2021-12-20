@@ -1,5 +1,5 @@
 ---
-  - name: playbook for User Management for all systems
+  - name: playbook for Provision VSphere
     hosts: prod
     ignore_errors: true
     ignore_unreachable: true
@@ -17,4 +17,5 @@
         tags:
           - always
     roles:
-      - { role: systems }
+      - { role: Configure_VM }
+      - { role: Provision_VM }

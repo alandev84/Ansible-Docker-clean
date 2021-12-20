@@ -1,0 +1,63 @@
+---
+# FOR Config VM
+  - name: Add Memory To New VM In Linux Group
+    add_host:
+      name: "{{ vm_network_one_ip }}"
+    groups: linux
+    ignore_errors: yes
+    tags:
+      - VMConfigMemory
+      - VMConfigAll
+
+# FOR Config DNS
+  - name: Remove All DNS Details
+    lineinfile:
+      path: /etc/sysconfig/network-scripts/ifcfg-ens224
+      regex: '^DNS'
+      state: absent
+    become: true
+    register: remove_dns
+    ignore_errors: yes
+    tags:
+      - VMConfigAll
+      - VMConfigDNS
+
+  - name: Add DNS Details
+    lineinfile:
+      path: /etc/sysconfig/network-scripts/ifcfg-ens224
+      insertafter: '^GATEWAY'
+      line: "{{ item }}"
+    become: true
+    loop: "{{ dns }}"
+    ignore_errors: yes
+    register: add_dns
+    tags:
+      - VMConfigAll
+      - VMConfigDNS
+    when: remove_dns.changed
+
+# FOR Restart Network
+  - name: Reboot Network Service
+    service:
+      name: network
+      state: restarted
+    become: true
+    ignore_errors: yes
+    register: restart_network
+    tags:
+     - VMConfigAll
+     - VMConfigDNS
+     - VMConfigRestartNetwork
+    when: remove_dns.changed or add_dns.changed
+
+  - name: Scan For SSH
+    wait_for:
+      port: 22
+      host: "{{ ansible_host }}"
+      delay: 10
+    delegate_to: localhost
+    tags:
+      - VMConfigAll
+      - VMConfigDNS
+      - VMConfigRestartNetwork
+    when: restart_network.changed

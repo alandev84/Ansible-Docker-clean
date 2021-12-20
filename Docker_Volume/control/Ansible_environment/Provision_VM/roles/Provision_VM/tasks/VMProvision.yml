@@ -1,0 +1,45 @@
+---
+# Provisioning VM
+  - name: Provision RHEL VM
+    vmware_guest:
+      validate_certs: "{{ item.valid_cert }}"
+      datacenter: "{{ item.dc_name }}"
+      cluster: "{{ item.cluster_name }}"
+      datastore: "{{ item.datastore }}"
+      folder: "{{ item.folderpath }}"
+      name: "{{ item.vm_name }}"
+      template: "{{ item.vmtemplate }}"
+      state: "{{ item.state }}"
+      guest_id: "{{ item.guestid }}"
+      disk:
+        - size_gb: "{{ item.hdd1_size }}"
+          type: "{{ item.disktype }}"
+          datastore: "{{ item.datastore }}"
+        - size_gb: "{{ item.hdd2_size }}"
+          type: "{{ item.disktype }}"
+          datastore: "{{ item.datastore }}"
+      hardware:
+        memory_mb: "{{ item.ram_size }}"
+        num_cpus: "{{ item.cpu_count }}"
+        scsi: "{{ item.scsi }}"
+      networks:
+        - name: "{{ network_name }}"
+          ip: "{{ vm_ip1 }}"
+          gateway: "{{ gateway }}"
+          netmask: "{{ subnet }}"
+          type: "{{ network_type }}"
+          allow_guest_control: "{{ rdp }}"
+          start_connected: "{{ start_connect }}"
+      wait_for_ip_address: "{{ wait_ip }}"
+      customization:
+        dns_servers:
+          - "{{ dns1 }}"
+          - "{{ dns2 }}"
+        domain: "{{ domain_name }}"
+        hostname: "{{ vm_name }}"
+      wait_for_customization: "{{ wait_customise }}"
+    register: remove_dns
+    ignore_errors: yes
+    loop: "{{ vmspecs }}"
+    tags:
+      - VMProvision

@@ -1,0 +1,4 @@
+idt: ./files/hostfile-idt.j2
+uat: ./files/hostfile-uat.j2
+sit: ./files/hostfile-sit.j2
+prod: ./files/hostfile-prod.j2
