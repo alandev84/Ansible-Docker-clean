@@ -1,0 +1,8 @@
+---
+  - name: playbook for extracting User Sudo list for all systems
+    hosts: prod
+    ignore_errors: true
+    ignore_unreachable: true
+    become: true
+    roles:
+      - { role: usersudo }
