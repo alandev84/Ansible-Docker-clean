@@ -15,3 +15,8 @@ dsaagent:
 
 networker:
   - lgtoxtdclnt-19.1.1.1-1.x86_64.rpm
+
+hpovmpackage:
+  - m4
+  - motif
+  - unzip

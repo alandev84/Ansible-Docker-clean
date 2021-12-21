@@ -1,0 +1,24 @@
+---
+# FOR RH
+  - name: Disable Root Path For List Of Staff - RedHat Host
+    lineinfile:
+      path: "/home/{{ item }}/.bash_profile"
+      regexp: "{{ regex }}"
+      line:  "{{ replace }}"
+    ignore_errors: yes
+    loop: "{{ staff }}"
+    tags:
+      - DisableRootEnvStaff
+    when: ansible_os_family == "RedHat"
+
+  - name: Disable Root Path For Root - RedHat Host
+      lineinfile:
+        path: "/root/.bash_profile"
+        regexp: "{{ regex }}"
+        line:  "{{ replace }}"
+      ignore_errors: yes
+      tags:
+        - DisableRootEnv
+      when: ansible_os_family == "RedHat"
+
+# For Solaris

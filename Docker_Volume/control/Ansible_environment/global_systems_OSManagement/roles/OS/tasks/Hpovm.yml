@@ -1,0 +1,108 @@
+---
+# For RedHat
+  - name: Copy Installer To Host For RedHat
+    copy:
+      src: "{{ hpovo_src }}"
+      dest: "{{ hpovo_dest }}"
+      owner: root
+      group: root
+      mode: '0644'
+    register: hpovm_copy
+    ignore_errors: yes
+    tags:
+      - OSInstallHpovm
+    when: ansible_os_family == "RedHat"
+
+  - name: Ensure Dependencies Before Installation For RedHat
+    yum:
+      naame: "{{ item }}"
+      state: latest
+    ignore_errors: yes
+    loop: "{{ hpovmpackage }}"
+    tags:
+      - OSInstallHpovm
+    when: hpovm_copy.changed
+
+  - name: Stop OVCtrl Service
+    service:
+      name: OVCtrl
+      state: stopped
+    register: hpovm_stop
+    ignore_errors: yes
+    tags:
+      - OSInstallHpovm
+    when: hpovm_copy.changed
+
+  - name: Uninstall HP OVM Module
+    ignore_errors: yes
+    shell: "{{ cmd_hpovo_remove }}"
+    register: hpovm_remove
+    tags:
+      - OSInstallHpovm
+    when: hpovm_stop.changed
+
+  - name: Unzip File Into Root Path
+    unarchive:
+      src: "{{ hpovo_dest }}"
+      dest: "{{ hpovo_root_path }}"
+      remote_src: yes
+    ignore_errors: yes
+    register: hpovm_unzip
+    tags:
+      - OSInstallHpovm
+    when: hpovm_remove.changed
+
+  - name: Update Permission Of Files
+    file:
+      path: "{{ hpovo_unzip_path }}"
+      state: directory
+      recurse: yes
+      owner: root
+      group: root
+      mode: '0755'
+    ignore_errors: yes
+    register: hpovm_permission
+    tags:
+      - OSInstallHpovm
+    when: hpovm_unzip.changed
+
+  - name: Installation Of HP OVM Module
+    ignore_errors: yes
+    shell: "{{ cmd_hpovo_install }}"
+    register: hpovm_installed
+    tags:
+      - OSInstallHpovm
+    when: hpovm_permission.changed
+
+  - name: Generate Cert After Installation
+    ignore_errors: yes
+    shell: "{{ cmd_hpovo_gen_cert }}"
+    register: hpovm_gencert
+    tags:
+      - OSInstallHpovm
+    when: hpovm_installed.changed
+
+  - name: Update Parameter 1
+    ignore_errors: yes
+    shell: "{{ cmd_hpovo_setpara1 }}"
+    register: hpovm_setpara1
+    tags:
+      - OSInstallHpovm
+    when: hpovm_gencert.changed
+
+  - name: Update Parameter 2
+    ignore_errors: yes
+    shell: "{{ cmd_hpovo_setpara2 }}"
+    register: hpovm_setpara2
+    tags:
+      - OSInstallHpovm
+    when: hpovm_setpara1.changed
+
+  - name: Start OVCtrl Service
+    service:
+      name: OVCtrl
+      state: restarted
+    ignore_errors: yes
+    tags:
+      - OSInstallHpovm
+    when: hpovm_setpara2.changed
