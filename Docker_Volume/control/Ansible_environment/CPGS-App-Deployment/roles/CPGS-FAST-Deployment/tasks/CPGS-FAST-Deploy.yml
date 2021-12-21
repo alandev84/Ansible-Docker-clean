@@ -1,0 +1,214 @@
+---
+# FOR CPGS-FAST - Deploy - Add New Packages
+  - name: Step 1 - Copy All New Packages to CPGS FAST Server [1/2]
+    become_user: apmgr
+    copy:
+      src: './files/{{ new_file }}.tar'
+      dest: '{{ tmp_path }}/{{ new_file }}.tar'
+    ignore_errors: yes
+    register: fast_copy_tar
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTCopy
+
+  - name: Step 1 - Copy All New Packages to CPGS FAST Server [2/2]
+    become_user: apmgr
+    unarchive:
+      src: '{{ tmp_path }}/{{ new_file }}.tar'
+      dest: "{{ tmp_path }}"
+      remote_src: yes
+    ignore_errors: yes
+    register: fast_copy_done
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTCopy
+    when: fast_copy_tar.changed
+
+# FOR CPGS-FAST - Deploy - Backup and Archive
+  - name: Step 2 - Create Config Backup Path
+    become_user: apmgr
+    file:
+      path: '{{ archive_path }}/{{ old_file }}/{{ fast_backup_conf_path }}'
+      state: directory
+    ignore_errors: yes
+    register: fast_backup_confpath
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTBackup
+    when: fast_copy_done.changed
+
+  - name: Step 2 - Create Program Backup Path
+    become_user: apmgr
+    file:
+      path: '{{ archive_path }}/{{ old_file }}/{{ fast_backup_prog_path }}'
+      state: directory
+    ignore_errors: yes
+    register: fast_backup_progpath
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTBackup
+    when: fast_backup_confpath.changed
+
+  - name: Step 2 - Config Directory Backup
+    become_user: apmgr
+    copy:
+      src: "{{ fast_conf_path }}"
+      dest: '{{ archive_path }}/{{ old_file }}/{{ fast_backup_conf_path }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: fast_conf_backup_complete
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTBackup
+    when: fast_backup_confpath.changed
+
+  - name: Step 2 - Program Directory Backup
+    become_user: apmgr
+    archive:
+      path: 
+        - '{{ fast_prog_path }}/*'
+      dest: '{{ archive_path }}/{{ old_file }}/{{ fast_backup_prog_path }}/program_svr.tgz'
+    ignore_errors: yes
+    register: fast_prog_backup_complete
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTBackup
+    when: fast_backup_progpath.changed
+
+# FOR CPGS-FAST - Deploy - Deployment Steps - Removal of old files and folder
+  - name: Step 3 - Removal Of Previous Application Deployment Folder
+    become_user: apmgr
+    file:
+      path: '{{ fast_opt_app_path }}/{{ fast_project_name }}'
+      state: absent
+    ignore_errors: yes
+    register: fast_cpgs_deploy1
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_backup_confpath.changed and fast_backup_progpath.changed
+
+  - name: Step 2 - Removal Of Previous Application Deployment WAR File
+    become_user: apmgr
+    file:
+      path: '{{ fast_opt_app_path }}/{{ fast_project_name }}.war'
+      state: absent
+    ignore_errors: yes
+    register: fast_cpgs_deploy2
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy1.changed
+
+# FOR CPGS-FAST - Deploy - Deployment Steps - Deploy New WAR File
+  - name: Step 3 - Deploy New WAR File
+    become_user: apmgr
+    copy:
+      src: '{{ tmp_path }}/{{ new_file }}/{{ fast_cpgsproc_path }}/{{ project_name }}.war'
+      dest: '{{ fast_opt_app_path }}/'
+      remote_src: yes
+    ignore_errors: yes
+    register: fast_cpgs_deploy3
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy2.changed
+
+  - name: Step 3 - Deploy Channel Properties File
+    become_user: apmgr
+    copy:
+      src: '{{ tmp_path }}/{{ new_file }}/{{ fast_conf_cpgsproc_path }}/channel.properties'
+      dest: "{{ fast_conf_path }}/"
+      remote_src: yes
+      backup: true
+    ignore_errors: yes
+    register: fast_cpgs_deploy4
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy3.changed
+
+  - name: Step 3 - Change RTSGDSTM421 Path
+    become_user: apmgr
+    lineinfile:
+      path: '{{ fast_conf_path }}/application.properties'
+      regexp: '^REPORT.RTSGDSTM421.BASE_PATH'
+      line: 'REPORT.RTSGDSTM421.BASE_PATH=/cpgsapp/appfc/reports/RPT/bank/<CURRENCY>/<DATE>/<PARTICIPANT>'
+      backup: true
+    ignore_errors: yes
+    register: fast_cpgs_deploy5a
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy4.changed
+
+  - name: Step 3 - Change RTSGDSTM453 Path
+    become_user: apmgr
+    lineinfile:
+      path: '{{ fast_conf_path }}/application.properties'
+      regexp: '^REPORT.RTSGDSTM453.BASE_PATH'
+      line: 'REPORT.RTSGDSTM453.BASE_PATH=/cpgsapp/appfc/reports/RPT/bank/<CURRENCY>/<DATE>/<PARTICIPANT>'
+    ignore_errors: yes
+    register: fast_cpgs_deploy5b
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy5a.changed
+
+  - name: Step 3 - Change RTSGDSTM454 Path
+    become_user: apmgr
+    lineinfile:
+      path: '{{ fast_conf_path }}/application.properties'
+      regexp: '^REPORT.RTSGDSTM454.BASE_PATH'
+      line: 'REPORT.RTSGDSTM454.BASE_PATH=/cpgsapp/appfc/reports/RPT/bank/<CURRENCY>/<DATE>/<PARTICIPANT>'
+    ignore_errors: yes
+    register: fast_cpgs_deploy5c
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy5b.changed
+
+  - name: Step 3 - Change RTSGDSTMCTL Path
+    become_user: apmgr
+    lineinfile:
+      path: '{{ fast_conf_path }}/application.properties'
+      regexp: '^REPORT.RTSGDSTMCTL.BASE_PATH'
+      line: 'REPORT.RTSGDSTMCTL.BASE_PATH=/cpgsapp/appfc/reports/CTL_STM/bank/<CURRENCY>/<DATE>/<PARTICIPANT>'
+    ignore_errors: yes
+    register: fast_cpgs_deploy6
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy5c.changed
+
+  - name: Step 3 - Modify EOF in Application Properties
+    become_user: apmgr
+    blockinfile:
+      path: "{{ fast_conf_path }}/application.properties"
+      block: |
+        # Graceful Shutdown Wait Interval For Close MQM Listeners In MilliSeconds
+        MQM.LISTENER.DOWN.DELAY=120000
+      backup: true
+    ignore_errors: yes
+    tags:
+      - CPGSFASTDeployFull
+      - CPGSFASTDeploy
+    when: fast_cpgs_deploy6.changed
+
+# FOR CPGS-FAST - Deploy - Start Service
+  - name: Start CPGS FAST Services
+    systemd:
+      name: cpgsfastprocessor
+      state: started
+    ignore_errors: yes
+    tags:
+      - CPGSFASTStartService
+
+# FOR CPGS-FAST - Deploy - Stop Service
+  - name: Stop CPGS FAST Services
+    systemd:
+      name: cpgsfastprocessor
+      state: stopped
+    ignore_errors: yes
+    tags:
+      - CPGSFASTStopService

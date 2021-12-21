@@ -1,0 +1,176 @@
+---
+# FOR CPGS-CAS - Deploy - Add New Packages
+  - name: Step 1 - Copy All New Packages to CPGS CAS Server [1/2]
+    become_user: apmgr
+    copy:
+      src: './files/{{ new_file }}.tar'
+      dest: '{{ tmp_path }}/{{ new_file }}.tar'
+    ignore_errors: yes
+    register: copy_tar
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASCopy
+
+  - name: Step 1 - Copy All New Packages to CPGS CAS Server [2/2]
+    become_user: apmgr
+    unarchive:
+      src: '{{ tmp_path }}/{{ new_file }}.tar'
+      dest: "{{ tmp_path }}"
+      remote_src: yes
+    ignore_errors: yes
+    register: copy_done
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASCopy
+    when: copy_tar.changed
+
+# FOR CPGS-CAS - Deploy - Backup and Archive
+  - name: Step 2 - Create Config Backup Path
+    become_user: apmgr
+    file:
+      path: '{{ archive_path }}/{{ old_file }}/{{ backup_conf_path }}'
+      state: directory
+    ignore_errors: yes
+    register: backup_confpath
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASBackup
+    when: copy_done.changed
+
+  - name: Step 2 - Create Program Backup Path
+    become_user: apmgr
+    file:
+      path: '{{ archive_path }}/{{ old_file }}/{{ backup_prog_path }}'
+      state: directory
+    ignore_errors: yes
+    register: backup_progpath
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASBackup
+    when: backup_confpath.changed
+
+  - name: Step 2 - Config Directory Backup
+    become_user: apmgr
+    copy:
+      src: "{{ conf_path }}"
+      dest: '{{ archive_path }}/{{ old_file }}/{{ backup_conf_path }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: conf_backup_complete
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASBackup
+    when: backup_confpath.changed
+
+  - name: Step 2 - Program Directory Backup
+    become_user: apmgr
+    archive:
+      path: 
+        - '{{ prog_path }}/*'
+      dest: '{{ archive_path }}/{{ old_file }}/{{ backup_prog_path }}/program_svr.tgz'
+    ignore_errors: yes
+    register: prog_backup_complete
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASBackup
+    when: backup_progpath.changed
+
+# FOR CPGS-CAS - Deploy - Deployment Steps - Removal of old files and folder
+  - name: Step 3 - Removal Of Previous Application Deployment Folder
+    become_user: apmgr
+    file:
+      path: '{{ opt_app_path }}/{{ project_name }}'
+      state: absent
+    ignore_errors: yes
+    register: cpgs_deploy1
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: backup_confpath.changed and backup_progpath.changed
+
+  - name: Step 2 - Removal Of Previous Application Deployment WAR File
+    become_user: apmgr
+    file:
+      path: '{{ opt_app_path }}/{{ project_name }}.war'
+      state: absent
+    ignore_errors: yes
+    register: cpgs_deploy2
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: cpgs_deploy1.changed
+
+# FOR CPGS-CAS - Deploy - Deployment Steps - Deploy New WAR File
+  - name: Step 3 - Deploy New WAR File
+    become_user: apmgr
+    copy:
+      src: '{{ tmp_path }}/{{ new_file }}/{{ cpgsproc_path }}/{{ project_name }}.war'
+      dest: '{{ opt_app_path }}/'
+      remote_src: yes
+    ignore_errors: yes
+    register: cpgs_deploy3
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: cpgs_deploy2.changed
+
+  - name: Step 3 - Deploy log4j2 Properties File
+    become_user: apmgr
+    copy:
+      src: '{{ tmp_path }}/{{ new_file }}/{{ conf_cpgsproc_path }}/log4j2.properties'
+      dest: "{{ conf_path }}/"
+      remote_src: yes
+      backup: true
+    ignore_errors: yes
+    register: cpgs_deploy4
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: cpgs_deploy3.changed
+
+  - name: Step 3 - Deploy Channel Properties File
+    become_user: apmgr
+    copy:
+      src: '{{ tmp_path }}/{{ new_file }}/{{ conf_cpgsproc_path }}/channel.properties'
+      dest: "{{ conf_path }}/"
+      remote_src: yes
+      backup: true
+    ignore_errors: yes
+    register: cpgs_deploy5
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: cpgs_deploy4.changed
+
+  - name: Step 3 - Modify EOF in Application Properties
+    become_user: apmgr
+    blockinfile:
+      path: "{{ conf_path }}/application.properties"
+      block: |
+        # Graceful Shutdown Wait Interval For Close MQM Listeners In MilliSeconds
+        MQM.LISTENER.DOWN.DELAY=30000
+      backup: true
+    ignore_errors: yes
+    register: cpgs_deploy_complete
+    tags:
+      - CPGSCASDeployFull
+      - CPGSCASDeploy
+    when: cpgs_deploy5.changed
+
+# FOR CPGS-CAS - Deploy - Start Service
+  - name: Start CPGS CAS Services
+    systemd:
+      name: cpgscasprocessor
+      state: started
+    ignore_errors: yes
+    tags:
+      - CPGSCASStartService
+
+# FOR CPGS-CAS - Deploy - Stop Service
+  - name: Stop CPGS CAS Services
+    systemd:
+      name: cpgscasprocessor
+      state: stopped
+    ignore_errors: yes
+    tags:
+      - CPGSCASStopService

@@ -1,5 +1,5 @@
 ---
-  - name: playbook for CAS App Deployment
+  - name: playbook for CPGS App Deployment
     hosts: all
     ignore_errors: true
     ignore_unreachable: true
@@ -17,4 +17,5 @@
         tags:
           - always
     roles:
-      - { role: CASDeployment }
+      - { role: CPGS-CAS-Deployment }
+      - { role: CPGS-FAST-Deployment }

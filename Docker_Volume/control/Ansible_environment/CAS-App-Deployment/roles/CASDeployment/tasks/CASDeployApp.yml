@@ -3,7 +3,7 @@
   - name: Step 1 - Backup All Path On AppShare [1/5]
     become_user: apmgr
     file:
-      path: '/var/tmp/deployment/{{ oldname }}/{{ item }}'
+      path: '{{ backup_tmp_path }}/{{ oldname }}/{{ item }}'
     ignore_errors: yes
     register: backup_folder
     loop: "{{ backup }}"
@@ -14,8 +14,8 @@
   - name: Step 1 - Config File Backup [2/5]
     become_user: apmgr
     copy:
-      src: /casapp/appfc/conf
-      dest: '/casapp/appshare/deployment/archive/{{ oldname }}/appfc_conf_svr1'
+      src: '{{ casapp_path }}/conf'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_conf_svr1'
       remote_src: yes
     ignore_errors: yes
     register: backup_conf
@@ -27,8 +27,8 @@
   - name: Step 1 - Script File Backup [3/5]
     become_user: apmgr
     copy:
-      src: /casapp/appfc/script
-      dest: '/casapp/appshare/deployment/archive/{{ oldname }}/appfc_script_svr1'
+      src: '{{ casapp_path }}/script'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_script_svr1'
       remote_src: yes
     ignore_errors: yes
     register: backup_script
@@ -40,8 +40,8 @@
   - name: Step 1 - HTML File & Home Folder Backup [4/5]
     become_user: apmgr
     copy:
-      src: /casapp/appfc/htmlhome
-      dest: '/casapp/appshare/deployment/archive/{{ oldname }}/appfc_htmlhome_svr1'
+      src: '{{ casapp_path }}/htmlhome'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_htmlhome_svr1'
       remote_src: yes
     ignore_errors: yes
     register: backup_htmlhome
@@ -54,8 +54,8 @@
     become_user: apmgr
     archive:
       path: 
-        - /casapp/appfc/program/*
-      dest: '/casapp/appshare/deployment/archive/{{ oldname }}/appfc_program_svr1/program_svr.tgz'
+        - '{{ backup_prog_path }}/*'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_program_svr1/program_svr.tgz'
     ignore_errors: yes
     register: backup_complete
     tags:
@@ -68,7 +68,7 @@
     become_user: apmgr
     copy:
       src: './files/{{ newname }}.tar'
-      dest: '/var/tmp/{{ newname }}.tar'
+      dest: '{{ tmp_path }}/{{ newname }}.tar'
     ignore_errors: yes
     register: step2_part1
     tags:
@@ -78,7 +78,7 @@
   - name: Step 2 - Copy CPGS Deployment Packages To Host [2/2]
     become_user: apmgr
     unarchive:
-      src: '/var/tmp/{{ newname }}.tar'
+      src: '{{ tmp_path }}/{{ newname }}.tar'
       dest: /var/tmp/
       remote_src: yes
     ignore_errors: yes
@@ -136,7 +136,7 @@
    - name: Step 4 - Update New Sachweb Deployment WAR File [1/2]
      become_user: apmgr
      copy:
-       src: './var/tmp/{{ newname }}/{{ newfilepath }}/SACHWeb/ROOT.war'
+       src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/SACHWeb/ROOT.war'
        dest: '{{ sachweb_newpath }}'
        remote_src: yes
      ignore_errors: yes
@@ -148,7 +148,7 @@
    - name: Step 4 - Update New Bankweb Deployment WAR File [2/2]
      become_user: apmgr
      copy:
-       src: './var/tmp/{{ newname }}/{{ newfilepath }}/BankWeb/ROOT.war'
+       src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/BankWeb/ROOT.war'
        dest: '{{ bankweb_newpath }}'
        remote_src: yes
      ignore_errors: yes
