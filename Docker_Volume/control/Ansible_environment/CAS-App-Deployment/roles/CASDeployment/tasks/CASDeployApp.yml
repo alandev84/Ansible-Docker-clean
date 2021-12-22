@@ -133,26 +133,26 @@
     when: step3_part3.changed
 
 # FOR CAS Services - Update Deployment New Files To Host - Step 4
-   - name: Step 4 - Update New Sachweb Deployment WAR File [1/2]
-     become_user: apmgr
-     copy:
-       src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/SACHWeb/ROOT.war'
-       dest: '{{ sachweb_newpath }}'
-       remote_src: yes
-     ignore_errors: yes
-     register: step4_part1
-     tags:
-       - CASDeployFull
-     when: step3_complete.changed
+  - name: Step 4 - Update New Sachweb Deployment WAR File [1/2]
+    become_user: apmgr
+    copy:
+      src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/SACHWeb/ROOT.war'
+      dest: '{{ sachweb_newpath }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: step4_part1
+    tags:
+      - CASDeployFull
+    when: step3_complete.changed
 
-   - name: Step 4 - Update New Bankweb Deployment WAR File [2/2]
-     become_user: apmgr
-     copy:
-       src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/BankWeb/ROOT.war'
-       dest: '{{ bankweb_newpath }}'
-       remote_src: yes
-     ignore_errors: yes
-     register: step4_complete
-     tags:
-       - CASDeployFull
-     when: step4_part1.changed
+  - name: Step 4 - Update New Bankweb Deployment WAR File [2/2]
+    become_user: apmgr
+    copy:
+      src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/BankWeb/ROOT.war'
+      dest: '{{ bankweb_newpath }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: step4_complete
+    tags:
+      - CASDeployFull
+    when: step4_part1.changed

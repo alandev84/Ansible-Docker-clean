@@ -12,13 +12,13 @@
     when: ansible_os_family == "RedHat"
 
   - name: Disable Root Path For Root - RedHat Host
-      lineinfile:
-        path: "/root/.bash_profile"
-        regexp: "{{ regex }}"
-        line:  "{{ replace }}"
-      ignore_errors: yes
-      tags:
-        - DisableRootEnv
-      when: ansible_os_family == "RedHat"
+    lineinfile:
+      path: "/root/.bash_profile"
+      regexp: "{{ regex }}"
+      line:  "{{ replace }}"
+    ignore_errors: yes
+    tags:
+      - DisableRootEnv
+    when: ansible_os_family == "RedHat"
 
 # For Solaris

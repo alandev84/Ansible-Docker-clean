@@ -15,7 +15,7 @@
 
   - name: Ensure Dependencies Before Installation For RedHat
     yum:
-      naame: "{{ item }}"
+      name: "{{ item }}"
       state: latest
     ignore_errors: yes
     loop: "{{ hpovmpackage }}"

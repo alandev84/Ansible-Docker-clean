@@ -3,7 +3,7 @@
   - name: Add Memory To New VM In Linux Group
     add_host:
       name: "{{ vm_network_one_ip }}"
-    groups: linux
+      groups: linux
     ignore_errors: yes
     tags:
       - VMConfigMemory
