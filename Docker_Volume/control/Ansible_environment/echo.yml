@@ -1,0 +1,26 @@
+---
+  - name: playbook to test variable output
+    hosts: prod
+    ignore_errors: true
+    ignore_unreachable: true
+    become: true
+
+    tasks:
+    - name: get facts
+      setup:
+      async: 60
+      poll: 0
+      register: getfact_task
+
+    - name: ensure task okay
+      async_status:
+        jid: "{{ getfact_task.ansible_job_id }}"
+      register: result
+      until: result.finished
+      retries: 30
+      delay: 10
+
+    - name: print facts
+      debug:
+        msg: "{{ ansible_os_family }}"
+      when: result.finished

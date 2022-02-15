@@ -5,6 +5,8 @@
       gid: "{{ item.gid }}"
       state: present
     loop: "{{ newgroup }}"
+    async: 60
+    poll: 0
     ignore_errors: yes
     tags:
       - CreateGroup
@@ -24,6 +26,8 @@
       update_password: on_create
       state: present
     loop: "{{ users }}"
+    async: 60
+    poll: 0
     ignore_errors: yes
     register: Add_User_Succeed_RH
     tags:
@@ -36,6 +40,8 @@
       regexp: "^{{ item.name }}:x:"
       state: absent
     loop: "{{ users }}"
+    async: 60
+    poll: 0
     ignore_errors: yes
     tags:
       - AddGroupUser
@@ -45,8 +51,10 @@
     replace:
       path: /etc/passwd
       regexp: "^{{ item.name }}:x:{{ item.uid }}:{{ item.uid }}"
-      replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.gid }}'
+      replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}'
     loop: "{{ users }}"
+    async: 60
+    poll: 0
     ignore_errors: yes
     tags:
       - AddGroupUser
@@ -57,6 +65,8 @@
     shell: chage -d 0 "{{ item.name }}"
     loop: "{{ users }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - AddGroupUser
     when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
@@ -65,14 +75,18 @@
     command: 'groupadd -g {{ item.gid }} {{ item.groups }}'
     loop: "{{ newgroup }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - CreateGroup
     when: ansible_os_family == "Solaris"
 
   - name: Create Users into Group in Solaris [1/2]
-    command: 'useradd -u {{ item.uid }} -g {{ item.gid }} -c "{{ item.comment }}" -s /bin/sh -d /export/home/{{ item.name }} -m {{ item.name }}'
+    command: 'useradd -u {{ item.uid }} -g {{ item.primary_gid }} -c "{{ item.comment }}" -s /bin/sh -d /export/home/{{ item.name }} -m {{ item.name }}'
     loop: "{{ users }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     register: Add_User_Succeed_Sol
     tags:
       - AddGroupUser
@@ -82,6 +96,8 @@
     command: 'usermod -a -G {{ item.groups }} {{ item.name }}'
     loop: "{{ users }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - AddGroupUser
     when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
@@ -93,6 +109,8 @@
       regexp: "^{{ item.name }}"
     loop: "{{ users }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - AddGroupUser
     when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
@@ -101,6 +119,8 @@
     command: 'passwd -e {{ item.name }}'
     loop: "{{ users }}"
     ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - AddGroupUser
     when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed

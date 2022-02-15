@@ -5,6 +5,9 @@
       state: absent
       remove: true
     loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - DeleteUser
     when: ansible_os_family != "Solaris"
@@ -15,6 +18,9 @@
       gid: "{{ item.gid }}"
       state: absent
     loop: "{{ newgroup }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - DeleteGroup
     when: ansible_os_family != "Solaris"
@@ -22,6 +28,9 @@
   - name: Delete User For Solaris
     command: 'userdel -r {{ item.name }}'
     loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - DeleteUser
     when: ansible_os_family == "Solaris"
@@ -29,6 +38,9 @@
   - name: Delete User From Group For Solaris
     command: 'groupdel {{ item.groups }}'
     loop: "{{ newgroup }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
     tags:
       - DeleteGroup
     when: ansible_os_family == "Solaris"
