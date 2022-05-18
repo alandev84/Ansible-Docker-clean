@@ -1,0 +1,2 @@
+SSLScan:
+        - { remote_path: "/home/devops/", local_path: "/ansible_tmp/", script_path_dest: "/home/devops/myscript.sh", script_path_src: "/SSL_TLS_Management/scripts/myscript.sh", owner: "devops", group: "devops", file_path_src: "/home/devops/{{ inventory_hostname }}.txt", file_path_dest: "/ansible_tmp/{{ inventory_hostname }}.txt" }

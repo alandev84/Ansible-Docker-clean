@@ -1,0 +1,9 @@
+---
+  - name: playbook for SSL/TLS Scan, Controller.
+    hosts: prod
+    gather_facts: yes
+    ignore_errors: true
+    ignore_unreachable: true
+    become: true
+    roles:
+      - { role: SSL_TLS_Tool }
