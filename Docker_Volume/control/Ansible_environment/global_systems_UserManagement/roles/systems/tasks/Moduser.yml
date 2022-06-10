@@ -51,6 +51,19 @@
       - ModUserUID
     when: ansible_os_family != "Solaris"
 
+  - name: Modify Users UID in RedHat (FORCE)
+    replace:
+      path: /etc/passwd
+      regexp: "^{{ item.name }}:x:\\d+"
+      replace: '{{ item.name }}:x:{{ item.uid }}'
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - ModUserUIDForce
+    when: ansible_os_family != "Solaris"
+
   - name: Modify UserName in RedHat
     command: 'usermod -l {{ item.new_name }} {{ item.name }}'
     loop: "{{ users }}"
@@ -90,6 +103,19 @@
     poll: 0
     tags:
       - ModUserUID
+    when: ansible_os_family == "Solaris"
+
+  - name: Modify Users UID in Solaris (FORCE)
+    lineinfile:
+      dest: /etc/passwd
+      line: "{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}:{{ item.script_path }}"
+      regexp: "^{{ item.name }}:x:\\d+"
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - ModUserUIDForce
     when: ansible_os_family == "Solaris"
 
   - name: Modify UserName in Solaris

@@ -1,3 +1,3 @@
 users:
-  - { name: Alan, new_name: Blan, uid: 1088, groups: "group1", primary_gid: 1001, comment: "System Admin ID A" }
-  - { name: Jesse, new_name: Cesse, uid: 1099, groups: "group1", primary_gid: 1001, comment: "System Admin ID B" }
+  - { name: Alan, new_name: Blan, uid: 6800, groups: "group1", primary_gid: 1001, comment: "System Admin ID A", home: "/home/Alan", script_path: "/bin/bash" }
+  - { name: Jesse, new_name: Cesse, uid: 1099, groups: "group1", primary_gid: 1001, comment: "System Admin ID B", home: "/home/Jesse", script_path: "/bin/bash" }
