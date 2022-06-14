@@ -1,7 +1,7 @@
 ---
   - name: playbook for User Management for all systems
     hosts: prod
-    ignore_errors: true
+    #ignore_errors: true
     ignore_unreachable: true
     become: true
     pre_tasks:
