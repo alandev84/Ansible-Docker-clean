@@ -1,129 +1,200 @@
 ---
-#RH
-  - name: Modify Users into Specific Group in RedHat [1/2]
-    user:
-      name: "{{ item.name }}"
-      groups: "{{ item.groups }}"
-      append: no
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
-    register: Mod_User_Group_Succeed_RH
+#for RH
+  - name: Modify User in Group
+    block:
+      - name: Modify Users into Specific Group in RedHat [1/2] [RH]
+        user:
+          name: "{{ item.name }}"
+          groups: "{{ item.groups }}"
+          append: no
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        register: Mod_User_Group_Succeed_RH
+        when: ansible_os_family != "Solaris"
+
+      - name: Modify Users into Specific Group in RedHat [2/2] [RH]
+        replace:
+          path: /etc/passwd
+          regexp: "^{{ item.name }}:x:{{ item.uid }}:\\d+"
+          replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris" and Mod_User_Group_Succeed_RH.changed
+    always:
+      - import_tasks: outputGroupRecord_RH.yml
+        when: ansible_os_family != "Solaris"
     tags:
       - ModUserGroup
-    when: ansible_os_family != "Solaris"
 
-  - name: Modify Users into Specific Group in RedHat [2/2]
-    replace:
-      path: /etc/passwd
-      regexp: "^{{ item.name }}:x:{{ item.uid }}:\\d+"
-      replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
-    tags:
-      - ModUserGroup
-    when: ansible_os_family != "Solaris" and Mod_User_Group_Succeed_RH.changed
-
-  - name: Modify Users Comment in RedHat
-    user:
-      name: "{{ item.name }}"
-      comment: "{{ item.comment }}"
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User Comment
+    block:
+      - name: Modify Users Comment in RedHat [RH]
+        user:
+          name: "{{ item.name }}"
+          comment: "{{ item.comment }}"
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always:
+      - import_tasks: outputUserRecord_RH.yml
+        when: ansible_os_family != "Solaris"
     tags:
       - ModUserComment
-    when: ansible_os_family != "Solaris"
 
-  - name: Modify Users UID in RedHat
-    user:
-      name: "{{ item.name }}"
-      uid: "{{ item.uid }}"
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User UID [Unique]
+    block:
+      - name: Modify Users UID in RedHat [RH]
+        user:
+          name: "{{ item.name }}"
+          uid: "{{ item.uid }}"
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always:
+      - import_tasks: outputUserRecord_RH.yml
+        when: ansible_os_family != "Solaris"
     tags:
       - ModUserUID
-    when: ansible_os_family != "Solaris"
 
-  - name: Modify Users UID in RedHat (FORCE)
-    replace:
-      path: /etc/passwd
-      regexp: "^{{ item.name }}:x:\\d+"
-      replace: '{{ item.name }}:x:{{ item.uid }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User UID [Force]
+    block:
+      - name: Modify Users UID in RedHat (FORCE) [RH]
+        replace:
+          path: /etc/passwd
+          regexp: "^{{ item.name }}:x:\\d+"
+          replace: '{{ item.name }}:x:{{ item.uid }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always:
+      - import_tasks: outputUserRecord_RH.yml
+        when: ansible_os_family != "Solaris"
     tags:
       - ModUserUIDForce
-    when: ansible_os_family != "Solaris"
 
-  - name: Modify UserName in RedHat
-    command: 'usermod -l {{ item.new_name }} {{ item.name }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify UserName 
+    block:
+      - name: Modify UserName in RedHat [1/3] [RH]
+        shell: 'usermod -l {{ item.new_name }} {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+
+      - name: Modify UserName in RedHat [2/3] [RH]
+        replace:
+          path: /etc/passwd
+          regexp: "^{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}"
+          replace: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.new_home }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+
+      - name: Modify UserName in RedHat [3/3] [RH]
+        shell: 'mv {{ item.home }} {{ item.new_home }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always:
+      - import_tasks: outputUserRecord_RH.yml
+        when: ansible_os_family != "Solaris"
     tags:
       - ModUserName
-    when: ansible_os_family != "Solaris"
 
-#Solaris
-  - name: Create Users into Group in Solaris
-    command: 'usermod -G {{ item.groups }} {{ item.name }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+#for Solaris
+  - name: Modify User in Group
+    block:
+      - name: Create Users into Group in Solaris [Solaris]
+        command: 'usermod -G {{ item.groups }} {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputGroupRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
     tags:
       - ModUserGroup
-    when: ansible_os_family == "Solaris"
 
-  - name: Modify Users Comment in Solaris
-    command: 'usermod -c {{ item.comment }} {{ item.name }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User Comment
+    block:
+      - name: Modify Users Comment in Solaris [Solaris]
+        command: 'usermod -c {{ item.comment }} {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputUserRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
     tags:
       - ModUserComment
-    when: ansible_os_family == "Solaris"
 
-  - name: Modify Users UID in Solaris
-    command: 'usermod -u {{ item.uid }} {{ item.name }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User UID [Unique]
+    block:
+      - name: Modify Users UID in Solaris [Solaris]
+        command: 'usermod -u {{ item.uid }} {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputUserRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
     tags:
       - ModUserUID
-    when: ansible_os_family == "Solaris"
 
-  - name: Modify Users UID in Solaris (FORCE)
-    lineinfile:
-      dest: /etc/passwd
-      line: "{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}:{{ item.script_path }}"
-      regexp: "^{{ item.name }}:x:\\d+"
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify User UID [Force]
+    block:
+      - name: Modify Users UID in Solaris (FORCE) [Solaris]
+        lineinfile:
+          dest: /etc/passwd
+          line: "{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}:{{ item.script_path }}"
+          regexp: "^{{ item.name }}:x:\\d+"
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputUserRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
     tags:
       - ModUserUIDForce
-    when: ansible_os_family == "Solaris"
 
-  - name: Modify UserName in Solaris
-    command: 'usermod -l {{ item.new_name }} {{ item.name }}'
-    loop: "{{ users }}"
-    ignore_errors: yes
-    async: 60
-    poll: 0
+  - name: Modify UserName 
+    block:
+      - name: Modify UserName in Solaris [1/3] [Solaris]
+        shell: 'usermod -l {{ item.new_name }} {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+
+      - name: Modify UserName in Solaris [2/3] [Solaris]
+        lineinfile:
+          dest: /etc/passwd
+          line: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.new_home }}:{{ item.script_path }}'
+          regexp: "^{{ item.new_name }}"
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+
+      - name: Modify UserName in Solaris [3/3] [Solaris]
+        shell: 'mv {{ item.home }} {{ item.new_home }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputUserRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
     tags:
       - ModUserName
-    when: ansible_os_family == "Solaris"

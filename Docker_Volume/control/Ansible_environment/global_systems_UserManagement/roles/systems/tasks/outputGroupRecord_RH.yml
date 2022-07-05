@@ -1,0 +1,78 @@
+---
+#Always export result of CreateGroup
+  - name: Initialisation [1/2] [RH]
+    file:
+      path: "{{ item.file_path_src_Group }}"
+      state: absent
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Initialisation [2/2] [RH]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /Ansible_Event_Report/Group_Report_RH.log"
+
+  - name: Pull Result [1/4] [RH]
+    become: true
+    shell: "cat /etc/group > {{ item.file_path_src_Group }}"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [2/4] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_Group }}"
+      insertbefore: BOF
+      line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [3/4] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_Group }}"
+      insertbefore: BOF
+      line: "HOSTNAME: {{ inventory_hostname }}"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [4/4] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_Group }}"
+      insertbefore: BOF
+      line: "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [1/3] [RH]
+    fetch:
+      src: "{{ item.file_path_src_Group }}"
+      dest: "{{ item.file_path_dest }}"
+      flat: yes
+    loop: "{{ collection }}"
+
+  - name: Extraction Processing [2/3] [RH]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}Group_Report_RH.log"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [3/3] [RH]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf {{ item.local_path }}*.txt"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Generate Report
+    ansible.builtin.debug:
+      msg: "Output Result from {{ ansible_hostname }} Merge to /Ansible_Event_Report/Group_Report_RH.log"
