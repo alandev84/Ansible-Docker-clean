@@ -59,7 +59,7 @@
         when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
     
       - name: Add Users into Group in RedHat/Debian [4/4] [RH]
-        command: "chown {{ item.name }}:{{ item.groups }} {{ item.home }}"
+        command: "chown {{ item.name }}:{{ item.groups }} /home/{{ item.name }}"
         loop: "{{ users }}"
         async: 60
         poll: 0
@@ -110,7 +110,7 @@
         when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
     
       - name: Create Users into Group in Solaris [3/3]
-        command: "chown {{ item.name }}:{{ item.groups }} {{ item.home }}"
+        command: "chown {{ item.name }}:{{ item.groups }} /export/home/{{ item.name }}"
         loop: "{{ users }}"
         async: 60
         poll: 0

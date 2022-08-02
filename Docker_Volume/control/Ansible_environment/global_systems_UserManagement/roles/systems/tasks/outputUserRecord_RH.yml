@@ -3,7 +3,7 @@
     file:
       path: "{{ item.file_path_src_User }}"
       state: absent
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -16,20 +16,20 @@
   - name: Pull Result [1/6] [RH]
     become: true
     shell: "cat /etc/passwd > {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
   - name: Pull Result [2/6] [RH]
     shell: 'echo "-------------------GROUP FILE-------------------" >> {{ item.file_path_src_User }}'
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
   - name: Pull Result [3/6] [RH]
     become: true
     shell: "cat /etc/group >> {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -38,7 +38,7 @@
       path: "{{ item.file_path_src_User }}"
       insertbefore: BOF
       line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -47,7 +47,7 @@
       path: "{{ item.file_path_src_User }}"
       insertbefore: BOF
       line: "HOSTNAME: {{ inventory_hostname }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -56,7 +56,7 @@
       path: "{{ item.file_path_src_User }}"
       insertbefore: BOF
       line: "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -65,14 +65,14 @@
       src: "{{ item.file_path_src_User }}"
       dest: "{{ item.file_path_dest }}"
       flat: yes
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
 
   - name: Extraction Processing [2/3] [RH]
     become: false
     run_once: yes
     delegate_to: localhost
     shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}User_Report_RH.log"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -81,7 +81,7 @@
     run_once: yes
     delegate_to: localhost
     shell: "rm -rf {{ item.local_path }}*.txt"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 

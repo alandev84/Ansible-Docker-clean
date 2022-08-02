@@ -1,7 +1,7 @@
 ---
   - name: Initialisation [1/2] [Solaris]
     shell: "rm -rf {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
@@ -14,42 +14,42 @@
   - name: Pull Result [1/6] [Solaris]
     become: true
     shell: 'echo "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-" >> {{ item.file_path_src_User }}'
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
   - name: Pull Result [2/6] [Solaris]
     become: true
     shell: 'echo "HOSTNAME: {{ inventory_hostname }}" >> {{ item.file_path_src_User }}'  
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
   - name: Pull Result [3/6] [Solaris]
     become: true
     shell: 'echo  "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" >> {{ item.file_path_src_User }}'
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
   - name: Pull Result [4/6] [Solaris]
     become: true
     shell: "cat /etc/passwd >> {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
   - name: Pull Result [5/6] [Solaris]
     become: true
     shell: 'echo "-------------------GROUP FILE-------------------" >> {{ item.file_path_src_User }}'
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
   - name: Pull Result [6/6] [Solaris]
     become: true
     shell: "cat /etc/group >> {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
@@ -57,7 +57,7 @@
   - name: Extraction Processing [1/4] [Solaris]
     become: true
     ansible.builtin.shell: "chown devops:devops {{ item.file_path_src_User }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
@@ -66,14 +66,14 @@
       src: "{{ item.file_path_src_User }}"
       dest: "{{ item.file_path_dest }}"
       flat: yes
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
 
   - name: Extraction Processing [3/4] [Solaris]
     become: false
     run_once: yes
     delegate_to: localhost
     shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}pUser_Report_SOL.log"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 
@@ -82,7 +82,7 @@
     run_once: yes
     delegate_to: localhost
     shell: "rm -rf {{ item.local_path }}*.txt"
-    loop: "{{ collection }}"
+    loop: "{{ collectionSOL }}"
     async: 60
     poll: 0
 

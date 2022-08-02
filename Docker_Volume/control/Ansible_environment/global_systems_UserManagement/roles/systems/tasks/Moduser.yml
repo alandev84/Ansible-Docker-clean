@@ -89,15 +89,15 @@
       - name: Modify UserName in RedHat [2/3] [RH]
         replace:
           path: /etc/passwd
-          regexp: "^{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}"
-          replace: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.new_home }}'
+          regexp: "^{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:/home/{{ item.name }}"
+          replace: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:/home/{{ item.new_name }}'
         loop: "{{ users }}"
         async: 60
         poll: 0
         when: ansible_os_family != "Solaris"
 
       - name: Modify UserName in RedHat [3/3] [RH]
-        shell: 'mv {{ item.home }} {{ item.new_home }}'
+        shell: 'mv /home/{{ item.name }} /home/{{ item.new_name }}'
         loop: "{{ users }}"
         async: 60
         poll: 0
@@ -156,7 +156,7 @@
       - name: Modify Users UID in Solaris (FORCE) [Solaris]
         lineinfile:
           dest: /etc/passwd
-          line: "{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.home }}:{{ item.script_path }}"
+          line: "{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:/export/home/{{ item.name }}:{{ item.script_path }}"
           regexp: "^{{ item.name }}:x:\\d+"
         loop: "{{ users }}"
         async: 60
@@ -180,7 +180,7 @@
       - name: Modify UserName in Solaris [2/3] [Solaris]
         lineinfile:
           dest: /etc/passwd
-          line: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:{{ item.new_home }}:{{ item.script_path }}'
+          line: '{{ item.new_name }}:x:{{ item.uid }}:{{ item.primary_gid }}:{{ item.comment }}:/export/home/{{ item.new_name }}:{{ item.script_path }}'
           regexp: "^{{ item.new_name }}"
         loop: "{{ users }}"
         async: 60
@@ -188,7 +188,7 @@
         when: ansible_os_family == "Solaris"
 
       - name: Modify UserName in Solaris [3/3] [Solaris]
-        shell: 'mv {{ item.home }} {{ item.new_home }}'
+        shell: 'mv /export/home/{{ item.name }} /export/home/{{ item.new_name }}'
         loop: "{{ users }}"
         async: 60
         poll: 0

@@ -1,0 +1,35 @@
+#!/bin/sh
+
+EXT_LIB=.:/CTS/program:/opt/gateware/bin
+EXT_LIB=$EXT_LIB:/opt/gateware/bin/gateware
+EXT_LIB=$EXT_LIB:/opt/gateware/bin/BCSgateware
+EXT_LIB=$EXT_LIB:/opt/gateware/bin/RemoteFileload
+EXT_LIB=$EXT_LIB:/opt/gateware/bin/internal
+export EXT_LIB
+
+GATEWARE_HOME=/opt/gateware/bin
+export GATEWARE_HOME
+
+
+JAVA_HOME=/usr/java
+export JAVA_HOME
+
+
+ORACLE_HOME=/opt/oracle/product/12.1/client_1
+export ORACLE_HOME
+
+
+PATH=/CTS/script:$GATEWARE_HOME:$JAVA_HOME/jre/bin:$JAVA_HOME/bin:/usr/bin:/usr/local/bin:/usr/ccs/bin:/usr/openwin/bin:/usr/sbin:/usr/ucb:/etc:/CTS/contingency:/CTS/scripts:/opt/gateware/bin/gateware:/opt/safenet/lunaclient/jsp/lib:/opt/safenet/lunaclient/lib:/ArCTS/script:/CTS/scripts:$ORACLE_HOME:$ORACLE_HOME/bin:/opt/CA/eTrustAccessControl/bin
+export PATH
+
+
+LD_LIBRARY_PATH=/CTS/program:$GATEWARE_HOME:/usr/local/lib:$JAVA_HOME/jre/lib/sparcv9:$JAVA_HOME/jre/lib/sparcv9/server:/opt/safenet/lunaclient/jsp/lib:/opt/safenet/lunaclient/lib:$ORACLE_HOME:$ORACLE_HOME/lib
+#LD_LIBRARY_PATH=/CTS/program:$GATEWARE_HOME:/usr/local/lib:$JAVA_HOME/jre/lib/sparc:$JAVA_HOME/jre/lib/sparc/client:/opt/safenet/lunaclient/jsp/lib:/opt/safenet/lunaclient/lib
+export LD_LIBRARY_PATH
+
+
+CLASSPATH=$GATEWARE_HOME:$JAVA_HOME/bin:$EXT_LIB
+export CLASSPATH
+
+cd /CTSApp/appshare/script
+umask 007

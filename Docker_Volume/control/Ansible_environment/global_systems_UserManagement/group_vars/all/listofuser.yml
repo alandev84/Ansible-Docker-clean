@@ -1,3 +1,9 @@
+#Editable fields for users are name, new_name(if required), uid, groups, primary_gid, script_path(if required)
 users:
-  - { name: Alan, new_name: Blan, uid: 6810, groups: "group2", primary_gid: 1001, comment: "System Admin ID Ab", home: "/home/Alan", new_home: "/home/Blan", script_path: "/bin/bash" }
-  - { name: Jesse, new_name: Cesse, uid: 1099, groups: "group1", primary_gid: 1001, comment: "System Admin ID B", home: "/home/Jesse", new_home: "/home/Cesse", script_path: "/bin/bash" }
+  - { name: Alan, new_name: Blan, uid: 6820, groups: "group2", primary_gid: 1001, comment: "System Admin ID Abc", script_path: "/bin/bash" }
+  - { name: Jesse, new_name: Cesse, uid: 8099, groups: "group1", primary_gid: 1001, comment: "System Admin ID B", script_path: "/bin/bash" }
+
+#Editable fields for userprofile are name, profile_user only.
+userprofile:
+  - { name: Alan, profile_user: "apsu", owner: "root", group: "sysadm", file_src: "/global_systems_UserManagement/files/profile/", cas_web_su: "CAS_Web.txt", cts_web_su: "CTS_TCSVR.txt", cts_db_su: "CTS_DB.txt", cts_gw_su: "CTS_GW.txt", g3_web_su: "G3_TC.txt", g3_rpt_su: "G3_RPT.txt", cas_web_op: "CAS_Web.txt", cts_web_op: "CTS_TCSVR.txt", cts_db_op: "CTS_DB.txt", cts_gw_op: "CTS_GW.txt", g3_web_op: "G3_TC.txt", g3_rpt_op: "G3_RPT.txt" }
+  - { name: Jesse, profile_user: "apop", owner: "root", group: "sysadm", file_src: "/global_systems_UserManagement/files/profile/", cas_web_su: "CAS_Web.txt", cts_web_su: "CTS_TCSVR.txt", cts_db_su: "CTS_DB.txt", cts_gw_su: "CTS_GW.txt", g3_web_su: "G3_TC.txt", g3_rpt_su: "G3_RPT.txt", cas_web_op: "CAS_Web.txt", cts_web_op: "CTS_TCSVR.txt", cts_db_op: "CTS_DB.txt", cts_gw_op: "CTS_GW.txt", g3_web_op: "G3_TC.txt", g3_rpt_op: "G3_RPT.txt" }

@@ -1,2 +1,5 @@
-collection:
+collectionRH:
   - { remote_path: "/home/devops/", local_path: "/Ansible_Event_Report/", owner: "devops", group: "devops", file_path_src_Group: "/home/devops/Group_Report_{{ inventory_hostname }}.txt", file_path_dest: "/Ansible_Event_Report/{{ inventory_hostname }}.txt", file_path_src_User: "/home/devops/User_Report_{{ inventory_hostname }}.txt", file_path_src_UserStatus: "/home/devops/UserStatus_Report_{{ inventory_hostname }}.txt" }
+
+collectionSOL:
+  - { remote_path: "/export/home/devops/", local_path: "/Ansible_Event_Report/", owner: "devops", group: "devops", file_path_src_Group: "/export/home/devops/Group_Report_{{ inventory_hostname }}.txt", file_path_dest: "/Ansible_Event_Report/{{ inventory_hostname }}.txt", file_path_src_User: "/export/home/devops/User_Report_{{ inventory_hostname }}.txt", file_path_src_UserStatus: "/export/home/devops/UserStatus_Report_{{ inventory_hostname }}.txt" }

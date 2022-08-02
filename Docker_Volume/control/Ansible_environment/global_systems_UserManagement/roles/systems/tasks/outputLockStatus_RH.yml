@@ -3,7 +3,7 @@
     file:
       path: "{{ item.file_path_src_UserStatus }}"
       state: absent
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -23,7 +23,7 @@
   - name: Pull Result [2/6] [RH]
     become: true
     shell: "mv /home/devops/UserStatus {{ item.file_path_src_UserStatus }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -32,7 +32,7 @@
       path: "{{ item.file_path_src_UserStatus }}"
       insertbefore: BOF
       line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -41,7 +41,7 @@
       path: "{{ item.file_path_src_UserStatus }}"
       insertbefore: BOF
       line: "HOSTNAME: {{ inventory_hostname }}"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -50,7 +50,7 @@
       path: "{{ item.file_path_src_UserStatus }}"
       insertbefore: BOF
       line: "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -59,7 +59,7 @@
       path: "{{ item.file_path_src_UserStatus }}"
       insertbefore: BOF
       line: "-------------------User Status-------------------"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -68,14 +68,14 @@
       src: "{{ item.file_path_src_UserStatus }}"
       dest: "{{ item.file_path_dest }}"
       flat: yes
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
 
   - name: Extraction Processing [2/3] [RH]
     become: false
     run_once: yes
     delegate_to: localhost
     shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}UserStatus_Report_RH.log"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
@@ -84,7 +84,7 @@
     run_once: yes
     delegate_to: localhost
     shell: "rm -rf {{ item.local_path }}*.txt"
-    loop: "{{ collection }}"
+    loop: "{{ collectionRH }}"
     async: 60
     poll: 0
 
