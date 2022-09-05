@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q nfs-utils)  \
+|| \
+(echo 'nfs-utils is installed' ; exit 1)
+

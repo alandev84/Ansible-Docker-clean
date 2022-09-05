@@ -1,0 +1,30 @@
+---
+
+- name: 2.2.3 stop avahi-daemon.socket
+  service:
+    name: avahi-daemon.socket
+    state: stopped
+    enabled: false
+  when: "'avahi' in ansible_facts.packages"
+
+
+- name: 2.2.3 stop avahi-daemon.service
+  service:
+    name: avahi-daemon.service
+    state: stopped
+    enabled: false
+  when: "'avahi' in ansible_facts.packages"
+
+
+- name: 2.2.3 uninstall avahi-autoipd
+  yum:
+    name: avahi-autoipd
+    state: absent
+  when: "'avahi-autoipd' in ansible_facts.packages"
+
+
+- name: 2.2.3 uninstall avahi
+  yum:
+    name: avahi
+    state: absent
+  when: "'avahi' in ansible_facts.packages"

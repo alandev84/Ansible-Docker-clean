@@ -1,0 +1,9 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    dest: /etc/crontab
+    owner: root
+    group: root
+    mode: 0600
+

@@ -1,0 +1,20 @@
+---
+
+- name: 1.6.2 Ensure address space layout randomization (ASLR) is enabled (Scored) - search config
+  command: grep -Er '^\s*kernel\.randomize_va_space\s*=\s*2\s*$' /etc/sysctl.conf /etc/sysctl.d/
+  register: aslr_enabled
+  changed_when: false
+  failed_when: false
+
+- name: 1.6.2 Ensure address space layout randomization (ASLR) is enabled (Scored) - write config
+  lineinfile:
+    dest: /etc/sysctl.d/cis.conf
+    line: "kernel.randomize_va_space = 2"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+  when:
+    - aslr_enabled.rc == 1
+

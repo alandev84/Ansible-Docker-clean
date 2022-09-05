@@ -1,0 +1,8 @@
+---
+
+- name: 6.2.10 Ensure no users have .forward files (Scored)
+  file:
+    state: absent
+    dest: "~{{ item }}/.forward"
+  with_items: "{{ cis_users }}"
+

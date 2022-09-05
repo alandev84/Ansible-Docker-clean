@@ -1,0 +1,21 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - find users"
+      shell: |
+        set -o pipefail
+        awk -F':' '($3 == 0) { print $1 }' /etc/passwd
+      register: users_uid_zero
+      changed_when: false
+      failed_when: false
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - lock users"
+      user:
+        name: "{{ item }}"
+        password_lock: true
+      with_items: "{{ users_uid_zero.stdout_lines }}"
+      when:
+        - item != 'root'
+        - item != 'rootbkup'
+

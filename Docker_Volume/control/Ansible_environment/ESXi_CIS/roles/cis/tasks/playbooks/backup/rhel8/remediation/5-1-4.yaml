@@ -1,0 +1,9 @@
+---
+- name: 5.1.4 Ensure permissions on /etc/cron.daily are configured (Scored)
+  file:
+    dest: /etc/cron.daily
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+

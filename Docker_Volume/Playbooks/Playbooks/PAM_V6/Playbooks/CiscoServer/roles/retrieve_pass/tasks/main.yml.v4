@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Test Get Pass from Module
+    debug: msg={{ lookup("cyberarkpassword", cyquery)}}
+    vars:
+      cyquery:
+        appid: "app_ansible"
+        query: "Safe=testAnsible;Folder=Root;Object=Operating_System-BCSWinOTP-bcs.bcsgroup.com-svc_ansible"
+        output: "Password,PassProps.Username,PassProps.Address"

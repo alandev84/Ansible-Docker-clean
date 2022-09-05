@@ -1,0 +1,16 @@
+---
+
+- name: 5.4.4 Ensure password hashing algorithm is SHA-512 (Scored)
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/{{item}}
+      follow: true
+      regexp: ^(password\s+sufficient\s+pam_unix\.so\s)(?!.*sha512\s*)(.*)$
+      replace: \g<1> sha512\g<2>
+  with_items:
+  - system-auth
+  - password-auth
+  register: result
+
+
+
+

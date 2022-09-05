@@ -1,0 +1,12 @@
+---
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  set_fact:
+    cis_result: true
+  when: "'setroubleshoot' in ansible_facts.packages"
+

@@ -1,0 +1,21 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }} - DC"
+  win_user_right:
+    name: SeImpersonatePrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeImpersonatePrivilege_DC }}"
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }} - MS"
+  win_user_right:
+    name: SeImpersonatePrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeImpersonatePrivilege_MS }}"
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"

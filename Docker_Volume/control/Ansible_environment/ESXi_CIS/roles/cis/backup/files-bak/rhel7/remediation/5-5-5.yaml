@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+    dest: "{{ item }}"
+    regexp: '^(\s*umask\s+)\d+$'
+    replace: '\g<1>{{ cis_rhel7_umask }}'
+  with_items:
+    - /etc/bashrc
+    - /etc/profile
+

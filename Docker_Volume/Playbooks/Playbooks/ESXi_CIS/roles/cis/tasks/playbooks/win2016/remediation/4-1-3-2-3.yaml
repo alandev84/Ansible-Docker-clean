@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: EnableGuestAccount
+    value: "{{ cis_win_EnableGuestAccount }}"
+  check_mode: true
+  ignore_errors: true
+
+- debug: var=result

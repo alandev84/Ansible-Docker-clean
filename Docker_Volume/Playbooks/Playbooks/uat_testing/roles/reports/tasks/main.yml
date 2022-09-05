@@ -1,0 +1,14 @@
+---
+# tasks file for reports
+- name: Create report directory output
+  file:
+    path: /home/sysa_ansible/reports
+    state: directory
+  delegate_to: localhost
+  run_once: true
+
+- name: Generate uat report
+  template:
+    src: "./files/uat_report.j2"
+    dest: "/home/sysa_ansible/reports/all.txt"
+  delegate_to: localhost

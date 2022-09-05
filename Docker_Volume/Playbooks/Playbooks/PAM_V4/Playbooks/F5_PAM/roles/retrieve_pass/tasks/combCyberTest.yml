@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  tasks:
+   - name: Get 1st Password From CyberArk
+     shell: ./clipasswordsdk GetPassword -p AppDescs.AppID="app_ansible" -p Query="Safe=testAnsible;Folder=Root;Object=Operating System-testAnsible-172.31.17.127-rootbkup1" -o Password
+     args:
+       chdir: /opt/CARKaim/sdk/
+     register: cybr_pass1
+   - name: Get 2nd Password From CyberArk
+     shell: ./clipasswordsdk GetPassword -p AppDescs.AppID="app_ansible" -p Query="Safe=testAnsible;Folder=Root;Object=Operating System-testAnsible-172.31.17.127-rootbkup1" -o Password
+     args:
+       chdir: /opt/CARKaim/sdk/
+     register: cybr_pass2
+   - name: Print Password
+     debug:
+       msg: '{{cybr_pass1.stdout+cybr_pass2.stdout}}'
+     #no_log: no

@@ -1,0 +1,34 @@
+---
+- name: Ensure owner group folder exists
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_name }}"
+    folder_name: "{{ owner_code }}"
+    parent_folder: "VM_TARGET_FOLDERS"
+
+- name: Ensure project folder exists
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_name }}"
+    folder_name: "{{ proj_name }}"
+    parent_folder: "VM_TARGET_FOLDERS/{{ owner_code }}"
+ 
+- name: Ensure environment folder exists
+  community.vmware.vcenter_folder:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_name }}"
+    folder_name: "{{ env_code }}"
+    parent_folder: "VM_TARGET_FOLDERS/{{ 
+      owner_code }}/{{ proj_name }}"
+
+- name: Set target folder
+  set_fact:
+    vm_folder: "{{ dc_name }}/vm/VM_TARGET_FOLDERS/{{ 
+      owner_code }}/{{ proj_name }}/{{ env_code }}"
+

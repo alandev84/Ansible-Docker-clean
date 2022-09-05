@@ -1,0 +1,15 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/modprobe.d/squashfs.conf
+    regexp: "^(#)?\\s*install\\s+squashfs(\\s*|$)"
+    line: "install squashfs /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: rmmod squashfs
+  failed_when: false

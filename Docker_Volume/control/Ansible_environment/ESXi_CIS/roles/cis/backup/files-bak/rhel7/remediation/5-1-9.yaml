@@ -1,0 +1,20 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - deny"
+      file:
+        dest: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/at.deny
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - allow"
+      file:
+        dest: /etc/{{ item }}
+        mode: '0600'
+        owner: root
+        group: root
+      with_items:
+        - at.allow
+

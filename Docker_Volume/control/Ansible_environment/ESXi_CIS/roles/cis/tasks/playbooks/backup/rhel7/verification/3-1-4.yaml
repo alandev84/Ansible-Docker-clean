@@ -1,0 +1,28 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      shell: |
+        set -o pipefail
+        sysctl net.ipv4.ip_forward | grep -v -E "^net.ipv4.ip_forward\s*=\s*0\s*$" && exit 1
+        grep -E -s "^\s*net\.ipv4\.ip_forward\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf | grep -E  "\s*net\.ipv4\.ip_forward\s*=\s*1" && exit 1
+        sysctl net.ipv6.conf.all.forwarding | grep -v -E "^net.ipv6.conf.all.forwarding\s*=\s*0\s*$" && exit 1
+        grep -E -s "^\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" /etc/sysctl.conf /etc/sysctl.d/*.conf /usr/lib/sysctl.d/*.conf /run/sysctl.d/*.conf| grep -E "\s*net\.ipv6\.conf\.all\.forwarding\s*=\s*1" && exit 1
+      register: result
+      changed_when: false
+      failed_when: false
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: 
+        - result.rc == 1
+
+
+
+

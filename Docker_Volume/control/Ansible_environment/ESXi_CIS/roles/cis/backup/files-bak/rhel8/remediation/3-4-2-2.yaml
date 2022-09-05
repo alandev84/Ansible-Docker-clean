@@ -1,0 +1,10 @@
+---
+
+- name: 3.4.2.2 Ensure iptables is not enabled (Scored)
+  service:
+    name: iptables
+    state: stopped
+    enabled: false
+  when:
+    - cis_rhel8_firewall_package == "firewalld"
+    - "'iptables-services' in ansible_facts.packages"

@@ -1,0 +1,49 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - allowusers"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^AllowUsers'
+        line: AllowUsers {{ cis_rhel7_sshd['allowusers'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel7_sshd['allowusers'] |default('')
+
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - allowgroups"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^AllowGroups'
+        line: AllowGroups {{ cis_rhel7_sshd['allowgroups'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel7_sshd['allowgroups'] |default('')
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - denyusers"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^DenyUsers'
+        line: DenyUsers {{ cis_rhel7_sshd['denyusers'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel7_sshd['denyusers'] |default('')
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - denygroups"
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^DenyGroups'
+        line: DenyGroups {{ cis_rhel7_sshd['denygroups'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel7_sshd['denygroups'] | default('')
+

@@ -1,0 +1,13 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    state: present
+    dest: "{{ item }}"
+    create: true
+    regexp: '^TMOUT='
+    line: "TMOUT={{ cis_rhel7_shell_timeout }} ; export TMOUT"
+  with_items:
+    - /etc/bashrc
+    - /etc/profile
+

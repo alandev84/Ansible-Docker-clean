@@ -1,0 +1,9 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/default/useradd
+    regexp: "^\\s*INACTIVE\\s*=\\s*.*$"
+    line: 'INACTIVE={{ cis_rhel7_useradd_inactive }}'
+    state: present
+

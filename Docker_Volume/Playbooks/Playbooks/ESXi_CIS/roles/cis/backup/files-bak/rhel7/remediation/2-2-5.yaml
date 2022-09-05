@@ -1,0 +1,5 @@
+---
+- name: 2.2.5 Ensure DHCP Server is not installed (Scored)
+  yum:
+    name: dhcp
+    state: absent

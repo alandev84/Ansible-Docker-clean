@@ -1,0 +1,12 @@
+---
+
+- name: 1.5.1 Ensure permissions on bootloader config are configured (Scored)
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /boot/grub2/grubenv
+    - /boot/grub2/grub.cfg
+

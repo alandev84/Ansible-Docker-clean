@@ -1,0 +1,29 @@
+---
+
+- name: 1.2.4 Ensure gpgcheck is globally activated (Scored)
+  block:
+    - name: 1.2.4 Ensure gpgcheck is globally activated (Scored) - find repositories
+      shell: |
+        set -o pipefail
+        "grep -EH '\[.*\]' /etc/yum.repos.d/*.repo | grep -v '#' | sed 's/\[\(.*\)\]/\1/g'"
+      register: yum_repositories
+      changed_when: false
+      failed_when: false
+
+    - name: 1.2.4 Ensure gpgcheck is globally activated (Scored) - fix main configuration
+      replace:
+        dest: /etc/yum.conf
+        regexp: '^\s*(gpgcheck\s*=\s*)0$'
+        replace: '\g<1>1'
+
+    - name: 1.2.4 Ensure gpgcheck is globally activated (Scored) - fix repo configuration
+      ini_file:
+        path: "{{ item.split(':')[0] }}"
+        section: "{{ item.split(':')[1] }}"
+        option: gpgcheck
+        value: '1'
+        no_extra_spaces: true
+      with_items: "{{ yum_repositories.stdout_lines }}"
+      when:
+        - yum_repositories.stdout_lines | length > 0
+

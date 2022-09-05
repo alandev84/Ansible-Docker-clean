@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q bind)  \
+|| \
+(echo 'bind is installed' ; exit 1)

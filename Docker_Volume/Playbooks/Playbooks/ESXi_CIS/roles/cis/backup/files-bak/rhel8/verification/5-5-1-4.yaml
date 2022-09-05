@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.5.1.4 Ensure inactive password lock is 30 days or less (Scored)
+  lineinfile:
+    dest: /etc/default/useradd
+    regexp: "^\\s*INACTIVE\\s*=\\s*.*$"
+    line: 'INACTIVE={{ cis_rhel8_useradd_inactive }}'
+    state: present
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+

@@ -1,0 +1,2 @@
+regex: ^PATH=$PATH:$HOME/bin
+replace: #PATH=$PATH:$HOME/bin

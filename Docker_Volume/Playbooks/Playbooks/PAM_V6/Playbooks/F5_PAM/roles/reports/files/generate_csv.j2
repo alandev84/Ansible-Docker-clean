@@ -1,0 +1,7 @@
+{% for host in groups[group_name] %}
+{% if hostvars[host]['user_data_information'] is defined and hostvars[host]['ip'] is defined %}
+{% for data in hostvars[host]['user_data_information'] %}
+{{host}};Load Balancers(F5);nil;nil;{{data['status']}};nil;nil;{{data['user']}};{{hostvars[host]['ip']}}
+{% endfor %}
+{% endif %}
+{% endfor %}

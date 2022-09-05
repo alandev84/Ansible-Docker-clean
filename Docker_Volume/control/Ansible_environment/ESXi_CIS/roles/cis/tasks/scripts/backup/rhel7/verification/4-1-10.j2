@@ -1,0 +1,18 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/var/run/utmp\s+-p\s+wa\s+-k\s+session\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/var/log/wtmp\s+-p\s+wa\s+-k\s+logins\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/var/log/btmp\s+-p\s+wa\s+-k\s+logins\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/var/run/utmp\s+-p\s+wa\s+-k\s+session\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/var/log/wtmp\s+-p\s+wa\s+-k\s+logins\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/var/log/btmp\s+-p\s+wa\s+-k\s+logins\s*' \
+|| \
+(echo "did not audit sudo files" ; exit 1)
+
+
+

@@ -1,0 +1,27 @@
+---
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    # To see if it is set already, we poll the joural with a grep and register a variable
+    - name: search journal to see if protection was active at boot
+      shell: "/usr/bin/journalctl | /usr/bin/grep 'protection: active' "
+      register: nx_protection
+      changed_when: false
+      check_mode: no
+
+    # If we can't verify that it is active, we notify the user. This has to be set
+    #  in the BIOS or with a special kernel (32 bit kernels only)
+    - name: Verify XD/NX support is active
+      debug:
+        msg: "XD/NX support is active"
+      when: nx_protection.stdout is search("active")
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: nx_protection.stdout is search("active")
+

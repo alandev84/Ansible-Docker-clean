@@ -1,0 +1,30 @@
+#!/bin/sh
+
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+chmod\s+-S\s+fchmod\s+-S\s+fchmodat\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+chmod\s+-S\s+fchmod\s+-S\s+fchmodat\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+chown\s+-S\s+fchown\s+-S\s+fchownat\s+-S\s+lchown\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+chown\s+-S\s+fchown\s+-S\s+fchownat\s+-S\s+lchown\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+setxattr\s+-S\s+lsetxattr\s+-S\s+fsetxattr\s+-S\s+removexattr\s+-S\s+lremovexattr\s+-S\s+fremovexattr\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+setxattr\s+-S\s+lsetxattr\s+-S\s+fsetxattr\s+-S\s+removexattr\s+-S\s+lremovexattr\s+-S\s+fremovexattr\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+perm_mod\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+chmod,fchmod,fchmodat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+chmod,fchmod,fchmodat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+chown,fchown,lchown,fchownat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+lchown,fchown,chown,fchownat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+setxattr,lsetxattr,fsetxattr,removexattr,lremovexattr,fremovexattr\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=perm_mod\s*' \
+|| \
+(echo "audit rule problem" ; exit 1)
+
+
+

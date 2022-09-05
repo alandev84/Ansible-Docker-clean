@@ -1,0 +1,22 @@
+---
+
+#- debug: var=cis_action
+#- debug: var=cis_item
+
+
+# execute shell script
+- name: execute {{ cis_action }}
+  block:
+    - name: trigger {{ cis_action }} shell script for {{ cis_rules[cis_item]['name'] }}
+      include_tasks: execute_shell.yaml
+  when: exec_method == 'script'
+ 
+#    - name: trigger {{ cis_action }} shell script for {{ cis_rules[cis_item]['name'] }}
+
+# execute playbook
+- name: "execute anisble playbook {{ execution_path }}.yaml"
+  block:
+    - name: run {{ cis_action }} playbook for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: "./playbooks/{{ execution_path }}.yaml"
+  when: exec_method == 'playbook'
+

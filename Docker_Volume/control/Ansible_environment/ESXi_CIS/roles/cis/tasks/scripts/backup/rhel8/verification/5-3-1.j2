@@ -1,0 +1,5 @@
+#!/bin/sh
+
+authselect current | grep custom/{{ cis_rhel8_authselect_profile }} \
+|| \
+(echo "custom authselect profile is not current" ; exit 1)

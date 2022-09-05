@@ -1,0 +1,10 @@
+---
+- name: Cisco Routers
+  hosts: cisco_routers
+  gather_facts: true
+  become_method: runas
+  ignore_unreachable: yes
+  ignore_errors: yes 
+  roles:
+    - getuserinfo
+

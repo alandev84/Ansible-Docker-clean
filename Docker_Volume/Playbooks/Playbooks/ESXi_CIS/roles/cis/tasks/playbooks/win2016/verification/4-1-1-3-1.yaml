@@ -1,0 +1,22 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: |
+     New-PSDrive -PSDrive registry -Root HKEY_CLASSES_ROOT -name HKCR
+     Set-Location HKCR:
+     Get-ItemProperty -Path HKCR:\regfile\shell\open\command| Select-String default| Select-String 'Notepad.exe “%1”'
+  ignore_errors: true
+  register: result
+
+
+- set_fact:
+    number: "{{ result.stdout_lines }}"
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - number == []
+
+
+

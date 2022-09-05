@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name: mcstrans
+    state: absent
+  when: "'mcstrans' in ansible_facts.packages"

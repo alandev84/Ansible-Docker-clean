@@ -1,0 +1,9 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/var/log/sudo.log\s+-p\s+wa\s+-k\s+actions\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/var/log/sudo.log\s+-p\s+wa\s+-k\s+actions\s*' \
+|| \
+(echo "did not audit sudo log files" ; exit 1)
+
+

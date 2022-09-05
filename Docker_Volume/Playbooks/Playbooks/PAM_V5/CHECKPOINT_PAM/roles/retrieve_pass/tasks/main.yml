@@ -1,0 +1,22 @@
+---
+- name: GetPassword From CyberArk
+  local_action: |
+    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="RHEL" -p Query="Safe=RHEL;Folder=Root;Object=Operating-System-ansible_ssh-10.68.32.81-root;Username=root" -o Password
+  args:
+    chdir: /opt/CARKaim/sdk/
+  register: cybr_pass  
+  no_log: no 
+
+- name: Print the variable
+  set_fact:
+    password: "{{ cybr_pass['stdout'] }}"
+    cacheable: yes
+  no_log: no  
+  
+- name: Set SSH password fact variable
+  set_fact:
+    ansible_password: "{{ password }}"    
+    ansible_sudo_password: "{{ password }}"
+  no_log: no 
+
+

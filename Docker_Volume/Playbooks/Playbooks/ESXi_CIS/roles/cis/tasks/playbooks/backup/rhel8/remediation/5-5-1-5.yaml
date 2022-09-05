@@ -1,0 +1,6 @@
+---
+
+- name: 5.5.1.5 Ensure all users last password change date is in the past (Scored)
+  command: /bin/true
+  changed_when: false
+

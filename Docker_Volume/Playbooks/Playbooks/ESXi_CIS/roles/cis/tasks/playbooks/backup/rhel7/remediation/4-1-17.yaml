@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  copy:
+    dest: /etc/audit/rules.d/99-finalize.rules
+    content: |
+      -e 2
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart auditd
+

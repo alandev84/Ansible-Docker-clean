@@ -1,0 +1,14 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Securepipeservers\Winreg\AllowedExactpaths
+    name: Machine
+    data: "{{ cis_win2019_Machine.data }}"
+    state: "{{ cis_win2019_Machine.state|default('present') }}"
+    type: multistring
+  register: result
+  #  changed_when:
+  #    - result.diff|json_query('after.*.*.*.value') != result.diff|json_query('before.*.*.*.value')
+  #    - result.diff|json_query('after.*.*.*.value')|string|length > 10
+
+- debug: var=result

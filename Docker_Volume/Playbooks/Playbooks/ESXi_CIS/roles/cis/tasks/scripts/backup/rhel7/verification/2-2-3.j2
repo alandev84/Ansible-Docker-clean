@@ -1,0 +1,9 @@
+#!/bin/sh
+
+! (rpm -q avahi-autoipd avahi)  \
+|| \
+(echo 'Avahi Server is installed' ; exit 1)
+
+! (rpm -q avahi)  \
+|| \
+(echo 'Avahi Server is installed' ; exit 1)

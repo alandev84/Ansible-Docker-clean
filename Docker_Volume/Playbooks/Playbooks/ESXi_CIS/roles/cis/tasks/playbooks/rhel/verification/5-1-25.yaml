@@ -1,0 +1,80 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: auth
+      control: required
+      module_path: pam_env.so
+      new_type: auth
+      new_control: required
+      new_module_path: pam_faillock.so
+      module_arguments: 'preauth silent audit deny={{ cis_rhel_pam_failllock_deny }} unlock_time={{ cis_rhel_pam_failllock_timeout }}'
+      state: after
+  with_items:
+  - system-auth
+  - password-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0]
+  loop: "{{ result.results | json_query('[].[changed]') }}"
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: auth
+      control: requisite
+      module_path: pam_succeed_if.so
+      new_type: auth
+      new_control: '[default=die]'
+      new_module_path: pam_faillock.so
+      module_arguments: 'authfail audit deny={{ cis_rhel_pam_failllock_deny }} unlock_time={{ cis_rhel_pam_failllock_timeout }}'
+      state: before
+  with_items:
+  - system-auth
+  - password-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0]
+  loop: "{{ result.results | json_query('[].[changed]') }}"
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: account
+      control: required
+      module_path: pam_unix.so
+      new_type: account
+      new_control: required
+      new_module_path: pam_faillock.so
+      state: before
+  with_items:
+  - system-auth
+  - password-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0]
+  loop: "{{ result.results | json_query('[].[changed]') }}"
+

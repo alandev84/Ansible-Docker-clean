@@ -1,0 +1,12 @@
+---
+
+- name: 4.2.2.3 Ensure journald is configured to write logfiles to persistent disk (Scored)
+  ini_file:
+    path: /etc/systemd/journald.conf
+    section: Journal
+    no_extra_spaces: true
+    option: Storage
+    value: persistent
+  notify:
+    - restart journald
+

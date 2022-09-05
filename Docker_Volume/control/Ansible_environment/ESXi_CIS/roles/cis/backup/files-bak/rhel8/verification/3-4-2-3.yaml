@@ -1,0 +1,26 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 3.4.2.3 Ensure nftables is not enabled (Scored)
+  block:
+    - name: 3.4.2.3 Ensure nftables is not enabled (Scored)
+      service:
+        name: nftables
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: nftables_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: nftables_service_result['changed'] 
+
+  when:
+    - cis_rhel8_firewall_package == "firewalld"
+    - "'nftables' in ansible_facts.packages"
+
+  #- debug: var=cis_result

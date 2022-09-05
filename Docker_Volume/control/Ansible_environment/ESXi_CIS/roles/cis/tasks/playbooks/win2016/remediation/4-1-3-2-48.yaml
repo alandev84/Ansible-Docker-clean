@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa\Msv1_0
+    name: allownullsessionfallback
+    data: "{{ cis_win_allownullsessionfallback.data }}"
+    state: present
+    type: dword
+
+

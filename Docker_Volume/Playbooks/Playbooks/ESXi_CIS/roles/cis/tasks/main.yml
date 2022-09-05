@@ -1,0 +1,27 @@
+---
+
+- name: Prepare the variables for CIS tasks
+  include_tasks: pre_work.yaml
+
+- name:  trigger verificaiton task when selction ends with '.' - substring match
+  block:
+    - name: remove special meaning for . in selection 
+      set_fact:
+        filter_str: "^{{ selection.replace('.', '\\.') }}"
+
+    - name: trigger the CIS action for list of policies
+      include_tasks: actions.yaml
+      loop: "{{ cis_rules.keys() | select('match', filter_str) | list }}"
+      loop_control:
+        loop_var: cis_item
+  when: 
+  - selection is match("^([0-9]|\\.)+\\.$")
+
+- name:  trigger verificaiton task when selction exactly match
+  block:
+    - name: trigger the CIS action for single policies
+      include_tasks: actions.yaml
+      vars:
+        cis_item: "{{ selection }}"
+  when: 
+  - selection in cis_rules.keys()|list

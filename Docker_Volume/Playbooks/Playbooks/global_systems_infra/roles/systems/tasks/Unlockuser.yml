@@ -1,0 +1,33 @@
+---
+#for RH
+  - name: Unlock Users
+    block:
+      - name: Unlock Users In RedHat/Debian [RH]
+        user:
+          name: "{{ item.name }}"
+          password_lock: False
+          state: present
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always:
+      - import_tasks: outputLockStatus_RH.yml
+        when: ansible_os_family != "Solaris"
+    tags:
+      - UnlockUser
+
+#for Solaris
+  - name: Unlock Users
+    block:
+      - name: Unlock Users In Solaris [Solaris]
+        command: 'passwd -u {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always:
+      - import_tasks: outputLockStatus_SOL.yml
+        when: ansible_os_family == "Solaris"
+    tags:
+      - UnlockUser

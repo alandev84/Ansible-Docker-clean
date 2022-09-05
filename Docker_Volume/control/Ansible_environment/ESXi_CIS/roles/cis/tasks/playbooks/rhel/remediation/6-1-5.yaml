@@ -1,0 +1,19 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - find files"
+      shell: |
+        set -o pipefail
+        df --local -P | awk '{if(NR!=1) print $6}' | xargs -I '{}' find '{}' -perm /2000 -type f -ls
+      args:
+        executable: /bin/bash
+      changed_when: false
+      failed_when: false
+      register: GUID_files
+
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ GUID_files.stdout_lines }}"
+

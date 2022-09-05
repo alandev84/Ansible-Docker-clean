@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rpm -q firewalld \
+|| \
+(echo 'Firewall package is not installed' ; exit 1)

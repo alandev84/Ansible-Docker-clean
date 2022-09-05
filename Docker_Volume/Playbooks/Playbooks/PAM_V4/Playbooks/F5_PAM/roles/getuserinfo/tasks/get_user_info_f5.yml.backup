@@ -1,0 +1,70 @@
+---
+
+- name: Login to a form based webpage, then use the returned cookie to access the app in later tasks
+  uri:
+    url: https://172.28.200.7/mgmt/tm/auth/user
+    method: GET
+    user: "svc_ansible"
+    password: "y*A$GV_&2{xci)a"
+    validate_certs: no
+  register: result
+
+- name: Login to a form based webpage, then use the returned cookie to access the app in later tasks2
+  uri:
+    url: https://172.28.200.7/mgmt/tm/auth/login-failures
+    method: GET
+    user: "svc_ansible"
+    password: "y*A$GV_&2{xci)a"
+    validate_certs: no
+  register: result2
+
+
+- name: get username and role  
+  set_fact:
+    username_and_role: "{{ result | json_query(jmesquery) }}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.items[*].{Name: name, Description: description, Role: partitionAccess[0].role}"
+
+- name: Get Account Status Value 
+  set_fact:
+    username_and_status: "{{result2 | json_query(jmesquery)}}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.entries.*.nestedStats[].entries.{isLockedOut: lockedOut.description, Name: username.description}"
+
+
+############################################################################################################
+
+- name: Converting lists of username_and_role to dictionaries 
+  set_fact:
+    user_and_role: "{{ username_and_role|items2dict(key_name='Name',value_name='Role') }}"
+
+
+- name: Converting lists of user_and_status to dictionaries 
+  set_fact:
+    user_and_status: "{{ username_and_status|items2dict(key_name='Name',value_name='isLockedOut') }}"
+
+
+- name: Set data to display to be use at generate_csv
+  set_fact:
+    user_data_information: "{{ user_data_information|default([]) + [ { 'user': item, 'role': user_and_role[item],'status': isLockedOut } ] }}"
+    cacheable: yes
+  vars:
+    isLockedOut: "{% if user_and_status[item] == 'no' %}true{% else %}false{% endif %}"
+  when: privilege_user_name is defined and user_and_status[item] is defined and user_and_role[item] is defined
+  loop: "{{ privilege_user_name|list }}"
+  delegate_to: localhost 
+
+
+- debug: 
+    var: user_data_information
+
+
+
+
+
+  ###########################################################################################################
+
+
+

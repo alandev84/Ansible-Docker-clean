@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q xorg-x11*)  \
+|| \
+(echo 'X Window is installed' ; exit 1)

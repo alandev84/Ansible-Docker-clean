@@ -1,0 +1,13 @@
+---
+- name: 3.2.6 Ensure bogus ICMP responses are ignored (Scored)
+  sysctl:
+    name: "{{ item }}"
+    value: '1'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/cis.conf
+  with_items:
+    - net.ipv4.icmp_ignore_bogus_error_responses
+  notify:
+    - sysctl flush ipv4 route
+

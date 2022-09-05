@@ -1,0 +1,12 @@
+---
+
+- name: 5.2.16 Ensure SSH PAM is enabled (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.16"
+    block: |
+      UsePAM yes
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

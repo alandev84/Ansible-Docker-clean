@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep '\s/var/log/audit\s' | grep "^/dev/\S\+\s\+on\s\+/var/log/audit\s\+type\s\+xfs\s\+(rw,relatime,data=ordered)$" \
+|| \
+(mount | grep '\s/var/log/audit\s' ; exit 1)

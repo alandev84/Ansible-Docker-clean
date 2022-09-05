@@ -1,0 +1,21 @@
+---
+
+#- name: "4.2.10 Ensure logrotate is configured - find all rotate files"
+#  template:
+#    src: "{{ item }}"
+#    dest: /etc/logrotate.d/{{ item | basename }}
+#    owner: root
+#    group: root
+#    mode: 0644
+#  with_fileglob:
+#  - "{{ os }}/etc/logrotate.d/*" 
+
+
+- name: "4.2.10 Ensure logrotate is configured - logrotate.conf"
+  template:
+    src: "{{ os }}/etc/logrotate.conf"
+    dest: /etc/logrotate.conf
+    owner: root
+    group: root
+    mode: 0644
+

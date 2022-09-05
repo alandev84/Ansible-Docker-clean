@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: ShutdownWithoutLogon
+    data: "{{ cis_win2019_2_3_13_1.data }}"
+    state: "{{ cis_win2019_2_3_13_1.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result
+

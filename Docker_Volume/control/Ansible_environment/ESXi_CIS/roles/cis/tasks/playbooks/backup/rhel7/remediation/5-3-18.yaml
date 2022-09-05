@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel7 5.3.18"
+    block: |
+      Banner /etc/issue.net
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

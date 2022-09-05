@@ -1,0 +1,37 @@
+#- name: GetPassword From CyberArk
+#  local_action: |
+#    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="Palo-Alto" -p Query="Safe=Palo-Alto;Folder=Root;Object=Operating-System-UnixSSH-10.68.32.81-Administrator;Username=Administrator" -o Password
+#   local_action: 
+#    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="ansible_safe" -p Query="Safe=Ansible_safe;Folder=Root;Object=Operating-System-ansible_ssh-10.68.32.81-Administrator;Username=Administrator" -o Password
+#  args:
+#    chdir: /opt/CARKaim/sdk/
+#  register: cybr_pass  
+#  no_log: no
+
+- name: GetPassword From CyberArk
+  local_action: 
+    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="app_ansible" -p Query="Safe=testAnsible;Folder=Root;Object=Operating_System-BCSWinOTP-bcs.bcsgroup.com-svc_ansible" -o Password
+  args:
+    chdir: /opt/CARKaim/sdk/
+  register: cybr_pass  
+#  no_log: yes
+
+- name: Print the variable
+  set_fact:
+    password: "{{ cybr_pass['stdout'] }}"
+    cacheable: yes
+  no_log: no  
+  
+- name: Set SSH password fact variable
+  set_fact:
+    ansible_password: "{{ password }}"    
+    ansible_sudo_password: "{{ password }}"
+  no_log: no 
+
+
+
+
+      
+
+
+  

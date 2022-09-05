@@ -1,0 +1,11 @@
+---
+
+- name: "1.8.1.1 Ensure message of the day is configured properly (Scored)\n
+  1.8.1.4 Ensure permissions on /etc/motd are configured (Scored)"
+  template:
+    src: "{{ os }}/etc/motd.j2"
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+grep -Eir '^\s*Defaults\s+([^#]+,\s*)?logfile=\s*/var/log/sudo.log\s*$' /etc/sudoers /etc/sudoers.d/ \
+|| \
+(echo "No 'Defaults logfile=<file path>' setting" ; exit 1)

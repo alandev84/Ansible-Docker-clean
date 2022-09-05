@@ -1,0 +1,34 @@
+---
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  template:
+    src: "{{ os }}/etc/issue.net.j2"
+    dest: /etc/issue.net
+    owner: root
+    group: root
+    mode: 0644
+  check_mode: yes
+  failed_when: false
+  register: motd_file_result
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: |
+    set -o pipefail
+    id=`grep '^ID=' /etc/os-release | cut -d= -f2 | sed -e 's/\"//g'`
+    grep  -i $id /etc/issue.net && exit 0
+    grep -E -i '\\v|\\r|\\m|\\s' /etc/issue.net && exit 0
+  failed_when: false
+  changed_when: false
+  register: content_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - motd_file_result['changed'] 
+    - content_result.rc == 0
+
+

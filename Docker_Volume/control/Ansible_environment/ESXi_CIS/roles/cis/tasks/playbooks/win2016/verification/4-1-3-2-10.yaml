@@ -1,0 +1,24 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\CurrentControlSet\Services\NTDS\Parameters
+    name: LDAPServerIntegrity
+    data: "{{ cis_win_LDAPServerIntegrity.data }}"
+    state: present
+    type: dword
+  check_mode: true
+  ignore_errors: true
+  register: result
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+    - ansible_windows_domain_role == "Primary domain controller"
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"

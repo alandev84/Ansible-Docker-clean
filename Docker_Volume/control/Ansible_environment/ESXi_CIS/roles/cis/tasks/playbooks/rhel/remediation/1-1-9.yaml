@@ -1,0 +1,19 @@
+---
+
+- name: set nodev opt variable 
+  set_fact:
+    mount_opt: nodev
+    mount_p: /var/tmp
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+    dest: /etc/fstab
+    regexp: '^\s*(?P<part1>.+\s+{{ mount_p }}\s+(ext4|xfs)\s+)(?P<opt>((?!({{ mount_opt }}|\s)).)*)(?P<part2>\s+\d+\s+\d+\s*)$'
+    replace: '\g<part1>\g<opt>,{{ mount_opt }}\g<part2>'
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  mount:
+    path: "{{ mount_p }}"
+    opts: remount,{{ mount_opt }}
+    state: remounted
+

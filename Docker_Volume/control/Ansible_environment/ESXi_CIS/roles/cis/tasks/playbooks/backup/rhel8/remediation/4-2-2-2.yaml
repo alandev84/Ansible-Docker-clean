@@ -1,0 +1,12 @@
+---
+
+- name: 4.2.2.2 Ensure journald is configured to compress large log files (Scored)
+  ini_file:
+    path: /etc/systemd/journald.conf
+    section: Journal
+    no_extra_spaces: true
+    option: Compress
+    value: "yes"
+  notify:
+    - restart journald
+

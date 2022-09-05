@@ -1,0 +1,14 @@
+---
+- name: 3.2.4 Ensure suspicious packets are logged (Scored)
+  sysctl:
+    name: "{{ item }}"
+    value: '1'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/cis.conf
+  with_items:
+    - net.ipv4.conf.all.log_martians
+    - net.ipv4.conf.default.log_martians
+  notify:
+    - sysctl flush ipv4 route
+

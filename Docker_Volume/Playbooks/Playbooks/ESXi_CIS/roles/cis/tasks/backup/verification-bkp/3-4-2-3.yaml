@@ -1,0 +1,31 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: check nftables status (enabled & started)
+  service:
+    name: nftables
+    enabled: no
+    state: stopped
+  check_mode: yes
+  register: nftables_service_result
+
+- name: no nftables pkg
+  yum:
+    name: nftables
+    state: absent
+  check_mode: yes
+  register: nftables_pkg_result
+
+  #- debug: var=nftables_service_result
+
+  #- debug: var=nftables_pkg_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not nftables_service_result['changed'] or not nftables_pkg_result['changed']
+
+  #- debug: var=cis_result

@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: SMBServerNameHardeningLevel
+    data: "{{ cis_win_SMBServerNameHardeningLevel.data }}"
+    state: present
+    type: dword
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q openldap-servers)  \
+|| \
+(echo 'openldap-servers is installed' ; exit 1)

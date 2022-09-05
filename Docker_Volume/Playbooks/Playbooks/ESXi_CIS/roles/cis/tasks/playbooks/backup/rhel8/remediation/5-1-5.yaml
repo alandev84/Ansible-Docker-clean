@@ -1,0 +1,10 @@
+---
+
+- name: 5.1.5 Ensure permissions on /etc/cron.weekly are configured (Scored)
+  file:
+    dest: /etc/cron.weekly
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+

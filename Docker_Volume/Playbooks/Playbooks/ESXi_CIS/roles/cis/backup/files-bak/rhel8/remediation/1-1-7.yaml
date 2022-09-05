@@ -1,0 +1,16 @@
+---
+- debug:
+    msg: "Need specify /var/tmp  device and fstype"
+
+#- name: "1.1.7 Ensure separate partition exists for /var/tmp (Scored)\n
+#  1.1.8 Ensure nodev option set on /var/tmp partition (Scored)\n
+#  1.1.9 Ensure nosuid option set on /var/tmp partition (Scored)\n
+#  1.1.10 Ensure noexec option set on /var/tmp partition (Scored)"
+#  mount:
+#    name: "/var/tmp"
+#    src: "{{ item.device }}"
+#    state: mounted
+#    fstype: "{{ item.fstype }}"
+#    opts: "defaults,nodev,nosuid,noexec"
+#  with_items: "{{ ansible_mounts }}"
+

@@ -1,0 +1,4 @@
+#!/bin/sh 
+
+[ `df --local -P 2> /dev/null | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null | wc -l ` == 0 ] || (echo "world-writable directory does not have sticky bit" ; exit 1)
+

@@ -1,0 +1,12 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: "'sudo' in ansible_facts.packages"
+

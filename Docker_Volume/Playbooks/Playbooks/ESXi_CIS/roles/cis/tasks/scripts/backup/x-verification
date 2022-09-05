@@ -1,0 +1,10 @@
+
+file=/root/cis-bcs/CIS/roles/cis/vars/cis_rhel_globe_vars.yaml
+
+#grep -E " name:|playbook" $file | grep -E " name:|verification" | grep -v "#" | grep " name:" | awk '{print $2 }' | awk -F '.' '{print $1,"-",$2,"-",$3,".yaml"}'  | tr -d ' ' |\
+grep -B4 -E "verification_method:.*script.*" $file | grep -E "^\s+[[:digit:]]" | awk -F '.' '{print $1,"-",$2,"-",$3,".j2"}'  | tr -d ' ' | tr -d ':' |\
+while read f
+do
+  echo $f
+  cp -p rhel7/verification/$f  rhel/verification/$f
+done

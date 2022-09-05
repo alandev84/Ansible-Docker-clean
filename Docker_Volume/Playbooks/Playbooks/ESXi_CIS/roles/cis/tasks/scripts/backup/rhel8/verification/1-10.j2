@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (grep -E -i '^\s*LEGACY\s*(\s+#.*)?$' /etc/crypto-policies/config)  \
+|| \
+(echo 'system-wide crypto policy is legacy' ; exit 1)

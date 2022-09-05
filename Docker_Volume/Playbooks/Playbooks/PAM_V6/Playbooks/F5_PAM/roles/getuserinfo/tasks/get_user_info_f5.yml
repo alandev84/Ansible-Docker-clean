@@ -1,0 +1,93 @@
+---
+
+- debug:
+    var: ansible_password
+
+- debug: 
+    var: ansible_user
+
+- name: Retrieve IP Address
+  set_fact: 
+    ip: "{{hostvars[inventory_hostname].ansible_default_ipv4.address}}"
+    cacheable: yes
+  register: ip
+
+- name: Login to a form based webpage, then use the returned cookie to access the app in later tasks
+  uri:
+    url: https://{{ip}}/mgmt/tm/auth/user
+    method: GET
+    user: "{{ansible_user}}"
+    password: "{{ansible_password}}"
+    validate_certs: no
+  register: result
+
+- name: Login to a form based webpage, then use the returned cookie to access the app in later tasks2
+  uri:
+    url: https://{{ip}}/mgmt/tm/auth/login-failures
+    method: GET
+    user: "{{ansible_user}}"
+    password: "{{ansible_password}}"
+    validate_certs: no
+  register: result2
+
+
+- name: get username and role  
+  set_fact:
+    username_and_role: "{{ result | json_query(jmesquery) }}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.items[*].{Name: name, Description: description, Role: partitionAccess[0].role}"
+
+- name: Get Account Status Value 
+  set_fact:
+    username_and_status: "{{result2 | json_query(jmesquery)}}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.entries.*.nestedStats[].entries.{isLockedOut: lockedOut.description, Name: username.description}"
+
+
+############################################################################################################
+
+- name: filter only admin role
+  set_fact:
+    priv: "{{ priv|default([]) + [item] }}"
+  when: item.Role == "admin"
+  loop: "{{ username_and_role }}"
+
+- debug:
+    var: priv
+
+- name: Convert list of user to dict
+  set_fact:
+    user_and_role2: "{{ priv|items2dict(key_name='Name',value_name='Role') }}"
+
+- name: Converting lists of username_and_role to dictionaries 
+  set_fact:
+    user_and_role: "{{ username_and_role|items2dict(key_name='Name',value_name='Role') }}"
+
+- name: Converting lists of user_and_status to dictionaries 
+  set_fact:
+    user_and_status: "{{ username_and_status|items2dict(key_name='Name',value_name='isLockedOut') }}"
+
+- name: Set data to display to be use at generate_csv
+  set_fact:
+    user_data_information: "{{ user_data_information|default([]) + [ { 'user': item, 'role': user_and_role2[item],'status': isLockedOut } ] }}"
+    cacheable: yes
+  vars:
+    isLockedOut: "{% if user_and_status[item] == 'no' %}true{% else %}false{% endif %}"
+  when: user_and_status[item] is defined and user_and_role2[item] is defined 
+  loop: "{{ user_and_status|list }}"
+  delegate_to: localhost 
+
+
+- debug: 
+    var: user_data_information
+
+
+
+
+
+  ###########################################################################################################
+
+
+

@@ -1,0 +1,29 @@
+---
+#Static
+vcenter_hostname: 172.28.201.116
+vcenter_username: BCS\Ansb_Vctr_VM
+vcenter_password: kLU]gdJi%&#MV3
+vm_disk_size: 100
+vm_disk_type: thin
+vm_cpu: 2
+vm_ram: 2048
+vm_domain: bcs.bcsgroup.com
+vm_network_mask: 255.255.255.0
+vm_dns: ['172.28.16.13', '172.18.16.13']
+
+#net_name/group port name: "{{ vm_network.split('-')[0]|replace(' ','') }}"
+#select list
+vm_template: test3
+vm_disk_datastore: DC2_DF_UPIDT_DS1 
+dc_name: DCW
+cluster_name: DF-UAT
+
+#create as list, call from survey
+ip: 172.31.17.207
+vm_folder: "/DCW/vm/Ansible - UAT"
+vm_name: test_rhel
+
+#call from survey instead of define from main.yml for all that is below
+vm_network_gw: 172.31.17.254
+vm_network: dPG_617_UAT-App
+vm_vlan: 617

@@ -1,0 +1,7 @@
+---
+
+- name: 2.2.4 Ensure CUPS is not installed (Scored)
+  yum:
+    name: cups
+    state: absent
+

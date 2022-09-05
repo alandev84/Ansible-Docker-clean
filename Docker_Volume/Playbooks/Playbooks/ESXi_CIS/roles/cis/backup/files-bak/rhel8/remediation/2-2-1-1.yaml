@@ -1,0 +1,12 @@
+---
+- name: 2.2.1.1 Ensure time synchronization is in use (Not Scored) - package installed
+  yum:
+    name: chrony
+    state: installed
+
+- name: 2.2.1.1 Ensure time synchronization is in use (Not Scored) - service started / enabled
+  service:
+    name: chronyd
+    state: started
+    enabled: true
+

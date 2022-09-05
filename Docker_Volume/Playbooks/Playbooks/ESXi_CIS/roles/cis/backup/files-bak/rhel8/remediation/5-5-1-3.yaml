@@ -1,0 +1,9 @@
+---
+
+- name: 5.5.1.3 Ensure password expiration warning days is 7 or more (Scored)
+  lineinfile:
+    dest: /etc/login.defs
+    regexp: "^\\s*PASS_WARN_AGE\\s*.*$"
+    line: 'PASS_WARN_AGE {{ cis_rhel8_pass_warn_age }}'
+    state: present
+

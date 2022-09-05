@@ -1,0 +1,55 @@
+---
+- name: Creating a report directory
+  file:
+    path: "{{ report_directory }}"
+    state: directory
+    owner: svc_ansible
+    group: sysadmin
+  delegate_to: 172.28.201.117
+
+- name: Generate report to /home/ftpuser/report/Leon
+  template:
+    src: "./files/generate_csv.j2"
+    dest: "{{ report_directory }}/cisco_router_with_cyberark.csv"
+    owner: svc_ansible
+    group: sysadmin
+  delegate_to: 172.28.201.117
+
+
+
+
+
+
+
+
+  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+

@@ -1,0 +1,7 @@
+---
+- name: 2.2.14 Ensure NIS server is not installed (Scored)
+  yum:
+    name: ypserv
+    state: absent
+
+

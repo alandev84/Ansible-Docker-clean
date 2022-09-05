@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sysctl net.ipv6.conf.all.accept_ra | grep -E '^\s*net.ipv6.conf.all.accept_ra\s*=\s*0\s*$' \
+&& \
+sysctl net.ipv6.conf.default.accept_ra | grep -E '^\s*net.ipv6.conf.default.accept_ra\s*=\s*0\s*$' \
+&& \
+grep -E '^\s*net.ipv6.conf.all.accept_ra\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+&& \
+grep -E '^\s*net.ipv6.conf.default.accept_ra\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+|| \
+(echo 'IPv6 router advertisements settings are wrong' ; exit 1)

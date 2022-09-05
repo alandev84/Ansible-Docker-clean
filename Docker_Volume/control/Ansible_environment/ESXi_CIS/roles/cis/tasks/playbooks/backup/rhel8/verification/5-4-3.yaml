@@ -1,0 +1,75 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) system-auth 1
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/system-auth
+      follow: true
+      regexp: ^password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel8_password_reuse }}
+  check_mode: true
+  ignore_errors: true
+  register: result_0
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result_0['failed']
+    - result_0['changed']
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) system-auth 2
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/system-auth
+      follow: true
+      regexp: ^(password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s.*remember\s*=\s*)(\S+)(.*)$
+      replace: \g<1>{{ cis_rhel8_password_reuse }}\g<3>
+  check_mode: true
+  ignore_errors: true
+  register: result_1
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result_1['failed']
+    - result_1['changed']
+    - result_0['changed']
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) password-auth 1
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/password-auth
+      follow: true
+      regexp: ^password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel8_password_reuse }}
+  check_mode: true
+  ignore_errors: true
+  register: result_2
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result_2['failed']
+    - result_2['changed']
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) password-auth 2
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/password-auth
+      follow: true
+      regexp: ^(password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s.*remember\s*=\s*)(\S+)(.*)$
+      replace: \g<1>{{ cis_rhel8_password_reuse }}\g<3>
+  check_mode: true
+  ignore_errors: true
+  register: result_3
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result_3['failed']
+    - result_3['changed']
+    - result_2['changed']

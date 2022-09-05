@@ -1,0 +1,18 @@
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+  - name: "{{ cis_rules[cis_item]['name'] }}"
+    template:
+      src: "{{ os }}/etc/systemd/system/tmp.mount.j2"
+      dest: /etc/systemd/system/tmp.mount
+      owner: root
+      group: root
+      mode: 0644
+    notify: 
+      - RHEL 7 reboot
+
+
+  - name: "{{ cis_rules[cis_item]['name'] }}"
+    shell: |
+      systemctl daemon-reload
+      systemctl unmask tmp.mount 
+

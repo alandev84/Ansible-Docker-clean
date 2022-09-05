@@ -1,0 +1,169 @@
+---
+#For RedHat
+  - name: Initialisation [1/2] [RH]
+    file:
+      path: "{{ item.file_path_src }}"
+      state: absent
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family == "RedHat"
+
+  - name: Initialisation [2/2] [RH]
+    file:
+      path: "{{ item.script_path_dest }}"
+      state: absent
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family == "RedHat"
+
+  - name: Copy Scan Script To Path [RH]
+    ansible.builtin.copy:
+      src: "{{ item.script_path_src }}"
+      dest: "{{ item.script_path_dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: '0777'
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family == "RedHat"
+
+  - name: Run Script Without Waiting [RH]
+    ansible.builtin.shell: "{{ item.script_path_dest }}"
+    become: true
+    async: 45
+    poll: 0
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family == "RedHat"
+
+  - name: Check If File is Generated [RH]
+    wait_for:
+      path: "{{ item.file_path_src }}"
+    ignore_errors: yes
+    loop: "{{ SSLScan }}"
+    tags:
+      - CollectSSL
+    when: ansible_os_family == "RedHat"
+
+  - name: Collect And Transfer to Ansible [RH]
+    fetch:
+      src: "{{ item.file_path_src }}"
+      dest: "{{ item.file_path_dest }}"
+      flat: yes
+    register: Collected_RH
+    loop: "{{ SSLScan }}"
+    tags:
+      - CollectSSL
+    when: ansible_os_family == "RedHat"
+
+#For Solaris, might need become for rm items.
+  - name: Initialisation [1/2] [Solaris]
+    shell: "rm -rf {{ item.file_path_src }}"
+    ignore_errors: yes
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Initialisation [2/2] [Solaris]
+    shell: "rm -rf {{ item.script_path_dest }}"
+    ignore_errors: yes
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+#need to change user to svc_ansible
+  - name: Copy Scan Script To Path [Solaris]
+    become: yes
+    become_user: devops
+    synchronize:
+      src: "{{ item.script_path_src }}"
+      dest: "{{ item.remote_path }}"
+      mode: push
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Chmod Script To Have Run Permission [Solaris]
+    become: yes
+    ansible.builtin.shell: "chmod 777 {{ item.script_path_dest }}"
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Chown Script To Be Run As Root [Solaris]
+    become: yes
+    ansible.builtin.shell: "chown root:root {{ item.script_path_dest }}"
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Execute Script [Solaris]
+    become: yes
+    ansible.builtin.shell: "{{ item.script_path_dest }}"
+    async: 45
+    poll: 0
+    loop: "{{ SSLScan }}"
+    tags:
+      - ScanSSL
+    when: ansible_os_family != "RedHat"
+
+#need to test on solaris
+  - name: Check If File is Generated [Solaris]
+    wait_for:
+      path: "{{ item.file_path_src }}"
+    ignore_errors: yes
+    loop: "{{ SSLScan }}"
+    tags:
+      - CollectSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Chown Script To Be Run As User [Solaris]
+    become: yes
+    ansible.builtin.shell: "chown svc_ansible:sysadm {{ item.file_path_src }}"
+    loop: "{{ SSLScan }}"
+    tags:
+      - CollectSSL
+    when: ansible_os_family != "RedHat"
+
+  - name: Collect And Transfer to Ansible [Solaris]
+    become: yes
+    become_user: devops
+    synchronize:
+      src: "{{ item.file_path_src }}"
+      dest: "{{ item.local_path }}"
+      mode: pull
+    register: Collected_Sol
+    loop: "{{ SSLScan }}"
+    tags:
+      - CollectSSL
+    when: ansible_os_family != "RedHat"
+
+#combined
+  - name: Merge Result [1/2]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "cat /ansible_tmp/*.txt > /ansible_tmp/SSL.log"
+    register: MergeSSL
+    ignore_errors: yes
+    tags:
+      - CollectSSL
+
+  - name: Merge Result [2/2]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /ansible_tmp/*.txt"
+    ignore_errors: yes
+    tags:
+      - CollectSSL
+    when: MergeSSL.changed

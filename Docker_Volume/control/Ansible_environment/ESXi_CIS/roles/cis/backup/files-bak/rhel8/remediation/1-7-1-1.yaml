@@ -1,0 +1,7 @@
+---
+
+- name: 1.7.1.1 Ensure SELinux is installed (Scored)
+  yum:
+    name: libselinux
+    state: installed
+

@@ -1,0 +1,14 @@
+---
+
+- debug:
+    msg: "Need to date ansible_mounts"
+
+#- name: 1.1.14 Ensure nodev option set on /home partition (Scored)
+#  mount:
+#    name: "/home"
+#    src: "{{ item.device }}"
+#    state: mounted
+#    fstype: "{{ item.fstype }}"
+#    opts: "defaults,nodev"
+#  with_items: "{{ ansible_mounts }}"
+#

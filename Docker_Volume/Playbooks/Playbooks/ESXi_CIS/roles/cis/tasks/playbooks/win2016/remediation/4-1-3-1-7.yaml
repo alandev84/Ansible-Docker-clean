@@ -1,0 +1,20 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeRemoteInteractiveLogonRight
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeRemoteInteractiveLogonRight }}"
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeRemoteInteractiveLogonRight
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeRemoteInteractiveLogonRight_Standalone }}"
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"

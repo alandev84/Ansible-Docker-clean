@@ -1,0 +1,19 @@
+---
+
+- name: 3.2.9 Ensure IPv6 router advertisements are not accepted (Scored)
+  sysctl:
+    name: "{{ item }}"
+    value: '0'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/cis.conf
+  with_items:
+    - net.ipv6.conf.all.accept_ra
+    - net.ipv6.conf.default.accept_ra
+    - net.ipv6.conf.all.accept_ra
+    - net.ipv6.conf.default.accept_ra
+  when:
+    - ipv6_disable is defined and ipv6_disable == 1
+  notify:
+    - sysctl flush ipv6 route
+

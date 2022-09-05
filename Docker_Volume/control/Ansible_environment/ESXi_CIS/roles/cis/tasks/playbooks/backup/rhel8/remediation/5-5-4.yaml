@@ -1,0 +1,7 @@
+---
+
+- name: 5.5.4 Ensure default group for the root account is GID 0 (Scored)
+  user:
+    name: root
+    group: "0"
+

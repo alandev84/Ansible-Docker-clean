@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q rsh)  \
+|| \
+(echo 'Rsh Client  is installed' ; exit 1)

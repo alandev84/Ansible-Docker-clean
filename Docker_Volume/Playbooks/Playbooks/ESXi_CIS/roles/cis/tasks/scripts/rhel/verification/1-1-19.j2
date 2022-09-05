@@ -1,0 +1,13 @@
+#!/bin/sh
+
+key='usb-storage'
+
+# (successful senario) || (failure senario)
+
+modprobe -n -v $key | grep -E '^install\s+/bin/true\s+$' \
+&& \
+grep -E "^\s*install\s+usb-storage\s+/bin/true\s*$" /etc/modprobe.d/*.conf \
+&& \
+! /usr/sbin/lsmod | grep $key \
+|| \
+(modprobe -n -v $key ; /usr/sbin/lsmod | grep $key ; exit 1)

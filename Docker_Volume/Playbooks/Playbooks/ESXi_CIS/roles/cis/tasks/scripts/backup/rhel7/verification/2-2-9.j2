@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q httpd)  \
+|| \
+(echo 'httpd is installed' ; exit 1)

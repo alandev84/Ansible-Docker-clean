@@ -1,0 +1,20 @@
+hpovm_hostsdetails:
+  - { ip1: "172.16.192.35 pocinfsysomw1.bcs.bcsgroup.com", ip2: "172.28.180.23 pdwinfsysomw1.bcs.bcsgroup.com" }
+  
+hpovm_mountdetails:
+  - { iso: "OA_12.22_Linux.iso", mountPath: "/mnt_hpov", tmpStoragePath: "/var/tmp/", localHostPath: "/var/lib/awx/projects/global_systems_OSManagement/files/" }
+
+hpovm_pingtest:
+  - pdwinfsysomw1
+  - 172.28.180.23
+
+hpovm_executiondetails:
+  - { phase1_step1: "/mnt_hpov/oainstall.sh -i -a -s pdwinfsysomw1.bcs.bcsgroup.com -cs pdwinfsysomw1.bcs.bcsgroup.com", phase1_step2: "/mnt_hpov/opcagt -status >> /tmp/Hpovm_output_{{ inventory_hostname }}_Before.txt", phase1_step3: "/mnt_hpov/ovcert -certreq", phase2_step1: "/mnt_hpov/ovcert -list >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", phase2_step2: "/mnt_hpov/ovconfchg -ns sec.cm -set ASYMMETRIC_KEY_LENGTH 4096", phase2_step3: "/mnt_hpov/ovconfchg -ns sec.core -set HASH_ALGO eSHA256", phase2_step4: "/mnt_hpov/opcagt -list_all_versions >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", phase2_step5: "/mnt_hpov/opcagt -stop", phase2_step6: "/mnt_hpov/opcagt -start", phase2_step7: "/mnt_hpov/opcagt -status >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", phase2_step8: "/mnt_hpov/ovconfget >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", phase3_step1: "/mnt_hpov/ovpolicy -list >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", phase3_step2: '/mnt_hpov/opcmsg a=a o=o severity=critical msg_grp=G3 msg_test="Testing After ovo installation from Ansible playbook"' }
+
+hpovm_package:
+  - m4
+  - motif
+  - unzip
+
+collection:
+  - { remote_path: "/tmp/", local_path: "/Ansible_Event_Report/", owner: "root", group: "root", file_path_src_hpovm: "/tmp/Hpovm_output_{{ inventory_hostname }}.log", file_path_src_before: "/tmp/Hpovm_output_{{ inventory_hostname }}_Before.txt", file_path_src_after: "/tmp/Hpovm_output_{{ inventory_hostname }}_After.txt", file_path_dest: "/Ansible_Event_Report/Hpovm_output_{{ inventory_hostname }}.log" }

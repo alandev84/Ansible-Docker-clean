@@ -1,0 +1,37 @@
+---
+#- name: selection value
+#  debug: 
+#    msg: "{{ selection }}"
+
+- name: script full path
+  set_fact:
+    execution_path: "verification/{{ cis_item['descrip'].split()[0] | replace('.','-') }}"
+ 
+    
+- name: execute verification
+  block:
+    - name: trigger verification shell script for "{{ cis_item['descrip'] }}"
+      include_tasks: verification_shell.yaml
+
+  when: cis_item['verification_method'] == 'script'
+ 
+
+- name: execute anisble playbook
+  block:
+          #    - debug:
+          #        msg: "{{ execution_path }}.yaml"
+
+    - name: run verification playbook for "{{ cis_item['descrip'] }}"
+      include_tasks: "{{ execution_path }}.yaml"
+
+      #    - debug: var=cis_result
+
+  when: cis_item['verification_method'] == 'playbook'
+
+  #- name: update report file
+  #  shell: "echo {{ ansible_hostname }},{{ ansible_default_ipv4.address }},{{ ansible_date_time.date }},{{ cis_item['descrip'] }},{{ cis_result }} >> {{ csv_file }}"
+  #  when: ( cis_result == 'FAIL' ) or ( cis_result == 'PASS' ) or ( cis_result == 'Manual Verification needed' )
+
+- set_fact:
+    all_results: "{{ all_results | combine({cis_item['descrip'].split()[0]:cis_result}) }}"
+

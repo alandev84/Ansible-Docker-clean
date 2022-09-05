@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (grep -E 'kernelopts=(\S+\s+)*(selinux=0|enforcing=0)+\b' /boot/grub2/grubenv) \
+|| \
+(echo '"selinux=0" or "enforcing=0" is in grub.' ; exit 1)

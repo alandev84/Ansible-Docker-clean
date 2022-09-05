@@ -1,0 +1,8 @@
+---
+
+- name: 6.2.11 Ensure no users have .netrc files (Scored)
+  file:
+    state: absent
+    dest: "~{{ item }}/.netrc"
+  with_items: "{{ cis_users }}"
+

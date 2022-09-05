@@ -1,0 +1,13 @@
+---
+
+- name: 3.3.4 Ensure TIPC is disabled (Scored)
+  lineinfile:
+    dest: /etc/modprobe.d/cis.conf
+    regexp: "^(#)?\\s*install\\s+tipc(\\s*|$)"
+    line: "install tipc /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+

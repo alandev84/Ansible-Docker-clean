@@ -1,0 +1,14 @@
+#!/bin/sh
+
+systemctl is-enabled ntpd | grep -E 'enabled' \
+&& \
+grep "^restrict" /etc/ntp.conf | grep 'default'|grep 'kod'|grep 'nomodify'|grep 'notrap'|grep 'nopeer'|grep 'noquery' \
+&& \
+grep "^restrict" /etc/ntp.conf | grep '-6'| grep 'default'|grep 'kod'|grep 'nomodify'|grep 'notrap'|grep 'nopeer'|grep 'noquery' \
+&& \
+grep -E "^(server|pool)" /etc/ntp.conf \
+&& \
+grep "^OPTIONS" /etc/sysconfig/ntpd| grep '-u ntp:ntp' \
+|| \
+(echo 'ntp configs are wrong' ; exit 1)
+

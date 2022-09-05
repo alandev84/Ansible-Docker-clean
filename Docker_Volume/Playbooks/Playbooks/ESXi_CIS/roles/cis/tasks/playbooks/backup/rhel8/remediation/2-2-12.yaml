@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.12 Ensure NFS is not enabled (Scored)
+  service:
+    name: nfs-server
+    state: stopped
+    enabled: false
+  when: "'nfs-utils' in ansible_facts.packages"
+

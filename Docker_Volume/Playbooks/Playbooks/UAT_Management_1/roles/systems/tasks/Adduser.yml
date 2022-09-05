@@ -1,0 +1,143 @@
+---
+#For RH
+  - name: Create Group in RedHat/Debian
+    group:
+      name: "{{ item.groups }}"
+      gid: "{{ item.gid }}"
+      state: present
+    loop: "{{ newgroup }}"
+    ignore_errors: yes
+    tags:
+      - CreateGroup
+    when: ansible_os_family != "Solaris"
+
+  - name: Add Users into Group in RedHat/Debian [1/4]
+    user:
+      name: "{{ item.name }}"
+      password: "{{ default_user_password | password_hash('sha512', 'A512') }}" 
+      groups: "{{ item.groups }}"
+      comment: "{{ item.comment }}"
+      uid: "{{ item.uid }}"
+      system: no
+      shell: /bin/bash
+      create_home: yes
+      home: /home/{{ item.name }}
+      update_password: on_create
+      state: present
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+    ignore_errors: yes
+    register: Add_User_Succeed_RH
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris"
+
+  - name: Add Users into Group in RedHat/Debian [2/4]
+    lineinfile:
+      dest: /etc/group
+      regexp: "^{{ item.name }}:x:"
+      state: absent
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
+  - name: Add Users into Group in RedHat/Debian [3/4]
+    replace:
+      path: /etc/passwd
+      regexp: "^{{ item.name }}:x:{{ item.uid }}:{{ item.uid }}"
+      replace: '{{ item.name }}:x:{{ item.uid }}:{{ item.primary_gid }}'
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
+  - name: Add Users into Group in RedHat/Debian [4/4]
+    command: "chown {{ item.name }}:{{ item.groups }} {{ item.home }}"
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
+  - name: Force Password Change On First Login in RedHat/Debian
+    shell: chage -d 0 "{{ item.name }}"
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - AddGroupUser
+    when: ansible_os_family != "Solaris" and Add_User_Succeed_RH.changed
+
+#For Solaris
+  - name: Create Group in Solaris
+    command: 'groupadd -g {{ item.gid }} {{ item.groups }}'
+    loop: "{{ newgroup }}"
+    ignore_errors: yes
+    tags:
+      - CreateGroup
+    when: ansible_os_family == "Solaris"
+
+  - name: Create Users into Group in Solaris [1/3]
+    command: 'useradd -u {{ item.uid }} -g {{ item.primary_gid }} -c "{{ item.comment }}" -s /bin/sh -d /export/home/{{ item.name }} -m {{ item.name }}'
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    register: Add_User_Succeed_Sol
+    tags:
+      - AddGroupUser
+    when: ansible_os_family == "Solaris"
+
+  - name: Create Users into Group in Solaris [2/3]
+    command: 'usermod -a -G {{ item.groups }} {{ item.name }}'
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - AddGroupUser
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
+
+  - name: Create Users into Group in Solaris [3/3]
+    command: "chown {{ item.name }}:{{ item.groups }} {{ item.home }}"
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - AddGroupUser
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
+
+  - name: Update Default Password For User Login in Solaris
+    lineinfile:
+      dest: /etc/shadow
+      line: "{{ item.name }}:$6$A512$klyqdClFDi//y3HdIg.O5Sn8Ywnqjif/gP1BCohx4bJC69TPuqZK85NdzlOKVyDuZYm.aUy5Acy5MNo.DeRyD.:0:0:99999:7:::"
+      regexp: "^{{ item.name }}"
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - AddGroupUser
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed
+
+  - name: Force Password Change On First Login in Solaris
+    command: 'passwd -e {{ item.name }}'
+    loop: "{{ users }}"
+    ignore_errors: yes
+    async: 60
+    poll: 0
+    tags:
+      - AddGroupUser
+    when: ansible_os_family == "Solaris" and Add_User_Succeed_Sol.changed

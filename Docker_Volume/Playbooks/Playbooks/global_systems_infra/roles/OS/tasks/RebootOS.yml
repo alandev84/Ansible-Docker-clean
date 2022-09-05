@@ -1,0 +1,30 @@
+---
+  - name: Reboot RedHat
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - OSRebootRH
+      - OSRebootAll
+    when: ansible_os_family == "RedHat"
+
+  - name: Reboot Debian
+    shell: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - OSRebootDeb
+      - OSRebootAll
+    when: ansible_os_family == "Debian"
+
+  - name: Reboot Solaris
+    command: "sleep 5 && reboot"
+    async: 1
+    poll: 0
+    ignore_errors: yes
+    tags:
+      - OSRebootSol
+      - OSRebootAll
+    when: ansible_os_family == "Solaris"

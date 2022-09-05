@@ -1,0 +1,6 @@
+---
+# vars file for UAT_Tasks
+tmpdir: /var/tmp/chpasswd
+#password: 'Asdf1234Asdf1234'
+password: 'P@ssw0rd@2020'
+resetpasswd_sh: resetPasswd.sh

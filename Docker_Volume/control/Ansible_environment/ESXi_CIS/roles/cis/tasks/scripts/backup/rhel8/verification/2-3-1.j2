@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q ypbind)  \
+|| \
+(echo 'NIS Client is installed' ; exit 1)

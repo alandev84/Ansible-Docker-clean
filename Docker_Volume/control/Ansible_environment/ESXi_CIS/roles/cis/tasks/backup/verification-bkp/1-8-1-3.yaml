@@ -1,0 +1,14 @@
+
+- name:  copy standard /etc/issue.net
+  copy:
+    src: section01/standard/etc_issue_net
+    dest: /etc/issue.net
+  check_mode: yes
+  register: file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not file_result['changed']
+
+

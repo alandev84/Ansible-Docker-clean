@@ -1,0 +1,5 @@
+#!/bin/sh
+
+authselect current | grep with-faillock \
+|| \
+(echo "authselect dose not includes with-faillock" ; exit 1)

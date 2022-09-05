@@ -1,0 +1,13 @@
+---
+
+- name: 3.4.2 Configure firewalld
+  block:
+
+    - name: 3.4.2.4 Ensure default zone is set (Scored)
+      command: firewall-cmd --set-default-zone {{ cis_rhel8_firewall_default_zone }}
+      register: set_default_zone
+      changed_when: "'Warning: ZONE_ALREADY_SET' not in set_default_zone.stderr"
+
+  when:
+    cis_rhel8_firewall_package == "firewalld"
+

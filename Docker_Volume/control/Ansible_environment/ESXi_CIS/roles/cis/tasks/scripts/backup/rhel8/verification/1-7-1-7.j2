@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q mcstrans 2>/dev/null 1>&2) \
+|| \
+(echo 'mcstrans package is installed.' ; exit 1)

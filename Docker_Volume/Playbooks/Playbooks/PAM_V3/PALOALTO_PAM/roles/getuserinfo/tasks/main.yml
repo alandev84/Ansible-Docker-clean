@@ -1,0 +1,8 @@
+---
+- name: Main - Collection of user information
+  import_tasks: get_user_info_palo_alto.yml
+    
+
+
+
+

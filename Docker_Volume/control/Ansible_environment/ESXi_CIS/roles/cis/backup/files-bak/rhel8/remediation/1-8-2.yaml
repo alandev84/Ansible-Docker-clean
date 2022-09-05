@@ -1,0 +1,11 @@
+---
+
+- name: 1.8.2 Ensure GDM login banner is configured (Scored)
+  template:
+    src: "{{ os }}/etc/dm3/greeter.dconf-defaults.j2"
+    dest: /etc/dm3/greeter.dconf-defaults
+    owner: root
+    group: root
+    mode: 0644
+  when: "'gdm' in ansible_facts.packages"
+

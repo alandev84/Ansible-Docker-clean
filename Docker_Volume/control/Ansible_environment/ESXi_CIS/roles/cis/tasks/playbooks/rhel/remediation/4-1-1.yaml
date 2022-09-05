@@ -1,0 +1,63 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }} - read config"
+  command: grep -E "GRUB_CMDLINE_LINUX=.*audit=1.*" /etc/default/grub
+  register: grep_audit_grub
+  failed_when: false
+  changed_when: false
+
+- name: "{{ cis_rules[cis_item]['name'] }} - write config"
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX="(.*)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 audit=1"'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true
+  when:
+    - grep_audit_grub.rc == 1
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  when:
+    - stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+    - grep_audit_grub != 0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+  when:
+    - not stat_result_grub2_grub.stat.exists
+    - stat_result_EFI_grub.stat.exists
+    - grep_audit_grub != 0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: |
+     set -o pipefail
+     grubby --info DEFAULT | grep -E 'args=(\S+\s+)*audit=1\b'
+  register: grep_kenel
+  failed_when: false
+  changed_when: false
+
+- shell: echo "Reboot soon"
+  when:
+    - grep_kenel.rc == 1
+  notify:
+    - RHEL reboot
+
+#Edit /etc/default/grub and add audit=1 to GRUB_CMDLINE_LINUX: GRUB_CMDLINE_LINUX="audit=1"
+#Run the following command to update the grub2 configuration: # grub2-mkconfig -o /boot/grub2/grub.cfg
+#OR # grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg

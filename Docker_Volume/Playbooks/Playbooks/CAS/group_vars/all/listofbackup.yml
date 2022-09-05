@@ -1,0 +1,9 @@
+backup:
+  - appfc_conf_svr1
+  - appfc_conf_svr2
+  - appfc_program_svr1
+  - appfc_program_svr2
+  - appfc_script_svr1
+  - appfc_script_svr2
+  - appfc_htmlhome_svr1
+  - appfc_htmlhome_svr2

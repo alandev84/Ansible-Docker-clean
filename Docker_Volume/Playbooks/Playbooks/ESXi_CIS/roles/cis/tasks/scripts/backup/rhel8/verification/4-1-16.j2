@@ -1,0 +1,11 @@
+#!/bin/sh
+
+grep -E "^\s*-w\s+$(grep -r logfile /etc/sudoers* | sed -e 's/.*logfile=//;s/,? .*//')\s+-p\s+wa\s+-k\s+actions" /etc/audit/rules.d/*.rules |\
+grep -E '\-w\s+/var/log/sudo.log\s+-p\s+wa\s+-k\s+actions\s*$' \
+&& \
+auditctl -l | grep -E '^-w\s+/var/log/sudo.log\s+-p\s+wa\s+-k\s+actions\s*' \
+|| \
+(echo "audit rule problem" ; exit 1)
+
+
+

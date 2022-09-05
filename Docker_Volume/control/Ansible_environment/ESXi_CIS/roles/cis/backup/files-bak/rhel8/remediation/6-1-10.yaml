@@ -1,0 +1,23 @@
+---
+
+- name: "{{ cis_rules[selection]['name'] }}"
+  block:
+    - name: "{{ cis_rules[selection]['name'] }} - find files"
+      shell: |
+        set -o pipefail
+        df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type f -perm -0002
+      args:
+        executable: /bin/bash
+      register: world_writable_files
+      changed_when: false
+      failed_when: false
+
+    - name: "{{ cis_rules[selection]['name'] }} - fix permission"
+      command: "chmod o-w '{{ item }}'"
+      args:
+        warn: false
+      when:
+        - world_writable_files.stdout_lines | length > 0
+      with_items:
+        - "{{ world_writable_files.stdout_lines }}"
+

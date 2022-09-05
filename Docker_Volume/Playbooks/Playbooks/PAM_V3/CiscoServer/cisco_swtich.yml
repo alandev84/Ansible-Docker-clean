@@ -1,0 +1,9 @@
+---
+- name: Cisco Switch
+  hosts: cisco_switch
+  gather_facts: true
+  become_method: runas
+  ignore_unreachable: yes
+  roles:
+    - getuserinfo
+

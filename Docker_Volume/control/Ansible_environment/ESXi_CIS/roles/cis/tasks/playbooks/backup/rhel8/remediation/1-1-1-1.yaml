@@ -1,0 +1,12 @@
+---
+- name: 1.1.1.1 Ensure mounting of cramfs filesystems is disabled (Scored)
+  lineinfile:
+    dest: /etc/modprobe.d/cis.conf
+    regexp: "^(#)?\\s*install\\s+cramfs(\\s*|$)"
+    line: "install cramfs /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+

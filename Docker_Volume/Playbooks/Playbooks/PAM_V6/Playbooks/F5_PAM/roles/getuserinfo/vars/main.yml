@@ -1,0 +1,18 @@
+---
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+ansible_become_method: 'su'
+ansible_become_exe: 'sudo -p "Password: " su -'
+user_data_information: []
+ansible_user: svc_ansible
+ansible_password: "{{hostvars['localhost'].password}}"
+ansible_sudo_password: "{{hostvars['localhost'].password}}"
+
+
+
+
+privilege_user_name: 
+  - "admin"
+  - "admin_lb"
+
+cyberark_password: ""
+

@@ -1,0 +1,43 @@
+---
+
+#- name: 1.4.2 Ensure filesystem integrity is regularly checked (Scored) copy conf files
+#  copy:
+#    src: "{{ item.src }}"
+#    dest: "{{ item.dest }}"
+#    owner: root
+#    group: root
+#    mode: '0644'
+#  loop:
+#  - { src: config/aidecheck.service, dest: /etc/systemd/system/aidecheck.service }
+#  - { src: config/aidecheck.timer,   dest: /etc/systemd/system/aidecheck.timer   }
+#
+#- name: 1.4.2 Ensure filesystem integrity is regularly checked (Scored) check aidecheck status (enabled & started)
+#  service:
+#    name: aidecheck.service
+#    enabled: yes
+#    state: started
+#  register: aidecheck_service__result
+#
+#- name: 1.4.2 Ensure filesystem integrity is regularly checked (Scored) check aidecheck status (enabled & started)
+#  service:
+#    name: aidecheck.timer
+#    enabled: yes
+#    state: started
+#  register: aidecheck_timer_result
+#
+#- name: restart aidecheck.service
+#  shell: |
+#    systemctl stop aidecheck.service
+#    systemctl start aidecheck.service
+
+
+- name: 1.4.2 Ensure filesystem integrity is regularly checked (Scored)
+  cron:
+    name: CIS 1.4.2 Ensure filesystem integrity is regularly checked
+    weekday: "{{ cis_rhel8_aide_cron['weekday'] }}"
+    minute: "{{ cis_rhel8_aide_cron['minute'] }}"
+    hour: "{{ cis_rhel8_aide_cron['hour'] }}"
+    user: "{{ cis_rhel8_aide_cron['user'] }}"
+    job: "{{ cis_rhel8_aide_cron['job'] }}"
+    cron_file: "{{ cis_rhel8_aide_cron['cron_file'] }}"
+

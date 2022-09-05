@@ -1,0 +1,31 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: (Get-Volume | Select-Object "FileSystem" | Select-String -NotMatch NTFS).Length
+  ignore_errors: true
+  register: result1
+
+- set_fact:
+    number: "{{ result1.stdout_lines }}"
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: Get-Volume | Select-Object "DriveLetter","FileSystem","DriveType","OperationalStatus","SizeRemaining","Size" | Select-String -NotMatch NTFS
+  ignore_errors: true
+  register: result
+
+
+- name: print result
+  debug:
+    msg: | 
+      Not all local drives are using NTFS file system!
+      This drive is not using NTFS:  "{{ result.stdout_lines }}"
+  when:
+    - number != ["0"]
+
+
+- name: print result
+  debug:
+    msg: Great! All local drives are using NTFS file system!
+  when:
+    - number == ["0"]
+

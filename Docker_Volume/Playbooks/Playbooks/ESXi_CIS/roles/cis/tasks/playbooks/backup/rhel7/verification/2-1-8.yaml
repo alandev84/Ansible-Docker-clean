@@ -1,0 +1,29 @@
+---
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: grep -Er '^\s*kernel\.randomize_va_space\s*=\s*2\s*$' /etc/sysctl.conf /etc/sysctl.d/
+  register: aslr_enabled_01
+  changed_when: false
+  failed_when: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: |
+    set -o pipefail
+    sysctl kernel.randomize_va_space |  grep -E '^\s*kernel\.randomize_va_space\s*=\s*2\s*$'
+  register: aslr_enabled_02
+  changed_when: false
+  failed_when: false
+
+- debug: var=aslr_enabled_02
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: 
+    - aslr_enabled_01.rc == 0
+    - aslr_enabled_02.rc == 0
+

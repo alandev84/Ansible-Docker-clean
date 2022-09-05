@@ -1,0 +1,13 @@
+---
+
+- name: 1.10 Ensure system-wide crypto policy is not legacy (Scored) - check policy
+  command: grep -E '^\s*(DEFAULT|FUTURE|FIPS)\s*$' /etc/crypto-policies/config
+  changed_when: false
+  failed_when: false
+  register: crypto_policy
+
+- name: 1.10 Ensure system-wide crypto policy is not legacy (Scored)
+  command: update-crypto-policies --set {{ cis_rhel8_crypto_policy }}
+  when:
+    - crypto_policy.stdout == 'LEGACY'
+

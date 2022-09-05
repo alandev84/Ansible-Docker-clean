@@ -1,0 +1,13 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: LimitBlankPasswordUse
+    data: "{{ cis_win2019_LimitBlankPasswordUse.data }}"
+    state: "{{ cis_win2019_LimitBlankPasswordUse.state|default('present') }}"
+    type: dword
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- debug: var=result

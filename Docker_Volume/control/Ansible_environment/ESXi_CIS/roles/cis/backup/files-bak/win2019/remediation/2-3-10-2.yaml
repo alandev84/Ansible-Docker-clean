@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: RestrictAnonymousSAM
+    data: "{{ cis_win2019_RestrictAnonymousSAM.data }}"
+    state: "{{ cis_win2019_RestrictAnonymousSAM.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result

@@ -1,0 +1,14 @@
+---
+- name: 3.2.3 Ensure secure ICMP redirects are not accepted (Scored)
+  sysctl:
+    name: "{{ item }}"
+    value: '0'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/cis.conf
+  with_items:
+    - net.ipv4.conf.default.secure_redirects
+    - net.ipv4.conf.all.secure_redirects
+  notify:
+    - sysctl flush ipv4 route
+

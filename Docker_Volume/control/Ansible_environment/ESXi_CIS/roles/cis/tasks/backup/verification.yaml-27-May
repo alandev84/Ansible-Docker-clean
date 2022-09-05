@@ -1,0 +1,49 @@
+---
+
+
+- name: set result
+  set_fact:
+    cis_result: "FAIL"
+
+- debug: 
+    msg: "{{ selection }}"
+
+- include_tasks: generate_full_path.yaml
+  
+    
+- name: execute verification
+  block:
+    - name: run script "{{ cis_item['verification_file'] }}"
+      #script: "{{ cis_item['verification_file'] }}"
+      script: "{{  execution_path }}"
+      #ignore_errors: true
+      changed_when: false
+      failed_when: false
+      register: script_result
+
+    - debug: var=script_result
+
+    - name: set result
+      set_fact:
+        cis_result: "PASS"
+      when: script_result['rc'] == 0
+  
+#    - debug: var=cis_result
+
+  when: cis_item['verification_method'] == 'script'
+ 
+- name: execute anisble playbook
+  block:
+    - name: run playbook "{{ cis_item['verification_file'] }}"
+      include_tasks: "{{ execution_path }}"
+      #include_tasks: "{{ cis_item['verification_file'] }}"
+
+    - debug: var=cis_result
+
+  when: cis_item['verification_method'] == 'playbook'
+
+- name: update report file
+  shell: "echo {{ ansible_hostname }},{{ ansible_default_ipv4.address }},{{ ansible_date_time.date }},{{ cis_item['descrip'] }},{{ cis_result }} >> {{ csv_file }}"
+  when: ( cis_result == 'FAIL' ) or ( cis_result == 'PASS' ) or ( cis_result == 'Manual Verification needed' )
+
+

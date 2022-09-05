@@ -1,0 +1,55 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }} pam_unix.so"
+  replace:
+      dest: "{{item}}"
+      follow: true
+      regexp: ^password\s+(sufficient|requisite|required)\s+pam_unix\.so\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel7_password_reuse }}
+  with_items:
+  - /etc/pam.d/system-auth
+  - /etc/pam.d/password-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- debug: var=result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0] 
+  loop: "{{ result.results | json_query('[].[changed]') }}"
+
+      
+- name: "{{ cis_rules[cis_item]['name'] }} pam_pwhistory.so"
+  replace:
+      dest: "{{item}}"
+      follow: true
+      regexp: ^password\s+(requisite|required)\s+pam_pwhistory\.so\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel7_password_reuse }}
+  register: result
+  with_items:
+  - /etc/pam.d/system-auth
+  - /etc/pam.d/password-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0] 
+  loop: "{{ result.results | json_query('[].[changed]') }}"
+
+
+
+
+

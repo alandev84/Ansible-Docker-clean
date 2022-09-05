@@ -1,0 +1,22 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeDebugPrivilege
+    users: "{{ item.users }}"
+    action: "{{ item.action|default('set') }}"
+  loop: "{{ cis_win2019_SeDebugPrivilege }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+
+

@@ -1,0 +1,10 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    path: /etc/issue
+    owner: root
+    group: root
+    mode: '0644'
+  register: file__result
+

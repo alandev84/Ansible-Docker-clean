@@ -1,0 +1,74 @@
+---
+# FOR RH
+  - name: Update Cache For RedHat
+    yum:
+      update_cache: yes
+    ignore_errors: yes
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWRH
+      - OSInstallSWCache
+    when: ansible_os_family == "RedHat"
+
+  - name: Install Packages For RedHat
+    yum:
+      name: "{{ item }}"
+      state: present
+    ignore_errors: yes
+    register: yum_install_status
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWRH
+    loop: "{{ redhatsoftware }}"
+    when: ansible_os_family == "RedHat"
+
+  - name: Remove Packages Not Needed After Installation For RedHat
+    yum:
+      autoremove: yes
+    ignore_errors: yes
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWRH
+    when: ansible_os_family == "RedHat" and yum_install_status.changed
+
+# FOR DEB
+  - name: Update Cache For Debian
+    apt:
+      update_cache: yes
+    ignore_errors: yes
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWDeb
+      - OSInstallSWCache
+    when: ansible_os_family == "Debian"
+
+  - name: Install Packages In Debian
+    apt:
+      name: "{{ item }}"
+      state: present
+    ignore_errors: yes
+    register: apt_install_status
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWDeb
+    loop: "{{ debiansoftware }}"
+    when: ansible_os_family == "Debian"
+ 
+  - name: Remove Packages Not Needed After Installation For Debian
+    apt:
+      autoremove: yes
+    ignore_errors: yes
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWDeb
+    when: ansible_os_family == "Debian" and apt_install_status.changed
+ 
+# FOR SOLARIS
+  - name: Install Packages In Solaris
+    command: '/usr/sbin/pkgadd {{ item }} > {{ logfile }} 2>&1'
+    ignore_errors: yes
+    tags:
+      - OSInstallSWAll
+      - OSInstallSWSol
+    loop: "{{ solarissoftware }}"
+    when: ansible_os_family == "Solaris"

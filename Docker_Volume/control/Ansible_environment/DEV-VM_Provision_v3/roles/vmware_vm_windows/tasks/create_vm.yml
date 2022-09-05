@@ -1,0 +1,63 @@
+---
+
+- name: Check if target VM already exists
+  vmware_guest_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_name }}"
+    name: "{{ item.name }}"
+    folder: "{{ vm_folder }}"
+    validate_certs: no
+  loop: "{{ vm_info }}"
+  ignore_errors: true
+  register: info_result
+
+- name: Fail if the VM already exists
+  fail:
+    msg: "There is a VM with the same name in this folder"
+  when: not info_result.failed
+
+
+- block:
+
+    - name: Provision VM
+      vmware_guest:
+        validate_certs: no
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc_name }}"
+        cluster: "{{ cluster_name }}"
+        template: "{{ vm_template }}"
+        folder: "{{ vm_folder }}"
+        name: "{{ item.name }}"
+        disk: 
+        - size_gb: "{{ vm_disk_size }}"
+          type: "{{ vm_disk_type }}"
+          datastore: "{{ vm_disk_datastore }}"
+        hardware:
+          hotadd_cpu: yes
+          hotremove_cpu: yes
+          hotadd_memory: yes
+          num_cpus: "{{ vm_cpu }}"
+          memory_mb: "{{ vm_ram }}"
+        networks:
+        - name: "{{ vm_network }}"
+          ip: "{{ item.ip }}"
+          type: static
+          start_connected: yes
+          connected: yes
+          gateway: "{{ vm_network_gw }}"
+          netmask: "{{ vm_network_mask }}"
+          vlan: "{{ vm_vlan }}"
+          dns_servers:
+            - 172.28.16.13
+            - 172.18.16.13
+          domain: "{{ vm_domain }}"
+        state: poweredon
+        wait_for_ip_address: true
+      loop: "{{ vm_info }}"
+      register: vm_result
+
+

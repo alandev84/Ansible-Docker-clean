@@ -1,0 +1,42 @@
+---
+
+#- debug: var=cis_action
+#- debug: var=cis_item
+
+- name: script full path
+  set_fact:
+    execution_path: "{{ os }}/{{ cis_action }}/{{ cis_item | replace('.','-') }}"
+    method: "{{ cis_action }}_method"
+
+# execute shell script
+- name: execute {{ cis_action }}
+  block:
+    - name: trigger {{ cis_action }} shell script for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: execute_shell.yaml
+  when: cis_rules[cis_item][method] == 'script'
+ 
+
+# execute playbook
+- name: execute anisble playbook "{{ execution_path }}.yaml"
+  block:
+    - name: run {{ cis_action }} playbook for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: "./playbooks/{{ execution_path }}.yaml"
+  when: cis_rules[cis_item][method] == 'playbook'
+
+- name: execute {{ cis_action }}
+  include_tasks: mixed-actions.yaml
+  loop: "{{ cis_rules[cis_item]['remediation_method'].split(',') | list  }}"
+  loop_control:
+    loop_var: exec_method
+  when: 
+    - "',' in cis_rules[cis_item]['remediation_method']"
+    - cis_action == 'remediation'
+
+# update result for reporting purpose
+#- name: update CIS result for {{ cis_item }}
+#  set_fact:
+#    all_results: "{{ all_results | combine({cis_item:cis_result}) }}"
+#  when: cis_action == 'verification'
+
+#- debug:
+#    msg: "{{ all_results }}"

@@ -1,0 +1,25 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/modprobe.d/fat.conf
+    regexp: "^(#)?\\s*install\\s+{{ item }}(\\s*|$)"
+    line: "install {{ item }} /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+  loop:
+    - fat
+    - vfat
+    - msdos
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: rmmod "{{ item }}"
+  failed_when: false
+  loop:
+    - fat
+    - vfat
+    - msdos
+

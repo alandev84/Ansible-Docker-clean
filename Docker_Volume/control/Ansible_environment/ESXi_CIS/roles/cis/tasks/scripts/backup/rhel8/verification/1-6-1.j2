@@ -1,0 +1,9 @@
+#!/bin/sh
+
+grep -Er '^\s*hard\s+core\s+0\s*$' /etc/security/limits.conf /etc/security/limits.d/ \
+&& \
+sysctl fs.suid_dumpable | grep '^fs.suid_dumpable\s*=\s*0$' \
+&& \
+grep -r "^\s*fs\.suid_dumpable\s*=\s*0\s*$" /etc/sysctl.conf /etc/sysctl.d/ \
+|| \
+(echo '"\* hard core 0" or "fs.suid_dumpable = 0" or "fs.suid_dumpable = 0" setting is not in place' ; exit 1)

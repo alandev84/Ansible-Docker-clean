@@ -1,0 +1,10 @@
+#version 1.0
+---
+- name: playbook for User Management for all systems
+  hosts: all
+  gather_facts: true
+# ignore_errors: true
+  ignore_unreachable: true
+  become: false
+  roles:
+    - { role: UAT_Tasks }

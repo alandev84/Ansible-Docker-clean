@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rpm -q audit audit-libs \
+|| \
+(echo "auditd is not installed" ; exit 1)

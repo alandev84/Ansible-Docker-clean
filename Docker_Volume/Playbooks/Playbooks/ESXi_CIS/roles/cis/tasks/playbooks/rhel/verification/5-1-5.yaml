@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    state: file
+    mode: 0600
+  check_mode: yes
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: result['changed'] 
+

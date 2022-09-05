@@ -1,0 +1,49 @@
+---
+
+- name: 5.2.2 Ensure SSH access is limited (Scored)
+  block:
+    - name: 5.2.2 Ensure SSH access is limited (Scored) - allowusers
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^AllowUsers'
+        line: AllowUsers {{ cis_rhel8_sshd['allowusers'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel8_sshd['allowusers'] |default('')
+
+
+    - name: 5.2.2 Ensure SSH access is limited (Scored) - allowgroups
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^AllowGroups'
+        line: AllowGroups {{ cis_rhel8_sshd['allowgroups'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel8_sshd['allowgroups'] |default('')
+
+    - name: 5.2.2 Ensure SSH access is limited (Scored) - denyusers
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^DenyUsers'
+        line: DenyUsers {{ cis_rhel8_sshd['denyusers'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel8_sshd['denyusers'] |default('')
+
+    - name: 5.2.2 Ensure SSH access is limited (Scored) - denygroups
+      lineinfile:
+        state: present
+        dest: /etc/ssh/sshd_config
+        regexp: '(?i)^DenyGroups'
+        line: DenyGroups {{ cis_rhel8_sshd['denygroups'] }}
+      notify:
+        - restart sshd
+      when:
+        - cis_rhel8_sshd['denygroups'] | default('')
+

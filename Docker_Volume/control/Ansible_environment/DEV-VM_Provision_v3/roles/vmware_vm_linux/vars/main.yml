@@ -1,0 +1,13 @@
+---
+#Static
+vcenter_hostname: 172.28.201.116
+vcenter_username: BCS\Ansb_Vctr_VM
+vcenter_password: kLU]gdJi%&#MV3
+vm_disk_size: 100
+vm_disk_type: thin
+vm_cpu: 2
+vm_ram: 2048
+vm_domain: bcs.bcsgroup.com
+vm_network_mask: 255.255.255.0
+vm_dns: ['172.28.16.13', '172.18.16.13']
+

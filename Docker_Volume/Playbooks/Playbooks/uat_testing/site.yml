@@ -1,0 +1,16 @@
+---
+- name: Get UAT Testing
+  hosts: "{{ serverenvironment }}"
+  ignore_errors: true
+  ignore_unreachable: true
+  roles:
+    - uat_testing
+  become: yes
+
+- name: Generate report
+  hosts: localhost
+  vars:
+    server_groups:
+      - "{{ serverenvironment }}"
+  roles:
+    - reports

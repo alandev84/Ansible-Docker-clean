@@ -1,0 +1,31 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: check iptables status (enabled & started)
+  service:
+    name: iptables
+    enabled: no
+    state: stopped
+  check_mode: yes
+  register: iptables_service_result
+
+- name: no iptables-services pkg
+  yum:
+    name: iptables-services
+    state: absent
+  check_mode: yes
+  register: iptables_pkg_result
+
+- debug: var=iptables_service_result
+
+- debug: var=iptables_pkg_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not iptables_service_result['changed'] or not iptables_pkg_result['changed']
+
+  #- debug: var=cis_result

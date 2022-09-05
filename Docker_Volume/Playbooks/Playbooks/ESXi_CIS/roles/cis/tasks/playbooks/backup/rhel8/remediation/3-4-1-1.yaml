@@ -1,0 +1,7 @@
+---
+
+- name: 3.4.1.1 Ensure a Firewall package is installed (Scored)
+  yum:
+    name: "{{ cis_rhel8_firewall_package }}"
+    state: installed
+

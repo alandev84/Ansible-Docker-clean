@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeTakeOwnershipPrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeTakeOwnershipPrivilege }}"
+
+

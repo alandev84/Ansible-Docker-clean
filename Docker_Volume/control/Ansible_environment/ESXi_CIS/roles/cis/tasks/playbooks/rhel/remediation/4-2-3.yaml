@@ -1,0 +1,17 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: find /etc/rsyslog.d/ -name "*.conf"
+  register: rsyslog_config_files
+  failed_when: false
+  changed_when: false
+
+- name: "{{ cis_rules[cis_item]['name'] }} - fix file mode"
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: '^$FileCreateMode \d+'
+    line: '$FileCreateMode {{ cis_rhel_rsyslog_file_mode }}'
+  with_items: "{{ rsyslog_config_files.stdout_lines }} + [ '/etc/rsyslog.conf' ]"
+  notify:
+    - restart rsyslog
+

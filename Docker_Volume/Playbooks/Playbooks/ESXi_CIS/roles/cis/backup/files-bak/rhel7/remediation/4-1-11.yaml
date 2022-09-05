@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  template:
+    src: rhel7/config/audit_rules/privileged_commands.rules
+    dest: /etc/audit/rules.d/privileged_commands.rules
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart auditd
+

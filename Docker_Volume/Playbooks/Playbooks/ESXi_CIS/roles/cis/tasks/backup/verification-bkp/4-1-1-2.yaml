@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: check auditd status (enabled & started)
+  service:
+    name: auditd
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: auditd_service_result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not auditd_service_result['changed'] 
+
+  #- debug: var=cis_result

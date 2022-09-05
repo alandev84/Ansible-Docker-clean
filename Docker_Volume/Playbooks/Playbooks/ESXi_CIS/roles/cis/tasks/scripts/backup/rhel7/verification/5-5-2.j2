@@ -1,0 +1,7 @@
+#!/bin/sh
+
+[ `awk -F: '($1!="root" && $1!="sync" && $1!="shutdown" && $1!="halt" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' && $7!~/nologin/ && $7!="/bin/false") {print}' /etc/passwd | wc -l` == 0 ] \
+&& \
+[ `awk -F: '($1!="root" && $1!~/^\+/ && $3<'"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"') {print $1}' /etc/passwd | xargs -I '{}' passwd -S '{}' | awk '($2!="L" && $2!="LK") {print $1}' | wc -l` == 0 ] \
+|| \
+(echo "system accounts are not secured" ; exit 1)

@@ -1,0 +1,71 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      shell: |
+        set -o pipefail
+        grep "^\s*linux" /boot/grub2/grub.cfg | grep -E "(selinux=0|enforcing=0)"
+      register: result
+      changed_when: false
+      failed_when: false
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: 
+        - result.rc == 0
+  when:
+    - stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      shell: |
+        set -o pipefail
+        grep "^\s*linux" /boot/efi/EFI/redhat/grub.cfg | grep -E "(selinux=0|enforcing=0)"
+      register: result
+      changed_when: false
+      failed_when: false
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: 
+        - result.rc == 0
+  when:
+    - not stat_result_grub2_grub.stat.exists
+    - stat_result_EFI_grub.stat.exists
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: 
+    - not stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+
+
+
+
+
+
+
+
+

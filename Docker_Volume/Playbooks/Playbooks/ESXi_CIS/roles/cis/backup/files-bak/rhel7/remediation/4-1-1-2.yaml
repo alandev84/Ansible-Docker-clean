@@ -1,0 +1,8 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  service:
+    name: auditd
+    enabled: yes
+    state: started
+

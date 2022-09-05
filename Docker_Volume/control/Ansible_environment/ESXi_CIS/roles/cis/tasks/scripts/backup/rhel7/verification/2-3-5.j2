@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q openldap-clients)  \
+|| \
+(echo ' LDAP Client is installed' ; exit 1)

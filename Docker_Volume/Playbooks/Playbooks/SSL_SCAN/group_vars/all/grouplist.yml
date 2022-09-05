@@ -1,0 +1,3 @@
+newgroup:
+  - { groups: "testgroup1", gid: 8001 }
+  - { groups: "testgroup2", gid: 8002 }

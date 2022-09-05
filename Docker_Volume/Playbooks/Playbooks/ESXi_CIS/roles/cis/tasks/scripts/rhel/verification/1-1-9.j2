@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+findmnt -n /var/tmp | grep -E '\bnodev\b' \
+|| \
+(findmnt -n /var/tmp ; exit 1)

@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.12 Ensure users' .netrc Files are not group or world accessible (Scored)
+  command: /bin/true
+  changed_when: false
+

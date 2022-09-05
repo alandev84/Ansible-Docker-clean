@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q rpcbind)  \
+|| \
+(echo 'rpcbind is installed' ; exit 1)
+

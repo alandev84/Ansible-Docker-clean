@@ -1,0 +1,112 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }} - allowusers"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '(?i)^AllowUsers'
+    line: AllowUsers {{ cis_rhel7_sshd['allowusers'] }}
+  notify:
+    - restart sshd
+  when:
+    - cis_rhel7_sshd['allowusers'] |default('')
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item['failed']
+        - item['changed']
+      loop: "{{ result.results }}"
+  when: not result.skipped
+
+
+- name: "{{ cis_rules[cis_item]['name'] }} - allowgroups"
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '(?i)^AllowGroups'
+    line: AllowGroups {{ cis_rhel7_sshd['allowgroups'] }}
+  notify:
+    - restart sshd
+  when:
+    - cis_rhel7_sshd['allowgroups'] |default('')
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item['failed']
+        - item['changed']
+      loop: "{{ result.results }}"
+  when: not result.skipped
+
+
+
+- name: 5.3.4 Ensure SSH access is limited (Automated) - denyusers
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '(?i)^DenyUsers'
+    line: DenyUsers {{ cis_rhel7_sshd['denyusers'] }}
+  notify:
+    - restart sshd
+  when:
+    - cis_rhel7_sshd['denyusers'] |default('')
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: 5.3.4 Ensure SSH access is limited (Automated)
+  block:
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item['failed']
+        - item['changed']
+      loop: "{{ result.results }}"
+  when: not result.skipped
+
+
+- name: 5.3.4 Ensure SSH access is limited (Automated) - denygroups
+  lineinfile:
+    state: present
+    dest: /etc/ssh/sshd_config
+    regexp: '(?i)^DenyGroups'
+    line: DenyGroups {{ cis_rhel7_sshd['denygroups'] }}
+  notify:
+    - restart sshd
+  when:
+    - cis_rhel7_sshd['denygroups'] | default('')
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: 5.3.4 Ensure SSH access is limited (Automated) 
+  block:
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item['failed']
+        - item['changed']
+      loop: "{{ result.results }}"
+  when: not result.skipped
+
+

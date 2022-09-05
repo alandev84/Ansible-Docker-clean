@@ -1,0 +1,8 @@
+---
+
+- name: Generate report to user ccount directory 
+  template: 
+    src: "./files/generate_csv.j2"
+    dest: "/root/mycsv.csv"
+
+

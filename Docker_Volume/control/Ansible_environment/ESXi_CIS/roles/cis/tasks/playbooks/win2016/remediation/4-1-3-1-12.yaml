@@ -1,0 +1,8 @@
+---
+- name: 1.12.Create a token object(4.1.3.)
+  win_user_right:
+    name: SeCreateTokenPrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeCreateTokenPrivilege }}"
+

@@ -1,0 +1,22 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - find files"
+      shell: |
+        set -o pipefail
+        df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup
+      args:
+        executable: /bin/bash
+      changed_when: false
+      failed_when: false
+      register: ungrouped_files
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - fix permission"
+      file:
+        path: "{{ item }}"
+        group: "{{ cis_rhel7_group_ungrouped_file }}"
+      with_items: "{{ ungrouped_files.stdout_lines }}"
+      when:
+        - ungrouped_files.stdout_lines | length > 0
+

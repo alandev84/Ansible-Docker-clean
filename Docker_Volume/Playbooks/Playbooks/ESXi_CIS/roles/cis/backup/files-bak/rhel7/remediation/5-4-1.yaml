@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  # TODO: deal with authselect
+  lineinfile:
+    regexp: "\\s*{{ item.key }}\\s*=\\s*.*"
+    line: "{{ item.key }} = {{ item.value }}"
+    dest: /etc/security/pwquality.conf
+  with_dict: "{{ cis_rhel7_pwquality }}"
+  register: result
+
+- debug: var=result

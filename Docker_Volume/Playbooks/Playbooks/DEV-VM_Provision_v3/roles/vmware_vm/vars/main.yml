@@ -1,0 +1,26 @@
+---
+vcenter_hostname: 
+vcenter_username: 
+
+vm_cpu: "2"
+    vm_ram: "2gb"
+    net_name/group port name: "{{ vm_network.split('-')[0]|replace(' ','') }}"
+    vm_template: ""
+    os_disk: ""  
+
+vm_domain: 
+
+dc_name: 
+cluster_name: 
+resource_pool: Resources
+tag_category: VMTags
+
+vmware_networks:
+  INT1EXT:
+    name: 
+    mask: 
+    gateway: 
+
+
+vm_sizes:
+  G1: {'cpu':,'ram':}

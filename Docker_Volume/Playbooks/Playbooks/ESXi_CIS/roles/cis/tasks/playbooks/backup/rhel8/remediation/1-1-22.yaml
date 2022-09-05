@@ -1,0 +1,17 @@
+---
+
+#- name: check if there is autofs
+#  shell: rpm -q autofs
+#  register: autofs_pkg_result
+#  changed_when: false
+#  failed_when: false
+#
+#
+#- debug: var=autofs_pkg_result
+
+- name: 1.1.22 Disable Automounting (Scored)
+  service:
+    name: autofs
+    enabled: false
+    state: stopped
+  when: "'autofs' in ansible_facts.packages"

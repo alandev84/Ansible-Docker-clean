@@ -1,0 +1,12 @@
+---
+- name: Get OS Information
+  import_tasks: get_os.yml
+
+- name: Get User UID and GUID Information
+  import_tasks: get_user_uid_guid.yml
+
+- name: Get the last password change
+  import_tasks: get_last_pass_change.yml
+
+- name: Get the last login information
+  import_tasks: get_last_login.yml

@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: check dhcpd status (enabled & started)
+  block:
+    - name: check dhcpd status (enabled & started)
+      service:
+        name: dhcpd
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: dhcpd_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: dhcpd_service_result['changed'] 
+
+  when: "'dhcpd' in ansible_facts.packages"
+  #- debug: var=cis_result

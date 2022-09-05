@@ -1,0 +1,23 @@
+---
+
+- name: 2.2.16 Ensure mail transfer agent is configured for local-only mode (Scored)
+  block:
+    - name: 2.2.16 Ensure mail transfer agent is configured for local-only mode (Scored) - search tcp port
+      shell: |
+        set -o pipefail
+        ss -lntu | grep -E ':25\\s' | grep -E -v '\\s(127.0.0.1|\\[::1\\]):25\\s'
+      changed_when: false
+      failed_when: false
+    
+    - name: 2.2.16 Ensure mail transfer agent is configured for local-only mode (Scored) - write config
+      lineinfile:
+        path: /etc/postfix/main.cf
+        regexp: "^\\s*inet_interfaces\\s*=.*$"
+        line: inet_interfaces = localhost
+        state: present
+        owner: root
+        group: root
+        mode: 0644
+
+  when: "'postfix' in ansible_facts.packages"
+

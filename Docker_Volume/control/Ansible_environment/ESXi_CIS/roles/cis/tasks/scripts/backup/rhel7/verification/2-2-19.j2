@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q rsync)  \
+|| \
+(echo 'rsync is installed' ; exit 1)

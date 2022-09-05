@@ -1,0 +1,10 @@
+- name: 3.2.8 Ensure TCP SYN Cookies is enabled (Scored)
+  sysctl:
+    name: net.ipv4.tcp_syncookies
+    value: '1'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/cis.conf
+  notify:
+    - sysctl flush ipv4 route
+

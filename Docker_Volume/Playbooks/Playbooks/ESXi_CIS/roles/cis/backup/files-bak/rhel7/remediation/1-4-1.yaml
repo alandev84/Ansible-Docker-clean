@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  expect:
+    command: /usr/sbin/grub2-setpassword
+    responses:
+      Enter password(.*): "{{ cis_rhel7_grub_password }}"
+      Confirm password(.*): "{{ cis_rhel7_grub_password }}"
+  ignore_errors: yes
+  register: expect_example_result
+
+

@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  mount:
+    name: /dev/shm
+    src: tmpfs
+    state: mounted
+    fstype: tmpfs
+    opts: "defaults,noexec,nodev,nosuid,seclabel"
+
+

@@ -1,0 +1,67 @@
+---
+- name: XB UAT GW Deployment
+  gather_facts: no
+  hosts: XB_UAT_GW
+  user: apmgr
+  ignore_errors: true
+  vars:
+    new_ver: XBGW_U01.00.28
+    old_ver: U01.00.27
+
+
+#  pre_tasks:
+#    - name: check RT service status
+#      shell: svcs g3app-rt-service-processor | grep -v STATE | cut -b1-6
+#      register: rt_status
+
+  tasks:
+    - name: Copy deployment Package to Server
+      copy:
+        src: /var/tmp/{{ new_ver }}.tar
+        dest: /XBapp/appfc/deployment/{{ new_ver }}.tar
+
+    - name: Unzip Deployment Package
+      unarchive:
+        src: /XBapp/appfc/deployment/{{ new_ver }}.tar
+        dest: /var/tmp/
+        remote_src: yes
+
+
+######## Create backup folders ###########
+
+    - name: Create Folders and Directory
+      file:
+        path: /XBapp/appfc/deployment/{{ old_ver }}/message-adapter/{{ item }}
+        state: directory
+      loop:
+         - appfc_program
+         - appfc_conf
+
+######## Take backup ###########
+
+    - name: Backup Program 
+      archive:
+        path:
+          - /XBapp/appfc/message-adapter
+        dest: /XBapp/appfc/deployment/{{ old_ver }}/message-adapter/appfc_program/message-adapter.tar
+
+    - name: Backup Conf
+      archive:
+        path:
+          - /XBapp/appfc/conf/message-adapter
+        dest: /XBapp/appfc/deployment/{{ old_ver }}/message-adapter/appfc_conf/message-conf-adapter.tar
+
+
+####### XB Deployment ##############
+
+    - name: Remove Message Adapter Folder
+      file:
+        path: /XBapp/appfc/message-adapter
+        state: absent
+
+    - name: Deploy Package
+      unarchive:
+        src: /var/tmp/XBGW_U01.00.28/XB_GW/message-adapter-U01.00.28.tar
+        dest: /XBapp/appfc/message-adapter
+        remote_src: yes
+...

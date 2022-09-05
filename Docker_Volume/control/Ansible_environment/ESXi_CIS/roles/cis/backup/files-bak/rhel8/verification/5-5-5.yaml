@@ -1,0 +1,31 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.5.5 Ensure default user umask is 027 or more restrictive (Scored)
+  replace:
+    dest: "{{ item }}"
+    regexp: '^(\s*umask\s+)\d+$'
+    replace: '\g<1>{{ cis_rhel8_umask }}'
+  with_items:
+    - /etc/bashrc
+    - /etc/profile
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+  #loop: "{{ result.results }}"
+
+
+

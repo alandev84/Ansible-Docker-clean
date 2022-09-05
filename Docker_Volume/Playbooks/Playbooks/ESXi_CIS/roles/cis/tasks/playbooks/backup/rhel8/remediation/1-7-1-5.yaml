@@ -1,0 +1,7 @@
+---
+
+- name: 1.7.1.5 Ensure no unconfined services exist (Scored)
+  command: /bin/true
+  changed_when: false
+  failed_when: false
+

@@ -1,0 +1,22 @@
+---
+
+- name: 6.1.11 Ensure no unowned files or directories exist (Scored)
+  block:
+    - name: 6.1.11 Ensure no unowned files or directories exist (Scored) - find files
+      shell: |
+        set -o pipefail
+        df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
+      args:
+        executable: /bin/bash
+      changed_when: false
+      failed_when: false
+      register: unowned_files
+
+    - name: 6.1.11 Ensure no unowned files or directories exist (Scored) - fix permission
+      file:
+        path: "{{ item }}"
+        owner: "{{ cis_rhel8_user_unowned_file }}"
+      when:
+        - unowned_files.stdout_lines | length > 0
+      with_items: "{{ unowned_files.stdout_lines }}"
+

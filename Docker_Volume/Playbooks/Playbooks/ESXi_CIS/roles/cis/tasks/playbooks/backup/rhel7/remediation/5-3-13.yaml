@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel7 5.3.13"
+    block: |
+      Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  template:
+    dest: /etc/audit/rules.d/delete.rules
+    src: rhel7/config/audit_rules/delete.rules
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart auditd
+

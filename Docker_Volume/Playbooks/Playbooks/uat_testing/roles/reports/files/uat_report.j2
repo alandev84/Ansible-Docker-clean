@@ -1,0 +1,46 @@
+{% for group_name in server_groups %}
+{% for host in groups[group_name] %}
+Hostname:
+"{{ hostvars[host]['server_name'] }}"
+Java Version:
+{% for server_name in hostvars[host]['server_name']%}
+{{ server_name }}
+{% endfor %}"
+IP Address:
+{% for java_version in hostvars[host]['java_version']%}
+{{ java_version }}
+{% endfor %}"
+Ping Gateway:
+{% for ping_gw in hostvars[host]['ping_gw']%}
+{{ ping_gw }}
+{% endfor %}"
+NTP Status:
+{% for ntp_info in hostvars[host]['ntp_info']%}
+{{ ntp_info }}
+{% endfor %}"
+Time Zone:
+{% for timezone_info in hostvars[host]['timezone_info']%}
+{{ timezone_info }}
+{% endfor %}"
+DNS Lookup:
+{% for nslookup_info in hostvars[host]['nslookup_info']%}
+{{ nslookup_info }}
+{% endfor %}"
+Mount Points:
+{% for mount_info in hostvars[host]['mount_info']%}
+{{ mount_info }}
+{% endfor %}"
+Users Created:
+{% for username_list in hostvars[host]['username_list']%}
+{{ username_list }}
+{% endfor %}"
+Anti Virus Status:
+{% for antivirus_status in hostvars[host]['antivirus_status']%}
+{{ antivirus_status }}
+{% endfor %}"
+VM Tools Status:
+{% for vmtools_status in hostvars[host]['vmtools_status']%}
+{{ vmtools_status }}
+{% endfor %}"
+{% endfor %}
+{% endfor %}

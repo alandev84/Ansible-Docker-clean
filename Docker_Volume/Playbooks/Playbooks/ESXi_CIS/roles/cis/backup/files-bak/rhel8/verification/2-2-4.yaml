@@ -1,0 +1,44 @@
+---
+
+#- name: init cis_result value as FAIL
+#  set_fact:
+#    cis_result: false
+#
+#- name: check avahi-daemon status (enabled & started)
+#  service:
+#    name: avahi-daemon
+#    enabled: yes
+#    state: started
+#  check_mode: yes
+#  register: avahi_service_result
+#
+#
+#- name: Reset cis_result value
+#  set_fact:
+#          cis_result: true
+#  when: avahi_service_result['changed'] 
+#
+#  #- debug: var=cis_result
+#---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 2.2.4 Ensure Avahi Server is not enabled (Scored)
+  block:
+    - name: 2.2.4 Ensure Avahi Server is not enabled (Scored)
+      service:
+        name: avahi-daemon
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: file__result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: file__result['changed']
+  when: "'avahi' in ansible_facts.packages"
+
+

@@ -1,0 +1,23 @@
+---
+
+report_directory: /home/ansible/report/Leon
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'
+ansible_become_method: 'su'
+ansible_become_exe: 'sudo -p "Password: " su -'
+
+acc_name: "{{ list_user }}"
+
+#acc_name:
+#  - "admin"
+#  - "admin_tuf"
+
+key_value: ""
+cyberark_password: ""
+
+
+priv_users_list: []
+
+# ansible_become_user: "ansible"
+# ansible_user: "ansible"
+# ansible_password: "{{ password }}"
+# ansible_sudo_pass: "{{ password }}"

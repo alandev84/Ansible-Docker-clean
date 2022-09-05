@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    dest: /etc/cron.d
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+
+

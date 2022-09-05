@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: check ypserv status (enabled & started)
+  block:
+    - name: check ypserv status (enabled & started)
+      service:
+        name: ypserv
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: ypserv_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: ypserv_service_result['changed'] 
+
+  when: "'ypserv' in ansible_facts.packages"
+  #- debug: var=cis_result

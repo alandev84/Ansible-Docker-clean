@@ -1,0 +1,12 @@
+#!/bin/bash
+
+sysctl net.ipv4.icmp_echo_ignore_broadcasts | grep -E "^\s*net\.ipv4\.icmp_echo_ignore_broadcasts\s*=\s*1\s*$"  \
+&& \
+grep "net\.ipv4\.icmp_echo_ignore_broadcasts" /etc/sysctl.conf /etc/sysctl.d/* | grep -E "\s*net\.ipv4\.icmp_echo_ignore_broadcasts\s*=\s*1\s*$" \
+|| \
+exit 1
+
+
+#Run the following commands and verify output matches:
+# sysctl net.ipv4.icmp_echo_ignore_broadcasts Output Result: net.ipv4.icmp_echo_ignore_broadcasts = 1 
+# grep "net\.ipv4\.icmp_echo_ignore_broadcasts" /etc/sysctl.conf /etc/sysctl.d/* Output Result: net.ipv4.icmp_echo_ignore_broadcasts = 1

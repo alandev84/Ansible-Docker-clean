@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q net-snmp)  \
+|| \
+(echo 'net-snmp is installed' ; exit 1)

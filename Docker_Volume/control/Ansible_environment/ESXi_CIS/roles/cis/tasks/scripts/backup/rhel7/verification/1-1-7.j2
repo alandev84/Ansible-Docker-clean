@@ -1,0 +1,5 @@
+#!/bin/sh
+
+findmnt /var/tmp \
+|| \
+(echo '/var/tmp is not separate partition' ; exit 1)

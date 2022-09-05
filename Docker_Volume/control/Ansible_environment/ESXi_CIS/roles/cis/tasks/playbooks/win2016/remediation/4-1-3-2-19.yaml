@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: DisableCAD
+    data: "{{ cis_win_DisableCAD.data }}"
+    state: present
+    type: dword
+

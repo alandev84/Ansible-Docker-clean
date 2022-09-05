@@ -1,0 +1,7 @@
+---
+
+- name: 1.11 Ensure system-wide crypto policy is FUTURE or FIPS (Scored)
+  command: update-crypto-policies --set {{ cis_rhel8_crypto_policy }}
+  when:
+    - crypto_policy.stdout == 'DEFAULT' or crypto_policy.stdout == 'LEGACY'
+

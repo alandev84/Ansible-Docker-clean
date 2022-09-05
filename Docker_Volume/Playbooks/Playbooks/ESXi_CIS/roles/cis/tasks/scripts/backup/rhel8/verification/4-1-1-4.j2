@@ -1,0 +1,6 @@
+#!/usr/bin/bash -x
+
+
+grep -E 'kernelopts=(\S+\s+)*audit_backlog_limit={{ section04_parms['audit_backlog_limit'] }}\b' /boot/grub2/grubenv \
+|| \
+(echo "audit is not enable as kernel params" ; exit 1)

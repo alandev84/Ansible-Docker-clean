@@ -1,0 +1,7 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: Get-WindowsUpdate -AcceptAll -Install
+  ignore_errors: true
+
+
+

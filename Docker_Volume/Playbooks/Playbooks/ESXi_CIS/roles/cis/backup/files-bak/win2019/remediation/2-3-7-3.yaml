@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: InactivityTimeoutSecs
+    data: "{{ cis_win2019_InactivityTimeoutSecs.data }}"
+    state: "{{ cis_win2019_InactivityTimeoutSecs.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result

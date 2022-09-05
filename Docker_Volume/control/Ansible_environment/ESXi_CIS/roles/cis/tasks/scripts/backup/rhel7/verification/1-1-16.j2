@@ -1,0 +1,5 @@
+#!/bin/sh
+
+findmnt /var/log/audit \
+|| \
+(echo '/var/log/audit is not separate partition' ; exit 1)

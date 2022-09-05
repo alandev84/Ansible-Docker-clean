@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.4 Ensure Avahi Server is not enabled (Scored)
+  service:
+    name: avahi-daemon
+    state: stopped
+    enabled: false
+  when: "'avahi' in ansible_facts.packages"
+

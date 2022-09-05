@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.13 Ensure RPC is not enabled (Scored)
+  service:
+    name: rpcbind
+    state: stopped
+    enabled: false
+  when: "'rpcbind' in ansible_facts.packages"
+

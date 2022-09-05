@@ -1,0 +1,14 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }} - check file by file"
+  shell: auditctl -l | grep -E '^-a\s+always,exit\s+-S\s+all\s+-F\s+path={{ item }}\s+-F\s+perm=x\s+-F\s+auid>=1000\s+\-F\s+auid!=-1\s+-F\s+key=privileged\s*$'
+  loop: "{{ priv_binaries.stdout_lines }}"
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0] != 0
+  loop: "{{ result.results | json_query('[].[rc]') }}"
+

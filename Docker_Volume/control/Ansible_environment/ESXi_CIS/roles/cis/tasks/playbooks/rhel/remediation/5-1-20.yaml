@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel 5.1.20"
+    block: |
+      LoginGraceTime {{ cis_rhel_sshd_login_grace_time }}
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

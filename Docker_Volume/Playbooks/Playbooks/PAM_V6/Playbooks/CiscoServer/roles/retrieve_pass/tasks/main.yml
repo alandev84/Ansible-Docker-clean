@@ -1,0 +1,26 @@
+---
+- name: GetPassword From CyberArk
+  local_action: 
+    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="app_ansible" -p Query="Safe=testAnsible;Folder=Root;Object=Operating_System-BCSWinOTP-bcs.bcsgroup.com-svc_ansible" -o Password
+  args:
+    chdir: /opt/CARKaim/sdk/
+  register: cybr_pass  
+  no_log: no
+
+
+- name: Print the variable
+  set_fact:
+    password: "{{ cybr_pass['stdout'] }}"
+    cacheable: yes
+  no_log: no
+  
+- name: Set SSH password fact variable
+  set_fact:
+    ansible_user: svc_ansible
+    ansible_password: "{{ password }}"    
+    ansible_sudo_password: "{{ password }}"
+  register: ansible_password
+  no_log: no
+
+- debug: 
+    var: ansible_password

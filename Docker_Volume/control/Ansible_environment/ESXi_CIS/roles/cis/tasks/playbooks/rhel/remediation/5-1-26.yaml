@@ -1,0 +1,16 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+      dest: /etc/pam.d/{{item}}
+      follow: true
+      regexp: ^(password\s+sufficient\s+pam_unix\.so\s)(?!.*sha512\s*)(.*)$
+      replace: \g<1> sha512\g<2>
+  with_items:
+  - system-auth
+  - password-auth
+  register: result
+
+
+
+

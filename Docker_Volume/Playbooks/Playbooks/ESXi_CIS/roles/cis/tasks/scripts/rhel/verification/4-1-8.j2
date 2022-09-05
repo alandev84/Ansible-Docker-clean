@@ -1,0 +1,14 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/etc/selinux/\s+-p\s+wa\s+-k\s+MAC-policy\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/usr/share/selinux/\s+-p\s+wa\s+-k\s+MAC-policy\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/selinux\s+-p\s+wa\s+-k\s+MAC-policy\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/usr/share/selinux\s+-p\s+wa\s+-k\s+MAC-policy\s*' \
+|| \
+(echo "audit conf rule failed" ; exit 1)
+
+
+

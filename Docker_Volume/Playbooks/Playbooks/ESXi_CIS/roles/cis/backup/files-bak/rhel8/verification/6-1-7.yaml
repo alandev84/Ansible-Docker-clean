@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 6.1.7 Ensure permissions on /etc/shadow- are configured (Scored)
+  file:
+    dest: /etc/shadow-
+    owner: root
+    group: root
+    mode: 0600
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+          

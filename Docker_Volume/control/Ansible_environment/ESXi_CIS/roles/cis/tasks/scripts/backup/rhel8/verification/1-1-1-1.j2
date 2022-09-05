@@ -1,0 +1,11 @@
+#!/bin/sh
+
+key='cramfs'
+
+# (successful senario) || (failure senario)
+
+modprobe -n -v $key | grep -E '^install\s+/bin/true\s+$' \
+&& \
+! /usr/sbin/lsmod | grep $key \
+|| \
+(modprobe -n -v $key ; /usr/sbin/lsmod | grep $key ; exit 1)

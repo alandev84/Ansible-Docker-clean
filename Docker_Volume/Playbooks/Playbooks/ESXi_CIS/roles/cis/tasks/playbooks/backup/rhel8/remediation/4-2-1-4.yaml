@@ -1,0 +1,6 @@
+---
+
+- name: 4.2.1.4 Ensure logging is configured (Not Scored)
+  command: /bin/true
+  changed_when: false
+

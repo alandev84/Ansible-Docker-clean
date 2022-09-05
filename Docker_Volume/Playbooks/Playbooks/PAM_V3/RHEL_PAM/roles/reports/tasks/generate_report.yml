@@ -1,0 +1,15 @@
+- name: Create directory for reports
+  file:
+    path: "{{ report_directory }}"
+    state: directory
+    owner: svc_ansible
+    group: svc_ansible
+  delegate_to: 172.28.201.117 
+
+- name: Generate hardening compliance report to /home/ftpuser/reports
+  template:
+    src: "./files/generate_csv.j2"
+    dest: "{{ report_directory }}/RHEL_PAM.csv"
+    owner: svc_ansible
+    group: svc_ansible
+  delegate_to: 172.28.201.117

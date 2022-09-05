@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name: libselinux
+    state: present
+  when: "'libselinux' not in ansible_facts.packages"

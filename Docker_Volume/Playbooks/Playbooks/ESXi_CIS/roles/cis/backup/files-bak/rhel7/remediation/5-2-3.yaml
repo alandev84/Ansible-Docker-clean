@@ -1,0 +1,22 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+  - name: "{{ cis_rules[cis_item]['name'] }} - search config"
+    command: grep -Er '^\s*Defaults\s+([^#]+,\s*)?logfile\s*=' /etc/sudoers /etc/sudoers.d
+    register: sudo_logfiles
+    changed_when: false
+    failed_when: false
+
+  - name: "{{ cis_rules[cis_item]['name'] }} - write config"
+    lineinfile:
+      dest: /etc/sudoers.d/cis-sudoers
+      line: 'Defaults logfile=/var/log/sudo.log'
+      state: present
+      owner: root
+      group: root
+      mode: 0400
+      create: true
+      validate: 'visudo -cf %s'
+    when:
+      - sudo_logfiles.rc == 1
+

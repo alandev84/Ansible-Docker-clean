@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa\Pku2U
+    name: AllowOnlineID
+    data: "{{ cis_win2019_2_3_11_3.data }}"
+    state: "{{ cis_win2019_2_3_11_3.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result
+

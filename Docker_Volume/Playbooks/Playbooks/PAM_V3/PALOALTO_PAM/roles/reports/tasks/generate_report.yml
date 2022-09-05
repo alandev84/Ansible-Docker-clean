@@ -1,0 +1,60 @@
+---
+
+- name: Creating a report directory
+  file:
+    path: "{{ report_directory }}"
+    state: directory
+    owner: ansible
+    group: ansible
+  delegate_to: 10.68.32.70
+
+# - name: Run a script using an executable in a system path | System Unit Files
+#   script: ./files/generate_csv.py
+#   args:
+#     executable: python3
+#   register: script_output
+
+- name: Generate report to /home/ftpuser/report/Leon
+  template:
+    src: "./files/generate_csv.j2"
+    dest: "{{ report_directory }}/pala_alto.csv"
+    owner: ansible
+    group: ansible    
+  delegate_to: 10.68.32.70
+
+
+
+
+
+
+  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+

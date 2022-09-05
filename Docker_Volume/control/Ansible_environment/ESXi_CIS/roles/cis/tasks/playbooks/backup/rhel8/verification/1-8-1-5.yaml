@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: Check /etc/issue file ownership, group and permissions
+  file:
+    path: /etc/issue
+    owner: root
+    group: root
+    mode: '0644'
+  check_mode: yes
+  register: file__result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: not file__result['changed']
+
+#- debug: var=cis_result

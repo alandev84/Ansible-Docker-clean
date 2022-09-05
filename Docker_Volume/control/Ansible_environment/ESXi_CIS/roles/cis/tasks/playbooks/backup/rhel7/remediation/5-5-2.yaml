@@ -1,0 +1,31 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - find users"
+      shell: "awk -F: '($3 < {{ cis_rhel7_min_uid }}) {print $1 }' /etc/passwd"
+      changed_when: false
+      check_mode: false
+      register: system_account
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - lock users"
+      user:
+        name: "{{ item }}"
+        password_lock: true
+      with_items:
+        - "{{ system_account.stdout_lines }}"
+      when:
+        - item != "root"
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - set shell to nologin"
+      user:
+        name: "{{ item }}"
+        shell: /sbin/nologin
+      with_items:
+        - "{{ system_account.stdout_lines }}"
+      when:
+        - item != "root"
+        - item != "sync"
+        - item != "shutdown"
+        - item != "halt"
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rpm -q sudo \
+|| \
+(rpm -q sudo ; exit 1)

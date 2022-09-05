@@ -1,0 +1,6 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  debug:
+    msg: "This has to be set in the BIOS or with a special kernel (32 bit kernels only)"
+

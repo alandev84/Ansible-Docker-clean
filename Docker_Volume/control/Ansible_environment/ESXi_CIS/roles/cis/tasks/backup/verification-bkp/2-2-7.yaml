@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: check smb status (enabled & started)
+  service:
+    name: smb
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: smb_service_result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: smb_service_result['changed'] 
+
+  #- debug: var=cis_result

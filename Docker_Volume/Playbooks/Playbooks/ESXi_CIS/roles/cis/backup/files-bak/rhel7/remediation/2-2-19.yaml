@@ -1,0 +1,7 @@
+---
+- name: 2.2.19 Ensure rsync is not installed or the rsyncd service is masked (Scored)
+  yum:
+    name: rsync
+    state: absent
+
+

@@ -1,0 +1,26 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: check iptables status (enabled & started)
+  block:
+    - name: check iptables status (enabled & started)
+      service:
+        name: iptables
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: iptables_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: iptables_service_result['changed'] 
+
+  when:
+    - cis_rhel8_firewall_package == "firewalld"
+    - "'iptables-services' in ansible_facts.packages"
+
+  #- debug: var=cis_result

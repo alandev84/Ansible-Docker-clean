@@ -1,0 +1,21 @@
+---
+# tasks file for cis-rhel8
+
+
+- name: set result
+  set_fact:
+    cis_result: "NA"
+
+- name:  prepare the verificaiton report
+  block:
+  
+    - include_tasks: verification.yaml
+      when: cis_item['descrip'] | regex_search(filter_str)
+      vars:
+        filter_str: "^{{ selection | string }}"
+      loop: "{{ cis }}"
+      loop_control:
+        loop_var: cis_item
+
+  when: verification 
+

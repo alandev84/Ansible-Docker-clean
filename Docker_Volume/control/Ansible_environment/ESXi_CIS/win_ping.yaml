@@ -1,0 +1,22 @@
+- hosts: win
+  gather_facts: false
+  vars:
+ 
+    ansible_port: 5986
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    #ansible_winrm_transport: basic
+    ansible_winrm_server_cert_validation: ignore
+    #ansible_password: 'Gl0b3@administrator'
+    #ansible_user: adminuser
+    ansible_password: '1qazXSW@'
+    ansible_user: Administrator
+ 
+  tasks:
+    - win_ping:
+
+    - setup:
+      register: result
+
+    - debug: 
+        msg: "{{ result.ansible_facts.ansible_ip_addresses[0] }}"

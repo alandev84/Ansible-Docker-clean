@@ -1,0 +1,8 @@
+---
+- name:  Stop RPT Service
+  gather_facts: no
+  hosts: UPG3JSRPT1 
+  tasks:
+    - name: Stopping RPT Service
+      command: /usr/sbin/svcadm disable rptservice
+...

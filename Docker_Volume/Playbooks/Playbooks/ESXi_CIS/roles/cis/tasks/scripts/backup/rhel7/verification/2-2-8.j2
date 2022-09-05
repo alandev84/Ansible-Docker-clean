@@ -1,0 +1,7 @@
+#!/bin/sh
+
+! (rpm -q vsftpd)  \
+|| \
+(echo 'vsftpd is installed' ; exit 1)
+
+

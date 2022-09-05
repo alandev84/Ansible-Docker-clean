@@ -1,0 +1,9 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/rsyslog.conf
+    regexp: '^\s*\*\.\* .*$'
+    line: '*.* @@{{ cis_rhel7_rsyslog_server }}'
+  when:
+    - cis_rhel7_rsyslog_server | length > 0

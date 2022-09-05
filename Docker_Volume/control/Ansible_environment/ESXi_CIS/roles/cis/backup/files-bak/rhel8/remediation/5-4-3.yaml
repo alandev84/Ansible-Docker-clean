@@ -1,0 +1,40 @@
+---
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) system-auth
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/system-auth
+      follow: true
+      regexp: ^password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel8_password_reuse }}
+  register: result
+
+
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) system-auth
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/system-auth
+      follow: true
+      regexp: ^(password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s.*remember\s*=\s*)(\S+)(.*)$
+      replace: \g<1>{{ cis_rhel8_password_reuse }}\g<3>
+  when: result['failed']
+
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) password-auth
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/password-auth
+      follow: true
+      regexp: ^password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s(?!.*remember\s*=\s*).*$
+      replace: \g<0> remember={{ cis_rhel8_password_reuse }}
+  register: result
+
+
+
+- name: 5.4.3 Ensure password reuse is limited (Scored) password-auth
+  replace:
+      dest: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/password-auth
+      follow: true
+      regexp: ^(password\s+(sufficient|requisite)\s+(pam_pwquality\.so|pam_unix\.so)\s.*remember\s*=\s*)(\S+)(.*)$
+      replace: \g<1>{{ cis_rhel8_password_reuse }}\g<3>
+  when: result['failed']
+
+

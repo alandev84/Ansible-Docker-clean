@@ -1,0 +1,51 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.1.8 Ensure at/cron is restricted to authorized users (Scored)
+  block:
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - deny
+      file:
+        dest: /etc/at.deny
+        state: absent
+      check_mode: yes
+      register: result_1
+
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - deny
+      file:
+        dest: /etc/at.deny
+        state: absent
+      check_mode: yes
+      register: result_2
+
+
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - allow
+      template:
+        dest: /etc/cron.allow
+        src: "{{ os }}/etc/cron.allow.j2"
+        mode: '0600'
+        owner: root
+        group: root
+      check_mode: yes
+      register: result_3
+
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - allow
+      template:
+        dest: /etc/at.allow
+        src: "{{ os }}/etc/at.allow.j2"
+        mode: '0600'
+        owner: root
+        group: root
+      check_mode: yes
+      register: result_4
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: result_1['changed'] or
+            result_2['changed'] or
+            result_3['changed'] or
+            result_4['changed'] 
+

@@ -1,0 +1,3 @@
+---
+# tasks file for UAT_Tasks
+  - import_tasks: reset_user_passwd_script.yml

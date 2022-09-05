@@ -1,0 +1,6 @@
+
+
+for f in `ls verification/*`
+do
+  vim $f
+done

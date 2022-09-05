@@ -1,0 +1,47 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/user.cfg
+  register: stat_result_grub2_user
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: 
+    - stat_result_grub2_grub.stat.exists
+    - stat_result_grub2_user.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+    - "stat_result_grub2_grub.stat.uid == 0"
+    - "stat_result_grub2_user.stat.uid == 0"
+    - "stat_result_grub2_grub.stat.gid == 0"
+    - "stat_result_grub2_user.stat.gid == 0"
+    - "stat_result_grub2_grub.stat.mode == '0600'"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: 
+    - not stat_result_grub2_grub.stat.exists
+    - not stat_result_grub2_user.stat.exists
+    - stat_result_EFI_grub.stat.exists
+    - "stat_result_EFI_grub.stat.uid == 0"
+    - "stat_result_EFI_grub.stat.gid == 0"
+    - "stat_result_EFI_grub.stat.mode == '0600'"
+
+

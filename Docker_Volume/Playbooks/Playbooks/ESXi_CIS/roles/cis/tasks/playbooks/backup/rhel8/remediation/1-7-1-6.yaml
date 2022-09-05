@@ -1,0 +1,7 @@
+---
+
+- name: 1.7.1.6 Ensure SETroubleshoot is not installed (Scored)
+  yum:
+    name: setroubleshoot
+    state: absent
+

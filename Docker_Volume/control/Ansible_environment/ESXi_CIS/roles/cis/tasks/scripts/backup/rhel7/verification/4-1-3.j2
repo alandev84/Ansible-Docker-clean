@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+grep -E '^max_log_file_action\s*=\s*keep_logs\s*$' /etc/audit/auditd.conf \
+|| \
+(echo "audit is not enable as kernel params" ; exit 1)

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ `awk -F: '($3 == 0) { print $1 }' /etc/passwd | grep -v -E "root|rootbkup" | wc -l` == 0 ] \
+|| \
+(echo "Other user uses UID 0" ; exit 1)

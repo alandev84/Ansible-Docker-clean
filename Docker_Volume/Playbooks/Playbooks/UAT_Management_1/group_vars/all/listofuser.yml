@@ -1,0 +1,3 @@
+users:
+  - { name: sysa_as, new_name: "Alex Soh", uid: 1014, groups: wheel, primary_gid: 14, comment: "Sysa SAR#22-122", shell_path: "/bin/bash" }
+  - { name: sysa_ks, new_name: "Kaliyaperumal Sentil", uid: 1012, groups: wheel, primary_gid: 14, comment: "Sysa SAR#22-122", shell_path: "/bin/bash" }

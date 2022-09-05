@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: MinimumPasswordLength
+    value: "{{ cis_win2019_MinimumPasswordLength }}"
+  register: result
+
+- debug: var=result

@@ -1,0 +1,54 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+
+    - name: Add AD/DNS Server to in-memory inventory
+      add_host:
+        host: "{{ dev_ad_host }}"
+        group: dnsserver
+        ansible_connection: winrm
+        ansible_port: 5986
+        ansible_winrm_transport: ntlm
+        ansible_user: "{{ dev_ad_user }}"
+        ansible_password: "{{ dev_ad_pass }}"
+        ansible_winrm_server_cert_validation: ignore
+      no_log: true
+
+#    - debug:
+#        msg: "{{ dev_ad_user }} - {{ dev_ad_pass }} -- {{ dev_ad_host }}"
+
+- hosts: dnsserver
+  gather_facts: false
+  become: false
+  ignore_unreachable: yes
+  vars:
+    ip_list: "{{ nat_vm_ips.split(',') }}"
+
+  tasks:
+    - name: set IP list for DNS record
+      set_fact:
+        dns_ip_list: "{{ ip_list }}"
+
+    - name: Verify DNS Records
+      include_tasks: tasks/verify_dns.yaml
+      loop: "{{ range(start_index|int,
+        (start_index|int + vm_count|int))|list }}"
+      loop_control:
+        loop_var: vm_index
+      ignore_errors: true
+
+
+- name: VM provision test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - block:
+        - name: Run VM provision role
+          include_role:
+            name: vmware_vm
+

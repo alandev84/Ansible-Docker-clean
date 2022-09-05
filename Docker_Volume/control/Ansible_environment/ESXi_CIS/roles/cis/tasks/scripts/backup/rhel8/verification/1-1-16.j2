@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep -E '\s/dev/shm\s' | grep nosuid \
+|| \
+(mount | grep -E '\s/dev/shm\s' ; exit 1)

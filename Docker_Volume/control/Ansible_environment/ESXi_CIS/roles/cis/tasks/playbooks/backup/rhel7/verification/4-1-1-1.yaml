@@ -1,0 +1,9 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  assert:
+    that:
+      - "'audit' in ansible_facts.packages" 
+      - "'audit-libs' in ansible_facts.packages"
+    fail_msg: "audit or audit-libs is not installed"
+    success_msg: "auditd is installed"

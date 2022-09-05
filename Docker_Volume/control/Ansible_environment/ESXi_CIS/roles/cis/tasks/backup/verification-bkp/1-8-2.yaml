@@ -1,0 +1,83 @@
+---
+
+# Both blockinfile & lineinfile moudles are not perfect for this task.
+# Seems the customize moudle is needed. -Jin
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: include cis-rhe8 role
+  multi_lines_matching:
+    file_path: /tmp/log
+    lines:
+      - '^\[\s*org/gnome/login-screen\s*\]\s*$'
+      - '^\s*banner-message-enable\s*=\s*true\s*$'
+      - "^\\s*banner-message-text\\s*=\\s*{{ gdm_banner_message }}\\s*$"
+  register: file_result
+
+- debug: var=file_result
+
+  #- name: Check settings in /etc/gdm3/greeter.dconf-defaults
+  #  blockinfile:
+  #          #path: /etc/gdm3/greeter.dconf-defaults
+  #    path: /tmp/log
+  #    block: |
+  #      [org/gnome/login-screen]
+  #      banner-message-enable=true
+  #      banner-message-text="{{ gdm_banner_message }}"   
+  #  check_mode: yes
+  #  register: file_result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: file_result['found']
+
+  #    # Both blockinfile & lineinfile moudles are not perfect for this task.
+  #    # Seems the customize moudle is needed. -Jin
+  #- name: Set first line  (1/3)
+  #  lineinfile: 
+  #    dest: /tmp/log
+  #    #line: '[org/gnome/login-screen]'
+  #    regexp: '^\[\s*org/gnome/login-screen\s*\]$'
+  #    state: absent
+  #  check_mode: yes
+  #  register: line_one_result
+  #
+  #- name: Set 2nd line (2/3)
+  #  lineinfile: 
+  #    dest: /tmp/log
+  #    insertafter: '^\[\s*org/gnome/login-screen\s*\]$'
+  #    line: 'banner-message-enable=true'
+  #  check_mode: yes
+  #  register: line_two_result
+  #
+  #- name: Set 3rd line (3/3)
+  #  lineinfile: 
+  #    dest: /tmp/log
+  #    insertafter: '^\s*banner-message-enable\s*=\s*true\s*$'
+  #    line: "banner-message-text={{ gdm_banner_message }}"
+  #  check_mode: yes
+  #  register: line_three_result
+  #
+  #- debug:
+  #    msg: "{{ line_one_result['changed'] }}"
+  #
+  #- debug:
+  #    msg: "{{ line_two_result['changed'] }}"
+  #
+  #- debug:
+  #    msg: "{{ line_three_result['changed'] }}"
+  #
+  #- name: Reset cis_result value
+  #  set_fact:
+  #    cis_result: 'PASS'
+  #  when: 
+  #    - line_one_result['changed']
+  #    - not line_two_result['changed']
+  #    - not line_three_result['changed']
+  #  #when: not file_result['changed']
+  #
+  #  #- debug: var=cis_result

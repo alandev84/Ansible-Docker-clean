@@ -1,0 +1,5 @@
+#!/bin/sh
+
+awk '/^\s*UID_MIN/{print $2}' /etc/login.defs | grep -w  {{ section04_parms['uid_min'] }}\
+|| \
+(echo "UID_MIN is not $1" ; exit 1)

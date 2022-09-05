@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name: ntp
+    state: present
+  when: "'ntp' in ansible_facts.packages"

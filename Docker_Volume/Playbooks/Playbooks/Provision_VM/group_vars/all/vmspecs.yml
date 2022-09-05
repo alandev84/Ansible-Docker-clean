@@ -1,0 +1,7 @@
+vmspecs:
+  - { dc_name: "someDC name", valid_cert: "no", cluster_name: "someCluster", datastore: "someDS name", folderpath: "/", vm_name: "somevmname", vmtemplate: "somevmtemplate", state: "somestate", guestid: "guestid", hdd1_size: 100, hdd2_size: 100, disktype: "eagerzeroedthick",ram_size: 16, cpu_count: 4, scsi: "paravirtual", network_name: "somenetworkname", vm_ip1: 192.168.1.2, gateway: 192.168.1.1, subnet: 255.255.255.255, network_type: "static", rdp: "yes", wait_ip: "yes", dns1: 192.28.180.29, dns2: 192.168.1.30, domain_name: "somedomain", wait_customise: "yes" }
+  - { dc_name: "someDC name", valid_cert: "no", cluster_name: "someCluster", datastore: "someDS name", folderpath: "/", vm_name: "somevmname", vmtemplate: "somevmtemplate", state: "somestate", guestid: "guestid", hdd1_size: 100, hdd2_size: 100, disktype: "eagerzeroedthick",ram_size: 16, cpu_count: 4, scsi: "paravirtual", network_name: "somenetworkname", vm_ip1: 192.168.1.2, gateway: 192.168.1.1, subnet: 255.255.255.255, network_type: "static", rdp: "yes", wait_ip: "yes", dns1: 192.28.180.29, dns2: 192.168.1.30, domain_name: "somedomain", wait_customise: "yes" }
+
+dns:
+  - DNS1=172.28.180.29
+  - DNS2=172.28.180.30

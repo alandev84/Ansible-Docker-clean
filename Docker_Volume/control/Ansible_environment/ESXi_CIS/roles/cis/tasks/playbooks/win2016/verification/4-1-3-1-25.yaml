@@ -1,0 +1,39 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }} - DC"
+  win_user_right:
+    name: SeImpersonatePrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeImpersonatePrivilege_DC }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+
+- name: "{{ cis_rules[cis_item]['name'] }} - MS"
+  win_user_right:
+    name: SeImpersonatePrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeImpersonatePrivilege_MS }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"
+
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+
+

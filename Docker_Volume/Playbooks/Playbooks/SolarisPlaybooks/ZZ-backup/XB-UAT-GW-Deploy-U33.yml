@@ -1,0 +1,192 @@
+---
+- name: XB UAT GW Deployment
+  gather_facts: no
+  hosts: XB_UAT_GW
+  user: apmgr
+  ignore_errors: true
+  vars:
+    zip_dir: XBGW_U01.00.33
+    new_ver: U01.00.33
+    old_ver: U01.00.32
+    copy_deploy_ma: false
+    deploy_ma_CF: false
+    deploy_pro_itmx_CF: false
+    deploy_pro_CF: false
+    deploy_ma_bkp: false
+    deploy_pro_bkp: false
+    deploy_pro_itmx_bkp: false
+    deploy_ma: true
+    deploy_pro: true
+    deploy_pro_itmx: true
+
+#  pre_tasks:
+#    - name: check RT service status
+#      shell: svcs g3app-rt-service-processor | grep -v STATE | cut -b1-6
+#      register: rt_status
+
+  tasks:
+    - name: Copy deployment Package to Server
+      copy:
+        src: /var/tmp/{{ zip_dir }}/XB_GW/message-adapter-{{ new_ver }}.tar
+        dest: /var/tmp/XB_GW/message-adapter-{{ new_ver }}.tar
+      when:
+        - copy_deploy_ma
+
+######## Create backup folders ###########
+
+    - name: Create MA Directory
+      file:
+        path: /XBapp/appfc/deployment/archive/{{ old_ver }}/message-adapter/{{ item }}
+        state: directory
+      loop:
+         - appfc_program
+         - appfc_conf
+      when:
+        - deploy_ma_CF
+
+
+######## Create backup folders ###########
+
+    - name: Create Pro ITMX Directory
+      file:
+        path: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor-itmx/{{ item }}
+        state: directory
+      loop:
+         - appfc_program
+         - appfc_conf
+      when:
+        - deploy_pro_itmx_CF
+
+######## Create backup folders ###########
+
+    - name: Create Pro Directory
+      file:
+        path: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor/{{ item }}
+        state: directory
+      loop:
+         - appfc_program
+         - appfc_conf
+      when:
+        - deploy_pro_CF
+
+######## Take backup ###########
+
+    - name: Backup Program MA
+      archive:
+        path:
+          - /XBapp/appfc/message-adapter
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/message-adapter/appfc_program/message-adapter.tar
+      when:
+        - deploy_ma_bkp
+
+    - name: Backup Conf MA
+      archive:
+        path:
+          - /XBapp/appfc/conf/message-adapter
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/message-adapter/appfc_conf/message-conf-adapter.tar
+      when:
+        - deploy_ma_bkp
+
+
+######## Take backup Processor ###########
+
+    - name: Backup Program Processor 
+      archive:
+        path:
+          - /XBapp/appfc/processor
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor/appfc_program/processor.tar
+      when:
+        - deploy_pro_bkp
+
+    - name: Backup Conf Processor
+      archive:
+        path:
+          - /XBapp/appfc/conf/processor
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor/appfc_conf/processor-conf.tar
+      when:
+        - deploy_pro_bkp
+
+######## Take backup Processor ITMX ###########
+
+    - name: Backup Program Processor ITMX
+      archive:
+        path:
+          - /XBapp/appfc/processor-itmx
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor-itmx/appfc_program/processor-itmx.tar
+      when:
+        - deploy_pro_itmx_bkp
+
+    - name: Backup Conf Processor ITMX
+      archive:
+        path:
+          - /XBapp/appfc/conf/processor-itmx
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/processor-itmx/appfc_conf/processor-itmx-conf.tar
+      when:
+        - deploy_pro_itmx_bkp
+
+
+####### XB Deployment ##############
+
+    - name: Remove Pro
+      command: /bin/mv /XBapp/appfc/processor /XBapp/appfc/processor-{{ old_ver }}
+      when:
+        - deploy_pro
+
+    - name: Deploy Pro
+      unarchive:
+        src: /var/tmp/XB_GW/processor-{{ new_ver }}.tar
+        dest: /XBapp/appfc/
+        remote_src: yes
+      when:
+        - deploy_pro
+
+    - name: Rename Pro
+      command: /bin/mv /XBapp/appfc/processor-{{ new_ver }} /XBapp/appfc/processor
+      when:
+        - deploy_pro
+
+####### XB Deployment Pro ##############
+
+    - name: Remove MA 
+      command: /bin/mv /XBapp/appfc/message-adapter /XBapp/appfc/message-adapter-{{ old_ver }}
+      when:
+        - deploy_ma
+
+    - name: Deploy MA
+      unarchive:
+        src: /var/tmp/XB_GW/message-adapter-{{ new_ver }}.tar
+        dest: /XBapp/appfc/
+        remote_src: yes
+      when:
+        - deploy_ma
+
+    - name: Rename MA 
+      command: /bin/mv /XBapp/appfc/message-adapter-{{ new_ver }} /XBapp/appfc/message-adapter
+      when:
+        - deploy_ma
+
+####### XB Deployment Pro ITMX ##############
+
+    - name: Remove Pro ITMX
+      command: /bin/mv /XBapp/appfc/processor-itmx /XBapp/appfc/processor-itmx-{{ old_ver }}
+      when:
+        - deploy_pro_itmx
+
+    - name: Deploy Pro ITMX
+      unarchive:
+        src: /var/tmp/XB_GW/processor-itmx-{{ new_ver }}.tar
+        dest: /XBapp/appfc/
+        remote_src: yes
+      when:
+        - deploy_pro_itmx
+
+    - name: Rename Pro ITMX
+      command: /bin/mv /XBapp/appfc/processor-itmx-{{ new_ver }} /XBapp/appfc/processor-itmx
+      when:
+        - deploy_pro_itmx
+
+    - name: change permission
+      command: chmod -R 750 /XBapp/appfc/processor-itmx
+
+...
+

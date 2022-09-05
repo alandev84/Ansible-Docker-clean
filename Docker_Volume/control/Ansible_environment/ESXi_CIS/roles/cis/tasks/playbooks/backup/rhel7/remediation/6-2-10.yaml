@@ -1,0 +1,6 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /bin/true
+  changed_when: false
+

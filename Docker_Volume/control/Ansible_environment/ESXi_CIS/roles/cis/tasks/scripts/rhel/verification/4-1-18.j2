@@ -1,0 +1,26 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/sbin/insmod\s+-p\s+x\s+-k\s+modules\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/sbin/rmmod\s+-p\s+x\s+-k\s+modules\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/sbin/modprobe\s+-p\s+x\s+-k\s+modules\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+init_module\s+-S\s+delete_module\s+-k\s+modules\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+init_module\s+-S\s+delete_module\s+-k\s+modules\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/sbin/insmod\s+-p\s+x\s+-k\s+modules\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/sbin/rmmod\s+-p\s+x\s+-k\s+modules\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/sbin/modprobe\s+-p\s+x\s+-k\s+modules\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+init_module,delete_module\s+-F\s+key=modules\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+init_module,delete_module\s+-F\s+key=modules\s*' \
+|| \
+(echo "audit rule problem" ; exit 1)
+
+
+

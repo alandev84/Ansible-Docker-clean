@@ -1,0 +1,77 @@
+---
+  - name: Initialisation [1/2] [Solaris]
+    shell: "rm -rf {{ item.file_path_src_Group }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Initialisation [2/2] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /Ansible_Event_Report/Group_Report_SOL.log"
+
+  - name: Pull Result [1/4] [Solaris]
+    become: true
+    shell: 'echo "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-" >> {{ item.file_path_src_Group }}'
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [2/4] [Solaris]
+    become: true
+    shell: 'echo "HOSTNAME: {{ inventory_hostname }}" >> {{ item.file_path_src_Group }}'  
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [3/4] [Solaris]
+    become: true
+    shell: 'echo  "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" >> {{ item.file_path_src_Group }}'
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [4/4] [Solaris]
+    become: true
+    shell: "cat /etc/group >> {{ item.file_path_src_Group }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  #need to change chown user {{ owner }}
+  - name: Extraction Processing [1/4] [Solaris]
+    become: true
+    ansible.builtin.shell: "chown svc_ansible:sysadm {{ item.file_path_src_Group }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+  
+  - name: Extraction Processing [2/4] [Solaris]
+    fetch:  
+      src: "{{ item.file_path_src_Group }}"
+      dest: "{{ item.local_path }}"
+      flat: yes
+    loop: "{{ collectionSOL }}"
+
+  - name: Extraction Processing [3/4] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}Group_Report_SOL.log"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [4/4] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf {{ item.local_path }}*.txt"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Generate Report
+    ansible.builtin.debug:
+      msg: "Output Result from {{ ansible_hostname }} Merge to /Ansible_Event_Report/Group_Report_SOL.log"

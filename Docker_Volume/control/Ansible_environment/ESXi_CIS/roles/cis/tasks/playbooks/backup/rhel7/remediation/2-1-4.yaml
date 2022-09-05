@@ -1,0 +1,43 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/user.cfg
+  register: stat_result_grub2_user
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+    state: touch
+  with_items:
+    - /boot/grub2/grub.cfg
+    - /boot/grub2/user.cfg
+  when: 
+    - stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /boot/efi/EFI/redhat/grub.cfg
+  when: 
+    - not stat_result_grub2_grub.stat.exists
+    - stat_result_EFI_grub.stat.exists

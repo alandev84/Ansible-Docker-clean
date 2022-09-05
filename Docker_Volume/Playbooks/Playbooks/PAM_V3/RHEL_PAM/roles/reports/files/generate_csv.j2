@@ -1,0 +1,5 @@
+{% for host in groups[group_name] -%}
+{% for user_account in hostvars[host]['user_account'] -%}
+    {{ host }};{{ hostvars[host]['os_type'] }};{{ hostvars[host]['user_account_gid'][loop.index0] }};{{ hostvars[host]['user_account_uid'][loop.index0] }};Not Applicable;{{ hostvars[host]['last_login_date'][loop.index0] | default('Not Applicable') }};{{ hostvars[host]['last_password_change'][loop.index0] | default('Not Applicable') }};{{ user_account }}
+{% endfor %}
+{% endfor %}

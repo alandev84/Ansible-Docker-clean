@@ -1,0 +1,20 @@
+---
+ansible_connection: network_cli
+ansible_network_os: ios
+ansible_become: yes
+ansible_become_method: enable
+#ansible_user: ciscoadmin
+#ansible_password: admin
+
+test: []
+is_privilege: []
+cisco_router_user_information: []
+
+privilage_users: 
+    - "ciscouser"
+    - "bar"
+
+output_lines:
+    - "username foo privilege 15 password 0 admin"
+    - "username bar password 0 admin"
+    - "username baz password 0 user"

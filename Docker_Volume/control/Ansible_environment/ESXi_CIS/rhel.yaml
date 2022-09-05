@@ -1,0 +1,13 @@
+- hosts: rhel
+  gather_facts: false
+  vars:
+ 
+ 
+  tasks:
+
+    - setup:
+      register: result
+
+    - debug: 
+        msg: "{{ result.ansible_facts }}"
+        #msg: "{{ result.ansible_facts.ansible_ip_addresses[0] }}"

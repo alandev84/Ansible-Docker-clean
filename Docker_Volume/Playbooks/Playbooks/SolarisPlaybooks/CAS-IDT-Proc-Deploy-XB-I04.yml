@@ -1,0 +1,56 @@
+---
+- name: CAS Processor Deployment
+  gather_facts: no
+  hosts: IDT_CAS_PROC 
+  user: apmgr
+  ignore_errors: true
+  vars:
+    new_ver: RF-CASSY-XB_I01.00.04
+    old_ver: RF-CASSY-XB_I01.00.03
+  tasks:
+    - name: Copy Bulk deployment Package to Server
+      copy:
+        src: /var/tmp/{{ new_ver }}.tar
+        dest: /casapp/appfc/deployment/IDT/{{ new_ver }}.tar
+
+    - name: Unzip Deployment Package
+      unarchive:
+        src: /casapp/appfc/deployment/IDT/{{ new_ver }}.tar
+        dest: /var/tmp/
+        remote_src: yes
+
+    - name: Create backup directory
+      file:
+        path: /casapp/appfc/deployment/archive/{{ old_ver }}/{{ item }}
+        state: directory
+      loop:
+         - appfc_conf
+         - appfc_program
+
+    - name: Backup Appfc Configurations  
+      copy:
+        src: /casapp/appfc/conf
+        dest: /casapp/appfc/deployment/archive/{{ old_ver }}/appfc_conf
+        remote_src: yes
+
+    - name: Backup Programs in Server Instance 
+      archive:
+        path:
+          - /casapp/appfc/program
+        dest: /casapp/appfc/deployment/archive/{{ old_ver }}/appfc_program/program_svr.tgz
+
+    - name: Remove Old App Deployment folder
+      file:
+        path: /opt/appserver/casprocessor/jws-3.1/share/tomcat8/webapps/CASProcessor
+        state: absent
+
+    - name: Remove Old App Deployment war file
+      file:
+        path: /opt/appserver/casprocessor/jws-3.1/share/tomcat8/webapps/CASProcessor.war
+        state: absent
+
+    - name: Copy New Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}//CASProcessor/CASProcessor.war
+        dest: /opt/appserver/casprocessor/jws-3.1/share/tomcat8/webapps/
+        remote_src: yes	

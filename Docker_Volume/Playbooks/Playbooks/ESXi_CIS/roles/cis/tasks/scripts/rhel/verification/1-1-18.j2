@@ -1,0 +1,5 @@
+#!/bin/sh 
+
+! (systemctl show "autofs.service" | grep -i unitfilestate=enabled) \
+|| \
+(echo Automounting is not disable ; exit 1)

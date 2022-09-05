@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+findmnt -n /home | grep -E '\bnodev\b' \
+|| \
+(findmnt -n /home ; exit 1)

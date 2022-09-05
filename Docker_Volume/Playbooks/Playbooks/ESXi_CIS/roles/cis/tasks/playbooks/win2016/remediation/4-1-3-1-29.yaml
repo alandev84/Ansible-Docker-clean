@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeBatchLogonRight
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeBatchLogonRight }}"
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"

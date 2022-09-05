@@ -1,0 +1,4 @@
+#!/bin/sh
+
+yum updateinfo list cves | grep CVE-2019-19339 || (echo 'No CVE-2019-19339 issue' ; exit 0)
+

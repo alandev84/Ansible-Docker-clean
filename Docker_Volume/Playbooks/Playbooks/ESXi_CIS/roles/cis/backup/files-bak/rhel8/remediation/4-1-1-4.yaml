@@ -1,0 +1,23 @@
+---
+
+- name: 4.1.1.4 Ensure audit_backlog_limit is sufficient (Scored) - read config
+  command: grep -E "GRUB_CMDLINE_LINUX=.*audit_backlog_limit={{ cis_rhel8_audit_backlog_limit }}.*" /etc/default/grub
+  register: grep_audit_backlog_grub
+  failed_when: false
+  changed_when: false
+
+- name: 4.1.1.4 Ensure audit_backlog_limit is sufficient (Scored) - write config
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX="(.*)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 audit_backlog_limit={{ cis_rhel8_audit_backlog_limit }}"'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true
+  when:
+    - grep_audit_backlog_grub.rc == 1
+  notify:
+    - update grub2
+

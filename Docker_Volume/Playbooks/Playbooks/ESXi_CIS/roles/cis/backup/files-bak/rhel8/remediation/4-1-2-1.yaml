@@ -1,0 +1,20 @@
+---
+
+- name: 4.1.1.1 Ensure auditd is installed (Scored)
+  yum:
+    name: audit
+    state: installed
+
+- name: 4.1.2.1 Ensure audit log storage size is configured (Scored)
+  lineinfile:
+    dest: /etc/audit/auditd.conf
+    regexp: '^max_log_file = \d+'
+    line: 'max_log_file = {{ cis_rhel8_audit_max_log_file }}'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true
+  notify:
+    - restart auditd
+

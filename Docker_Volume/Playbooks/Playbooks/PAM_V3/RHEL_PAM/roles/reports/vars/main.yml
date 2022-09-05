@@ -1,0 +1,4 @@
+---
+report_directory: /home/svc_ansible/reports
+group_name: redhat_servers
+ansible_ssh_extra_args: '-o StrictHostKeyChecking=no'

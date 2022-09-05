@@ -1,0 +1,22 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - find files"
+      shell: |
+        set -o pipefail
+        df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
+      args:
+        executable: /bin/bash
+      changed_when: false
+      failed_when: false
+      register: unowned_files
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - fix permission"
+      file:
+        path: "{{ item }}"
+        owner: "{{ cis_rhel7_user_unowned_file }}"
+      when:
+        - unowned_files.stdout_lines | length > 0
+      with_items: "{{ unowned_files.stdout_lines }}"
+

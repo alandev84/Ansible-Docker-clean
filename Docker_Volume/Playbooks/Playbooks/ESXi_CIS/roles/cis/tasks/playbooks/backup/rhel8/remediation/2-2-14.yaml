@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.7 Ensure Samba is not enabled (Scored)
+  service:
+    name: smb
+    state: stopped
+    enabled: false
+  when: "'slapd' in ansible_facts.packages"
+

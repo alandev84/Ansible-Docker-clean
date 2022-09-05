@@ -1,0 +1,6 @@
+---
+- name: 2.3.4 Ensure telnet client is not installed (Scored)
+  yum:
+    name: telnet
+    state: absent
+

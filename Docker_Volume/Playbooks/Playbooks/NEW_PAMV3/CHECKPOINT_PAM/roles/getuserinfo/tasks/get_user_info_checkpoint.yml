@@ -1,0 +1,135 @@
+---
+- name: Get Password from Cyberark
+  local_action: 
+    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="ansible_safe" -p Query="Safe=Ansible_safe;Folder=Root;Object=Operating-System-ansible_ssh-10.68.32.81-Administrator;Username=Administrator" -o Password
+  args:
+    chdir: /opt/CARKaim/sdk/
+  register: local_process
+
+- name: Save password from cyberark to var
+  set_fact: 
+    cyberark_password: "{{local_process.stdout}}"
+
+
+- name: Login to checkpoint
+  uri:
+    url: https://115.66.241.119:8443/gaia_api/login
+    method: POST
+    body_format: json
+    body:
+      user: "admin"
+      password: "qwe123"
+    validate_certs: no
+  register: result
+
+- name: Get login code
+  set_fact:     
+    login_code: "{{ result | json_query(jmesquery) }}"
+    cacheable: yes
+  vars:
+    jmesquery: "status"
+     
+- name: Set login status  
+  set_fact:
+    login_status: "{% if login_code == '200' %}True{% else %}False{% endif %}"
+  register: login_status
+
+
+- name: Check login status 
+  meta: end_play
+  when: login_status == false 
+
+- name: Get SID 
+  set_fact:     
+    sid: "{{ result | json_query(jmesquery) }}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.sid"
+ 
+- name: Show user to checkpoint
+  uri:
+    url: https://115.66.241.119:8443/gaia_api/show-users
+    method: POST
+    body_format: json
+    return_content: true
+    headers:
+      Content-Type: application/json
+      X-chkp-sid: "{{ sid }}"
+    body: "{}"
+    validate_certs: no
+  register: data
+
+# - name: Get User required information  
+#   set_fact:     
+#     user_data: "{{ data | json_query(jmesquery) }}"
+#     cacheable: yes
+#   vars:
+#      jmesquery: "json.objects[].[name]"
+#     #jmesquery: json.objects[*].[name,locked,uid]
+#     #jmesquery: "json.objects[*].name"
+#     #jmesquery: json.objects[*].{Name:name,Status:locked,UID:uid}
+#   register: user_data
+
+# - name: Get User required information  
+#   set_fact:     
+#     privilege_user_information: "{{ data | json_query(jmesquery) }}"
+#     cacheable: yes
+#   vars:
+#     jmesquery: json.objects[?name=='{{current_user}}'].[name,locked,uid]
+#   loop: "{{acc_name}}"
+#   loop_control:
+#     loop_var: current_user
+#   register: user_data
+
+# - name: Get All username  
+#   set_fact:     
+#     user_name: "{{ data | json_query(jmesquery) }}"
+#     cacheable: yes
+#   vars:
+#      jmesquery: "json.objects[*].name"
+#   register: user_name
+
+
+# - name: Check privilege 
+#   set_fact: 
+#     priv: "{{ user_name | intersect(acc_name) }}"
+#   register: priv
+
+
+- debug: 
+    var: acc_name.split('\n')
+
+- name: Get User required information  
+  set_fact:     
+    user_data: "{{ data | json_query(jmesquery) }}"
+    cacheable: yes
+  vars:
+    jmesquery: "json.objects[].name"
+
+- name: Check privilege 
+  set_fact: 
+    priv: "{{ user_data | intersect(acc_name.split('\n')) }}"
+  register: priv
+
+- name: Test Informationk 
+  set_fact: 
+    info3: "{{ data|json_query(jmesquery) + info3|default([]) }}"
+  vars: 
+    jmesquery: "json.objects[?name=='{{current_user}}'].[name,locked,uid]"
+  loop: "{{priv.ansible_facts.priv}}"
+  loop_control:
+    loop_var: current_user
+
+- name: Set information to be cacheable 
+  set_fact: 
+    user_information_data: "{{info3}}"
+    cacheable: yes 
+
+
+
+    
+
+
+    # info_user_details:  " [ '{{ data | json_query(jmesquery) }}' ] + {{ info_user_details | default([]) }}"
+    # info2: "{{ [info2] + [data | json_query(jmesquery)] | default([])}}"
+    # info2: "{{data | default([]) | json_query(jmesquery)  }}" 

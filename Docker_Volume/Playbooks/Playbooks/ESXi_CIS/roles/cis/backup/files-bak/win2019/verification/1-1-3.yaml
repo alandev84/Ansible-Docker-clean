@@ -1,0 +1,18 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: MinimumPasswordAge
+    value: "{{ cis_win2019_MinimumPasswordAge }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+
+

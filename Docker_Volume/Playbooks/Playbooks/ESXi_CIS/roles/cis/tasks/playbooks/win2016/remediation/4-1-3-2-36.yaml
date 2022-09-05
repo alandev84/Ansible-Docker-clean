@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: RestrictAnonymousSAM
+    data: "{{ cis_win_RestrictAnonymousSAM.data }}"
+    state: present
+    type: dword
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+

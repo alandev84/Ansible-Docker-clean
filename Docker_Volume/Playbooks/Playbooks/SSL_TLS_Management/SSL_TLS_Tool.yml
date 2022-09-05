@@ -1,0 +1,20 @@
+---
+  - name: playbook for SSL/TLS Scan, Controller.
+    hosts: all
+    gather_facts: true
+    ignore_unreachable: true
+    become: true
+    pre_tasks:
+      - name: Job Status
+        vars:
+          msg: |
+               Username = {{ Exec_User }}
+               Change Number or SAR Number or Commissioning Number = {{ Change_Number }}
+               Reason For Change = {{ Reason }}.
+               Additional Information = {{ Additional_Info }}.
+        debug:
+          msg: "{{ msg.split('\n') }}"
+        tags:
+          - always
+    roles:
+      - { role: SSL_TLS_Tool }

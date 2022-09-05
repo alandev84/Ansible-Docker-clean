@@ -1,0 +1,17 @@
+# ---
+# - name: Main - Collection of user information
+#   include_tasks: "{{ user_information_collection }}"
+#   loop:
+#     - get_user_info_f5.yml
+#   loop_control:
+#     loop_var: user_information_collection
+    
+
+- name: Main - Collection of user information
+  import_tasks: get_user_info_f5.yml
+
+
+
+
+       
+

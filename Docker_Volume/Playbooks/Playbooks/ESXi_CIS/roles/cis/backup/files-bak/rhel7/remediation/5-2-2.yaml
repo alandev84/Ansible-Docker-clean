@@ -1,0 +1,22 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+  - name: "{{ cis_rules[cis_item]['name'] }} - search config"
+    command: grep -Er '^\s*Defaults\s+([^#]+,\s*)?use_pty\s*=' /etc/sudoers /etc/sudoers.d
+    register: use_pty
+    changed_when: false
+    failed_when: false
+
+  - name: "{{ cis_rules[cis_item]['name'] }} - write config"
+    lineinfile:
+      dest: /etc/sudoers.d/{{ cis_rhel7_sudoers_file }}
+      line: "Defaults use_pty"
+      state: present
+      owner: root
+      group: root
+      mode: 0400
+      create: true
+    when:
+      - use_pty.rc == 1
+

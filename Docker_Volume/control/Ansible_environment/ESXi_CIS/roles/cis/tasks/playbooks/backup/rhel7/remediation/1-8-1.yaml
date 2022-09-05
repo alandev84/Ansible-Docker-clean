@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name: gdm
+    state: absent
+  when: "'gdm' in ansible_facts.packages"

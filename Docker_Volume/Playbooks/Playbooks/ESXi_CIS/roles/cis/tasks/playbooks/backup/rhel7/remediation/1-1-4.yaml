@@ -1,0 +1,62 @@
+---
+
+- name: check if "tmfs /tmp  tmpfs" is configured in /etc/fstab
+  shell: /usr/bin/grep -E "^\s*tmpfs\s+/tmp\s+tmpfs\s+" /etc/fstab
+  failed_when: false
+  changed_when: false
+  register: result
+
+- debug: var=result 
+  
+- name: Set up tmp in /etc/fstab
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      lineinfile:
+        dest: /etc/fstab
+        regexp: "^(#)?\\s*tmpfs\\s+/tmp\\s+"
+        line: "tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime 0 0"
+        state: present
+        owner: root
+        group: root
+        mode: 0644
+        create: false
+        validate: |
+           /usr/bin/grep -E "^\s*tmpfs\s+/tmp\s+tmpfs\s+defaults,rw,nosuid,nodev,noexec,relatime\s+0\s+0$" %s
+
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      shell: |
+        mount -o remount,noexec,nodev,nosuid /tmp
+  when: result.rc == 0
+    
+- name: Set up systemd tmp.mount
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      block:
+      - name: "{{ cis_rules[cis_item]['name'] }}"
+        shell: |
+          set -o pipefail
+          [ -f /etc/systemd/system/tmp.mount ] && exit 0
+          [ ! -f /etc/systemd/system/tmp.mount ] && cp -v /usr/lib/systemd/system/tmp.mount /etc/systemd/system/
+        register: yum_repositories
+
+      - name: "{{ cis_rules[cis_item]['name'] }}"
+        lineinfile:
+          dest: /etc/systemd/system/tmp.mount
+          regexp: "^Options=mode="
+          line: "Options=mode=1777,strictatime,nodev,nosuid"
+          #line: "Options=mode=1777,strictatime,noexec,nodev,nosuid"
+          state: present
+          owner: root
+          group: root
+          mode: 0644
+#        notify: 
+#          - RHEL 7 reboot
+
+    
+      - name: "{{ cis_rules[cis_item]['name'] }}"
+        shell: |
+          systemctl daemon-reload
+          systemctl unmask tmp.mount 
+          systemctl enable --now tmp.mount
+  when: result.rc != 0
+

@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.9 Ensure HTTP server is not enabled (Scored)
+  service:
+    name: httpd
+    state: stopped
+    enabled: false
+  when: "'httpd' in ansible_facts.packages"
+

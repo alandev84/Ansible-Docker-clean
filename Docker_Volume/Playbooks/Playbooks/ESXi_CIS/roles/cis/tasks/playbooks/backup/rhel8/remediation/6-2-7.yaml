@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.7 Ensure users' home directories permissions are 750 or more restrictive (Scored)
+  command: /bin/true
+  changed_when: false
+

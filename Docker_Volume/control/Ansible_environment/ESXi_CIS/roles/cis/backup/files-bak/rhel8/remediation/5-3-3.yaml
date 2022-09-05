@@ -1,0 +1,35 @@
+---
+
+- name: 5.3.1 Create custom authselect profile (Scored)
+  block:
+    - name: 5.3.1 Create custom authselect profile (Scored) - search profile
+      shell: authselect list | grep custom/{{ cis_rhel8_authselect_profile }}
+      register: authselect_list_profiles
+      changed_when: false
+      failed_when: false
+
+    - name: 5.3.1 Create custom authselect profile (Scored) - create profile
+      shell: |
+        authselect create-profile {{ cis_rhel8_authselect_profile }} -b sssd --symlink-meta
+        #authselect select custom/{{ cis_rhel8_authselect_profile }} --force
+      when:
+        - authselect_list_profiles.rc != 0
+
+- name: "5.3.2 Select authselect profile (Scored) - select profile\n
+  5.3.3 Ensure authselect includes with-faillock (Scored)"
+  block:
+    - name: 5.3.2 Select authselect profile (Scored) - find current profile
+      shell: "authselect current | grep \"Profile ID\" | sed 's@Profile ID: @@'"
+      register: authselect_current_profile
+      changed_when: false
+      failed_when: false
+
+    - debug: var=authselect_current_profile
+
+    - name: "5.3.2 Select authselect profile (Scored) - select profile\n
+      5.3.3 Ensure authselect includes with-faillock (Scored)"
+      command: authselect select custom/{{ cis_rhel8_authselect_profile }}  with-sudo with-faillock without-nullok --force
+      when:
+        - authselect_current_profile.rc == 0
+        - authselect_current_profile.stdout == "/".join(["custom", cis_rhel8_authselect_profile])
+

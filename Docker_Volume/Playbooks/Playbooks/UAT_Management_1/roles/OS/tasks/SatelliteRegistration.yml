@@ -1,0 +1,43 @@
+---
+# FOR RH
+  - name: Removal Of Old Satellite Tool (Katello)
+    yum:
+      name: "{{ item.uninstallname }}"
+      state: absent
+    ignore_errors: yes
+    loop: "{{ satellite }}"
+    tags:
+      - OSFullInstallSatellite
+      - OSUninstallSatellite
+    when: ansible_os_family == "RedHat"
+
+  - name: Download And Install Satellite Tool from Remote Satellite Server
+    yum:
+      name: "{{ item.installname }}"
+      state: present
+      validate_certs: false
+    ignore_errors: yes
+    loop: "{{ satellite }}"
+    tags:
+      - OSFullInstallSatellite
+      - OSInstallSatellite
+    when: ansible_os_family == "RedHat"
+
+  - name: Attach Subscription On Installed Host
+    shell: subscription-manager clean
+    ignore_errors: yes
+    tags:
+      - OSFullInstallSatellite
+      - OSInstallSatellite
+    when: ansible_os_family == "RedHat"
+
+  - name: Applying Activation Key on Installed Host
+    shell: 'subscription-manager register --org="{{ org }}" --activationkey="{{ activationkey }}"'
+    ignore_errors: yes
+    loop: "{{ satellite }}"
+    tags:
+      - OSFullInstallSatellite
+      - OSInstallSatellite
+    when: ansible_os_family == "RedHat"
+
+# For Solaris

@@ -1,0 +1,39 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.2.4 Ensure permissions on SSH public host key files are configured (Scored)
+  block:
+    - name: 5.2.4 Ensure permissions on SSH public host key files are configured (Scored) - search file
+      command: find /etc/ssh -xdev -type f -name 'ssh_host_*_key.pub'
+      register: host_pub_files
+      changed_when: false
+      failed_when: false
+
+    - name: 5.2.4 Ensure permissions on SSH public host key files are configured (Scored) - fix permission
+      file:
+        dest: "{{ item }}"
+        owner: root
+        group: root
+        mode: 0600
+      with_items: "{{ host_pub_files.stdout_lines }}"
+      check_mode: true
+      ignore_errors: true
+      register: result
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item[1]
+        - item[0]
+        - (result.skipped is not defined)  or
+          not result.skipped
+      loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+
+
+
+
+

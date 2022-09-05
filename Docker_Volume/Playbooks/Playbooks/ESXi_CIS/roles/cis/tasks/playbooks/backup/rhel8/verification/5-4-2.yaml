@@ -1,0 +1,31 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.4.2 Ensure lockout for failed password attempts is configured (Scored) - unlock_time
+  replace:
+    path: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/{{ item }}
+    regexp: '^(\s*auth\s+required\s+pam_faillock.so\s+.*unlock_time=)\S+(\s*.*)$'
+    replace: '\g<1>{{ cis_rhel8_pam_failllock_timeout }}\g<2>'
+  with_items:
+    - password-auth
+    - system-auth
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+  #loop: "{{ result.results }}"
+
+
+

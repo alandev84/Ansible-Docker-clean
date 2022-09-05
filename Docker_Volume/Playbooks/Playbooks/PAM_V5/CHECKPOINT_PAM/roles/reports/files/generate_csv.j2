@@ -1,0 +1,8 @@
+
+
+{% for host in groups[group_name] %}
+Device Type, GID, UID, Creation Date, Account Status, Last Login Date, Last Password Change, Privilege accounts
+{% for data in hostvars['127.0.0.1']['user_information_data']%}
+{{host}},{{data[2]}},NIL,NIL,{{data[1]}},NIL,NIL,{{data[0]}}
+{% endfor %}
+{% endfor %}

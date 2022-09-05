@@ -1,0 +1,56 @@
+---
+
+- name: Creating a report directory
+  file:
+    path: "{{ report_directory }}"
+    state: directory
+    owner: ansible
+    group: ansible
+  delegate_to: 10.68.32.70
+
+
+
+- name: Generate report to /home/ftpuser/report/Leon
+  template:
+    src: "./files/generate_csv.j2"
+    dest: "{{ report_directory }}/checkpoint.csv"
+    owner: ansible
+    group: ansible    
+  delegate_to: 10.68.32.70
+
+
+
+
+
+
+  
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+

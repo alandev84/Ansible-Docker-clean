@@ -1,0 +1,25 @@
+#!/bin/sh
+
+
+df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev \( -perm -4000 -o -perm -2000 \) -type f | \
+while read dir
+do
+   grep -E "^-a\s+always,exit\s+-F\s+path=${dir}\s+-F\s+perm=x\s+-F\s+auid>={{ cis_rhel_min_uid }}\s+-F\s+auid!=4294967295\s+-k\s+privileged\s*$" /etc/audit/rules.d/*.rules
+   if [ $? != 0 ]
+       then
+            exit 1
+   fi
+
+   auditctl -l | grep -E "^-a\s+always,exit\s+-S\s+all\s+-F\s+path=${dir}\s+-F\s+perm=x\s+-F\s+auid>={{ cis_rhel_min_uid }}\s+-F\s+auid!=-1\s+-F\s+key=privileged\s*$"
+   if [ $? != 0 ]
+       then
+            exit 1
+   fi
+
+done
+
+#Run the following command replacing <partition> with a list of partitions where
+#programs can be executed from on your system:
+# find <partition> -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>='"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' -F auid!=4294967295 –k privileged" }'
+#Verify all resulting lines are a .rules file in /etc/audit/rules.d/ and the output of auditctl -l.
+#Note: The .rules file output will be auid!=-1 not auid!=4294967295

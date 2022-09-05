@@ -1,0 +1,7 @@
+#!/bin/sh
+
+
+mount |  grep '\s/home\s' | grep "^/dev/\S\+\s\+on\s\+/home\s\+type\s\+xfs\s\+(rw,nodev,relatime,data=ordered)$" \
+|| \
+(mount |  grep '\s/home\s' ; exit 1)
+

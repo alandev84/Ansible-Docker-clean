@@ -1,0 +1,8 @@
+#!/bin/bash
+
+grep "^shadow" /etc/group | awk -F":" '{print $4}' | sed  's/,/\n/g' | while read u
+do
+  usermod -aG nobody ${u}
+done
+
+sed -ri 's/(^shadow:[^:]*:[^:]*:)([^:]+$)/\1/' /etc/group

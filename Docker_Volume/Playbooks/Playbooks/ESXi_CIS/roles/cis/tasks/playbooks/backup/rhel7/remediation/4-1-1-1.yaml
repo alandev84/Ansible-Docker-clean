@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name:
+      - audit
+      - audit-libs
+    state: present
+  when: ('audit' not in ansible_facts.packages) or
+        ('audit-libs' not in ansible_facts.packages)
+ 

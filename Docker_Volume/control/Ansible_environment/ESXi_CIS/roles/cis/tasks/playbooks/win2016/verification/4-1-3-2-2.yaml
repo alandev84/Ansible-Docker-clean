@@ -1,0 +1,20 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: NoConnectedUser
+    data: "{{ cis_win_NoConnectedUser.data }}"
+    state: "{{ cis_win_NoConnectedUser.state|default('present') }}"
+    type: dword
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+
+

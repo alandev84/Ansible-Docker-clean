@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.5 Ensure SNMP Server is not enabled (Scored)
+  service:
+    name: snmpd
+    state: stopped
+    enabled: false
+  when: "'net-snmp' in ansible_facts.packages"
+

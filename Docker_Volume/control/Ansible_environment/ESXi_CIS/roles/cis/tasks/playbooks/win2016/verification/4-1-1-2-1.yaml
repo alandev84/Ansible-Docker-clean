@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: newadministratorname
+    value: "{{ cis_win_newadministratorname }}"
+  check_mode: true
+  ignore_errors: true
+
+
+

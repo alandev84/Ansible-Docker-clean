@@ -1,0 +1,18 @@
+---
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: tail -1 /etc/audit/audit.rules | grep -E '^-e\s+2\s*$'
+  register: result
+
+  #- debug: var=result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: result['rc'] == 0
+
+

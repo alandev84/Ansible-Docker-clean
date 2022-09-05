@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rpm -q aide \
+|| \
+(rpm -q aide ; exit 1)

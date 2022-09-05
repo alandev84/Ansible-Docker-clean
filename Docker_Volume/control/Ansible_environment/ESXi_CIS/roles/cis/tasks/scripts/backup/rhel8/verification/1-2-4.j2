@@ -1,0 +1,9 @@
+#!/bin/sh
+
+key='usb-storage'
+
+! grep ^gpgcheck /etc/yum.conf | grep "gpgcheck\s*=\s*0$" \
+&& \
+! grep ^gpgcheck /etc/yum.repos.d/* | grep "gpgcheck\s*=\s*0$" \
+|| \
+(grep ^gpgcheck /etc/yum.conf | grep "gpgcheck\s*=\s*0$" ; grep ^gpgcheck /etc/yum.repos.d/* | grep "gpgcheck\s*=\s*0$" ; exit 1)

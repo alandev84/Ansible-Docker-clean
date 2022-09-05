@@ -1,0 +1,33 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+    dest: /etc/default/grub
+    regexp: "{{ item }}"
+    replace: ""
+  with_items:
+    - selinux=0
+    - enforcing=0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  when:
+    - stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+  when:
+    - not stat_result_grub2_grub.stat.exists
+    - stat_result_EFI_grub.stat.exists
+
+

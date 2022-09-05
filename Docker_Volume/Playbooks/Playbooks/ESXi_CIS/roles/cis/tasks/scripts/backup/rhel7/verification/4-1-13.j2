@@ -1,0 +1,14 @@
+#!/bin/sh
+
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+unlink\s+-S\s+unlinkat\s+-S\s+rename\s+-S\s+renameat\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+delete\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+unlink\s+-S\s+unlinkat\s+-S\s+rename\s+-S\s+renameat\s+-F\s+auid>=1000\s+-F\s+auid!=4294967295\s+-k\s+delete\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+rename,unlink,unlinkat,renameat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=delete\s*' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+unlink,rename,unlinkat,renameat\s+-F\s+auid>=1000\s+-F\s+auid!=-1\s+-F\s+key=delete\s*' \
+|| \
+(echo "audit rule problem" ; exit 1)
+
+
+

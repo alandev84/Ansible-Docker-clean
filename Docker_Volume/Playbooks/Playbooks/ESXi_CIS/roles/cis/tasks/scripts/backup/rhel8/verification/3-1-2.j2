@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sysctl net.ipv4.conf.all.send_redirects | grep -E '^\s*net.ipv4.conf.all.send_redirects\s*=\s*0\s*$' \
+&& \
+sysctl net.ipv4.conf.default.send_redirects | grep -E '^\s*net.ipv4.conf.default.send_redirects\s*=\s*0\s*$' \
+&& \
+grep -E '^\s*net.ipv4.conf.all.send_redirects\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+&& \
+grep -E '^\s*net.ipv4.conf.default.send_redirects\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+|| \
+(echo 'packet redirect sending is not disabled' ; exit 1)

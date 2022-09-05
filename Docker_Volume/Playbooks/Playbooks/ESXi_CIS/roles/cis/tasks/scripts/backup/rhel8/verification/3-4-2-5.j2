@@ -1,0 +1,9 @@
+#!/bin/sh
+
+nmcli -t connection show | awk -F: '{if($4){print $4}}' | while read INT;
+do 
+    firewall-cmd --get-active-zones | grep -B1 ${INT} || (echo "$INT is not in active zone" ; exit 1)
+
+done
+
+

@@ -1,0 +1,222 @@
+---
+# defaults file for cis-win2016
+
+gdm_banner_message:  gdm_banner_ "message"
+
+cis_win_newadministratorname: Administrators
+cis_win_NewGuestName: te
+cis_win_pwd_history: 24
+cis_win_MaximumPasswordAge: 60
+cis_win_MinimumPasswordAge: 1
+cis_win_MinimumPasswordAge_pv: 0
+cis_win_MinimumPasswordLength: 14
+cis_win_PasswordComplexity: 1
+cis_win_ClearTextPassword: 0
+cis_win_LockoutDuration: 15
+cis_win_LockoutBadCount: 5
+cis_win_ResetLockoutCount: 15
+cis_win_SeTrustedCredManAccessPrivilege:
+- users: []
+cis_win_SeTrustedCredManAccessPrivilege_DC: 
+- users: ['Administrators','Authenticated Users','ENTERPRISE DOMAIN CONTROLLERS']
+cis_win_SeTrustedCredManAccessPrivilege_MS: 
+- users: ['Administrators','Authenticated Users']
+cis_win_SeTcbPrivilege: 
+- users: []
+cis_win_SeMachineAccountPrivilege:
+- users: ['Administrators']
+cis_win_SeIncreaseQuotaPrivilege:
+- users: ['Administrators','Local Service','Network Service']
+cis_win_SeInteractiveLogonRight:
+- users: ['Administrators']
+cis_win_SeRemoteInteractiveLogonRight:
+- users: ['Administrators']
+cis_win_SeRemoteInteractiveLogonRight_Standalone:
+- users: ['Administrators']
+cis_win_SeBackupPrivilege:
+- users: ['Administrators']
+cis_win_SeSystemTimePrivilege:
+- users: ['Administrators','Local Service']
+cis_win_SeTimeZonePrivilege: 
+- users: ['Administrators','Local Service']
+cis_win_SeCreatePagefilePrivilege:
+- users: ['Administrators']
+cis_win_SeCreateTokenPrivilege:
+- users: []
+cis_win_SeCreateGlobalPrivilege:
+- users: ['Administrators','Local Service','Network Service','Service']
+cis_win_SeCreatePermanentPrivilege:
+- users: []
+cis_win_SeReLabelPrivilege:
+- users: []
+cis_win_SeCreateSymbolicLinkPrivilege_DC:
+- users: ['Administrators']
+cis_win_SeCreateSymbolicLinkPrivilege_MS:
+- users: ['Administrators']
+cis_win_SeDebugPrivilege:
+- users: ['Administrators']
+cis_win_SeDenyServiceLogonRight:
+- users: ['Guests']
+cis_win_SeDenyInteractiveLogonRight:
+- users: ['Guests']
+cis_win_SeDenyBatchLogonRight:
+- users: ['Guests']
+cis_win_SeAuditPrivilege:
+- users: ['LOCAL SERVICE','NETWORK SERVICE']
+cis_win_SeDenyRemoteInteractiveLogonRight:
+- users: ['Guests','Local account']
+cis_win_SeDenyNetworkLogonRight_DC:
+- users: ['Guests','Local account']
+cis_win_SeDenyNetworkLogonRight_MS:
+- users: ['Guests','Local account','Administrators']
+cis_win_SeEnableDelegationPrivilege_DC:
+- users: ['Administrators']
+cis_win_SeEnableDelegationPrivilege_MS:
+- users: ['Administrators']
+cis_win_SeImpersonatePrivilege_DC:
+- users: ['Administrators','SERVICE','LOCAL SERVICE','NETWORK SERVICE']
+cis_win_SeImpersonatePrivilege_MS:
+- users: ['Administrators','SERVICE','LOCAL SERVICE','NETWORK SERVICE']
+cis_win_SeRemoteShutdownPrivilege:
+- users: ['Administrators']
+cis_win_SeIncreaseBasePriorityPrivilege:
+- users: ['Administrators']
+cis_win_SeLoadDriverPrivilege:
+- users: ['Administrators']
+cis_win_SeLockMemoryPrivilege:
+- users: []
+cis_win_SeBatchLogonRight:
+- users: ['Administrators']
+cis_win_SeSecurityPrivilege_DC:
+- users: ['Administrators','Exchange Servers']
+cis_win_SeSecurityPrivilege_MS:
+- users: ['Administrators']
+cis_win_SeSystemEnvironmentPrivilege:
+- users: ['Administrators']
+cis_win_SeManageVolumePrivilege:
+- users: ['Administrators']
+cis_win_SeProfileSingleProcessPrivilege:
+- users: ['Administrators']
+cis_win_SeSystemProfilePrivilege:
+- users: ['Administrators','NT SERVICE\WdiServiceHost']
+cis_win_SeAssignPrimaryTokenPrivilege:
+- users: ['LOCAL SERVICE','NETWORK SERVICE']
+cis_win_SeRestorePrivilege:
+- users: ['Administrators']
+cis_win_SeShutdownPrivilege:
+- users: ['Administrators']
+cis_win_SeSyncAgentPrivilege:
+- users: []
+cis_win_SeTakeOwnershipPrivilege:
+- users: ['Administrators']
+cis_win_NoConnectedUser:
+  data: 3
+cis_win_EnableGuestAccount: 0
+cis_win_LimitBlankPasswordUse:
+  data: 1
+cis_win_SCENoApplyLegacyAuditPolicy:
+  data: 1
+cis_win_CrashOnAuditFail:
+  data: 0
+cis_win_AllocateDASD:
+  data: Administrators
+cis_win_AddPrinterDrivers:
+  data: 1
+cis_win_SubmitControl:
+  data: 0
+cis_win_LDAPServerIntegrity:
+  data: 2
+cis_win_RefusePasswordChange:
+  data: 0
+cis_win_RequireSignOrSeal:
+  data: 1
+cis_win_sealsecurechannel:
+  data: 1
+cis_win_signsecurechannel:
+  data: 1
+cis_win_disablepasswordchange:
+  data: 0
+cis_win_MaximumPasswordAge2:
+  data: 30
+cis_win_RequireStrongKey:
+  data: 1
+cis_win_DisableCAD:
+  data: 0
+cis_win_DontDisplayLastUserName:
+  data: 1
+cis_win_InactivityTimeoutSecs:
+  data: 900
+cis_win_LegalNoticeText:
+  data: 'This system is for the use of authorized users only. Individuals using this computer system without authority, or in excess of their authority, are
+subject to having all of their activities on this system monitored and recorded by system personnel. Anyone using this system expressly consents to
+such monitoring and is advised that if such monitoring reveals possible evidence of criminal activity, system personnel may provide the evidence of
+such monitoring to law enforcement officials.'
+cis_win_LegalNoticeCaption:
+  data: '--- WARNING ---'
+cis_win_cachedlogonscount:
+  data: 4
+cis_win_PasswordExpiryWarning:
+  data: 14
+cis_win_ForceUnlockLogon:
+  data: 1
+cis_win_scremoveoption:
+  data: 1
+cis_win_RequireSecuritySignature:
+  data: 1
+cis_win_EnableSecuritySignature:
+  data: 1
+cis_win_EnablePlainTextPassword:
+  data: 0
+cis_win_autodisconnect:
+  data: 15
+cis_win_requiresecuritysignature:
+  data: 1
+cis_win_enablesecuritysignature:
+  data: 1
+cis_win_SMBServerNameHardeningLevel:
+  data: 'Accept if provided by client'
+cis_win_enableforcedlogoff:
+  data: 1
+cis_win_LSAAnonymousNameLookup: 0
+cis_win_RestrictAnonymousSAM:
+  data: 1
+cis_win_RestrictAnonymous:
+  data: 1
+cis_win_DisableDomainCreds:
+  data: 1
+cis_win_EveryoneIncludesAnonymous:
+  data: 0
+cis_win_NullSessionPipes_DC1:
+  data: 'LSARPC, NETLOGON, SAMR'
+cis_win_NullSessionPipes_DC2:
+  data: 'LSARPC, NETLOGON, SAMR and BROWSER'
+cis_win_NullSessionPipes_MS1:
+  data: []
+cis_win_NullSessionPipes_MS2:
+  data: 'BROWSER'
+cis_win_Machine2:
+  data: ['System\CurrentControlSet\Control\ProductOptions', 'System\CurrentControlSet\Control\Server Applications', 'Software\Microsoft\Windows NT\CurrentVersion']
+cis_win_Machine:
+  data: ['Software\Microsoft\OLAP Server', 'Software\Microsoft\Windows NT\CurrentVersion\Perflib', 'Software\Microsoft\Windows NT\CurrentVersion\Print', 'Software\Microsoft\Windows NT\CurrentVersion\Windows', 'System\CurrentControlSet\Control\ContentIndex', 'System\CurrentControlSet\Control\Print\Printers', 'System\CurrentControlSet\Control\Terminal Server', 'System\CurrentControlSet\Control\Terminal Server\DefaultUserConfiguration', 'System\CurrentControlSet\Control\Terminal Server\UserConfig', 'System\CurrentControlSet\Services\Eventlog', 'System\CurrentControlSet\Services\SysmonLog']
+cis_win_2_43:
+  data: 1
+cis_win_2_44:
+  data: 'O:BAG:BAD:(A;;RC;;;BA)'
+cis_win_2_45:
+  data: []
+cis_win_2_46:
+  data: 0
+cis_win_UseMachineId:
+  data: 1
+cis_win_allownullsessionfallback:
+  data: 0
+cis_win_AllowOnlineID:
+  data: 0
+cis_win_SupportedEncryptionTypes:
+  data: 2147483644
+cis_win_NoLMHash:
+  data: 1
+cis_win_EnableForcedLogOff:
+  data: 1
+
+

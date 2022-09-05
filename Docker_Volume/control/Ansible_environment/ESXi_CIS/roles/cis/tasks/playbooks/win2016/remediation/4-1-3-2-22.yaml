@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: LegalNoticeCaption
+    data: "{{ cis_win_LegalNoticeCaption.data }}"
+    state: present
+    type: string
+

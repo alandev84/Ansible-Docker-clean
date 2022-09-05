@@ -1,0 +1,23 @@
+---
+
+- name: 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored) - read config
+  command: grep -E "GRUB_CMDLINE_LINUX=.*audit=1.*" /etc/default/grub
+  register: grep_audit_grub
+  failed_when: false
+  changed_when: false
+
+- name: 4.1.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored) - write config
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX="(.*)"$'
+    line: 'GRUB_CMDLINE_LINUX="\1 audit=1"'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true
+  when:
+    - grep_audit_grub.rc == 1
+  notify:
+    - update grub2
+

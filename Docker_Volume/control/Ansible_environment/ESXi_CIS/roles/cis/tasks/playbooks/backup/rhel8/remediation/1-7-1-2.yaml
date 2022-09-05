@@ -1,0 +1,9 @@
+---
+
+- name: 1.7.1.2 Ensure SELinux is not disabled in bootloader configuration (Scored)
+  replace:
+    dest: /etc/default/grub
+    regexp: '(selinux|enforcing)\s*=\s*0\s*'
+    follow: true
+  notify: update grub2
+

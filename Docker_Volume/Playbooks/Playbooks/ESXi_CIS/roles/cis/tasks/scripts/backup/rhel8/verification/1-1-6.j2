@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep -E '\s/var\s' | grep "^/dev/\S\+\s\+on\s\+/var\s\+type\s\+xfs\s\+(rw,relatime,data=ordered)$" \
+|| \
+(mount | grep -E '\s/var\s' ; exit 1)

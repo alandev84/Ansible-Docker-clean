@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.1.7 Ensure permissions on /etc/cron.d are configured (Scored)
+  file:
+    dest: /etc/cron.d
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+  check_mode: yes
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: result['changed'] 
+

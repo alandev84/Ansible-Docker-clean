@@ -1,0 +1,109 @@
+---
+  - name: Initialisation [1/4] [Solaris]
+    shell: "rm -rf {{ item.file_path_src_UserStatus }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  # change /home/svc_ansible to something else
+  - name: Initialisation [2/4] [Solaris]
+    shell: "rm -rf /export/home/svc_ansible/UserStatus"
+    async: 60
+    poll: 0
+
+  # change /home/svc_ansible to something else
+  - name: Initialisation [3/4] [Solaris]
+    shell: "rm -rf /export/home/svc_ansible/finalPW"
+    async: 60
+    poll: 0
+
+  - name: Initialisation [4/4] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /Ansible_Event_Report/UserStatus_Report_SOL.log"
+
+  - name: Pull Result [1/7] [Solaris]
+    become: true
+    shell: 'echo "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-" >> {{ item.file_path_src_UserStatus }}'
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [2/7] [Solaris]
+    become: true
+    shell: 'echo "HOSTNAME: {{ inventory_hostname }}" >> {{ item.file_path_src_UserStatus }}'  
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [3/7] [Solaris]
+    become: true
+    shell: 'echo  "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" >> {{ item.file_path_src_UserStatus }}'
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [4/7] [Solaris]
+    become: true
+    shell: 'echo "-------------------User Status-------------------" >> {{ item.file_path_src_UserStatus }}'
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [5/7] [Solaris]
+    become: true
+    shell: "passwd -S {{ item.name }} >> /export/home/svc_ansible/UserStatus"
+    loop: "{{ users }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [6/7] [Solaris]
+    become: true
+    shell: "cat /export/home/svc_ansible/UserStatus {{ item.file_path_src_UserStatus }} > /export/home/svc_ansible/finalPW"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [7/7] [Solaris]
+    become: true
+    shell: "mv /export/home/svc_ansible/finalPW {{ item.file_path_src_UserStatus }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [1/4] [Solaris]
+    become: true
+    ansible.builtin.shell: "chown svc_ansible:sysadm {{ item.file_path_src_UserStatus }}"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [2/4] [Solaris]
+    fetch:
+      src: "{{ item.file_path_src_UserStatus }}"
+      dest: "{{ item.file_path_dest }}"
+      flat: yes
+    loop: "{{ collectionSOL }}"
+
+  - name: Extraction Processing [3/4] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "cat {{ item.local_path }}*.txt > {{ item.local_path }}UserStatus_Report_SOL.log"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [4/4] [Solaris]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf {{ item.local_path }}*.txt"
+    loop: "{{ collectionSOL }}"
+    async: 60
+    poll: 0
+
+  - name: Generate Report
+    ansible.builtin.debug:
+      msg: "Output Result from {{ ansible_hostname }} Merge to /Ansible_Event_Report/UserStatus_Report_SOL.log"

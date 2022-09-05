@@ -1,0 +1,12 @@
+---
+
+- name: 5.2.8 Ensure SSH IgnoreRhosts is enabled (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.8"
+    block: |
+      IgnoreRhosts yes
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

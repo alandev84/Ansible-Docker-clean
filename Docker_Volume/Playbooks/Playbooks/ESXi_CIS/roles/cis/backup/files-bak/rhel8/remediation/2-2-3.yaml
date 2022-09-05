@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.3 Ensure rsync service is not enabled (Scored)
+  service:
+    name: rsyncd
+    state: stopped
+    enabled: false
+  when: "'rsync-daemon' in ansible_facts.packages"
+

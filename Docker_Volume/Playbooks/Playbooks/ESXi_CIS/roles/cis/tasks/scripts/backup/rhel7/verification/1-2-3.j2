@@ -1,0 +1,8 @@
+#!/bin/sh
+
+grep -E '^\s*gpgcheck\s*=\s*1\s*$' /etc/yum.conf \
+&& \
+[ `grep -P '^\h*gpgcheck=[^1\n\r]+\b(\h+.*)?$' /etc/yum.conf | wc -l` == 0 ] \
+|| \
+(echo "gpgcheck is not active" ; exit 1)
+

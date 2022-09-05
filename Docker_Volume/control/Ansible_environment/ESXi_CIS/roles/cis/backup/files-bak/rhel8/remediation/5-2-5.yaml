@@ -1,0 +1,12 @@
+---
+
+- name: 5.2.5 Ensure SSH LogLevel is appropriate (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.5"
+    block: |
+      LogLevel {{ cis_rhel8_sshd_log_level }}
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

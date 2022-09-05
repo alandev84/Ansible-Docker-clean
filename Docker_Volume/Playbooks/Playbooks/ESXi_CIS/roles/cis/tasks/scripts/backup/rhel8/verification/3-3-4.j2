@@ -1,0 +1,11 @@
+#!/bin/sh
+
+( \
+! (modprobe -n -v tipc) \
+|| \
+modprobe -n -v tipc | grep -E '^\s*install\s+/bin/true\s*$' \
+) \
+&& \
+! (lsmod | grep tipc) \
+|| \
+(echo 'tipc settings are wrong' ; exit 1)

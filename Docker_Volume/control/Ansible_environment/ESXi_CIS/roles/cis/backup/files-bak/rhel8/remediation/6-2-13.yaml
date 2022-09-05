@@ -1,0 +1,8 @@
+---
+
+- name: 6.2.13 Ensure no users have .rhosts files (Scored)
+  file:
+    state: absent
+    dest: "~{{ item }}/.rhosts"
+  with_items: "{{ cis_users }}"
+

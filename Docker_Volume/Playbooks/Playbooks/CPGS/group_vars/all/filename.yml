@@ -1,0 +1,23 @@
+# For CPGSCAS DEPLOYMENT
+new_file: CPGS_I01.00.02
+old_file: CPGS_I01.00.01
+project_name: cpgscas
+tmp_path: /var/tmp
+archive_path: /cpgsapp/appfc/deployment/archive
+backup_conf_path: cpgscasprocessor/appfc_conf
+backup_prog_path: cpgscasprocessor/appfc_program
+conf_path: /cpgsapp/appfc/conf/cpgscasprocessor
+prog_path: /cpgsapp/appfc/program/cpgscasprocessor
+opt_app_path: /opt/appserver/cpgscasprocessor/jws-5.1/tomcat/webapps
+cpgsproc_path: cpgscasprocessor
+conf_cpgsproc_path: conf/cpgscasprocessor
+
+# For CPGSFAST DEPLOYMENT
+fast_project_name: cpgsfast
+fast_prog_path: /cpgsapp/appfc/program/cpgsfastprocessor
+fast_conf_path: /cpgsapp/appfc/conf/cpgsfastprocessor
+fast_backup_prog_path: cpgsfastprocessor/appfc_program
+fast_backup_conf_path: cpgsfastprocessor/appfc_conf
+fast_opt_app_path: /opt/appserver/cpgsfastprocessor/jws-5.1/tomcat/webapps
+fast_cpgsproc_path: cpgsfastprocessor
+fast_conf_cpgsproc_path: conf/cpgsfastprocessor

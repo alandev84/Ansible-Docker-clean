@@ -1,0 +1,31 @@
+---
+# tasks file for cis-rhel8
+
+- set_fact:
+    cis_report: "{{ cis }}"
+
+- name: set result
+  set_fact:
+    cis_result: "NA"
+
+- name:  trigger verificaiton task when selction ends with '.' - substring match
+  block:
+    - include_tasks: verification.yaml
+      when: cis_item|string | regex_search(filter_str)
+      vars:
+        filter_str: "^{{ selection.replace('.', '\\.') }}"
+      loop: "{{ dicts.keys() | list }}"
+      loop_control:
+        loop_var: cis_item
+  when: 
+  - verification 
+  - selection is match("^([0-9]|\\.)+\\.$")
+
+- name:  trigger verificaiton task when selction exactly match
+  block:
+    - include_tasks: verification.yaml
+      vars:
+        cis_item: "{{ selection }}"
+  when: 
+  - verification 
+  - selection in dicts.keys()|list

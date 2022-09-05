@@ -1,0 +1,8 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: Get-LocalGroupMember -Group "Administrators" |Select-Object "Name"
+  register: output
+
+
+- debug:
+    msg: "{{ output.stdout_lines }}"

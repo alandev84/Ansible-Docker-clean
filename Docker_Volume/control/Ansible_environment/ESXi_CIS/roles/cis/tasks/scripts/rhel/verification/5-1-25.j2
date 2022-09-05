@@ -1,0 +1,35 @@
+#!/bin/sh
+
+grep -E "^\s*auth\s+required\s+pam_faillock\.so\s+preauth\s+silent\s+audit\s+deny=5\s+unlock_time=900\s*$" /etc/pam.d/system-auth \
+&& \
+grep -E "^\s*auth\s+sufficient\s+pam_unix\.so\s+(try_first_pass|nullok)\s+(try_first_pass|nullok)\s*$" /etc/pam.d/system-auth \
+&& \
+grep -E "^\s*auth\s+\[default=die\]\s+pam_faillock\.so\s+authfail\s+audit\s+deny=5\s+unlock_time=900\s*$" /etc/pam.d/system-auth \
+&& \
+grep -E "^\s*auth\s+required\s+pam_faillock\.so\s+preauth\s+silent\s+audit\s+deny=5\s+unlock_time=900\s*$" /etc/pam.d/password-auth \
+&& \
+grep -E "^\s*auth\s+sufficient\s+pam_unix\.so\s+(try_first_pass|nullok)\s+(try_first_pass|nullok)\s*$" /etc/pam.d/password-auth \
+&& \
+grep -E "^\s*auth\s+\[default=die\]\s+pam_faillock\.so\s+authfail\s+audit\s+deny=5\s+unlock_time=900\s*$" /etc/pam.d/password-auth \
+&& \
+grep -E '^\s*account\s+required\s+pam_faillock.so\s*' /etc/pam.d/system-auth \
+&& \
+grep -E '^\s*account\s+required\s+pam_faillock.so\s*' /etc/pam.d/password-auth \
+|| \
+(echo "auth setting is not right" ; exit 1)
+
+#1)Run the following commands: 
+# grep -E '^\s*auth\s+\S+\s+pam_(faillock|unix)\.so' /etc/pam.d/system-auth /etc/pam.d/password-auth
+#Verify the output includes the following lines:
+#Output Results:
+#/etc/pam.d/system-auth:auth required pam_faillock.so preauth silent audit deny=5 unlock_time=900
+#/etc/pam.d/system-auth:auth sufficient pam_unix.so nullok try_first_pass 
+#/etc/pam.d/system-auth:auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900 
+#/etc/pam.d/password-auth:auth required pam_faillock.so preauth silent audit deny=5 unlock_time=900
+#/etc/pam.d/password-auth:auth sufficient pam_unix.so nullok try_first_pass 
+#/etc/pam.d/password-auth:auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900
+#2)Verify the output includes the following lines
+# grep -E '^\s*account\s+required\s+pam_faillock.so\s*' /etc/pam.d/system-auth /etc/pam.d/password-auth
+#Output Result:
+#/etc/pam.d/system-auth:account required pam_faillock.so 
+#/etc/pam.d/password-auth:account required pam_faillock.so

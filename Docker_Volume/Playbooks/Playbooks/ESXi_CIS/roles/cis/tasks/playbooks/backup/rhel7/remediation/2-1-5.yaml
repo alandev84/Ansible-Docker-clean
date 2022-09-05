@@ -1,0 +1,13 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  ini_file:
+    path: /usr/lib/systemd/system/{{ item }}.service
+    section: Service
+    no_extra_spaces: true
+    option: ExecStart
+    value: -/bin/sh -c \"/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"
+  with_items:
+    - rescue
+    - emergency
+

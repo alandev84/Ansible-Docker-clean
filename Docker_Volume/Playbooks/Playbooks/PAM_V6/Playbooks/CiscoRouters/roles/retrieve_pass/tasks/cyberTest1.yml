@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  tasks:
+   - name: GetPassword From CyberArk
+     shell: ./clipasswordsdk GetPassword -p AppDescs.AppID="app_ansible" -p Query="Safe=testAnsible;Folder=Root;Object=Operating_System-BCSWinOTP-bcs.bcsgroup.com-svc_ansible" -o Password
+     args:
+       chdir: /opt/CARKaim/sdk/
+     register: cybr_pass
+     no_log: no
+   - name: Print Password
+     debug: Print Result
+     msg: "{{ cybr_pass['stdout'] }}" 

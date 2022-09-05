@@ -1,0 +1,26 @@
+#!/bin/sh
+
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+adjtimex\s+-S\s+settimeofday\s+-k\s+time-change\s*$' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+adjtimex\s+-S\s+settimeofday\s+-S\s+stime\s+-k\s+time-change\s*$' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+clock_settime\s+-k\s+time-change\s*$' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+clock_settime\s+-k\s+time-change\s*$' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/localtime\s+-p\s+wa\s+-k\s+time-change\s*$' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+adjtimex,settimeofday\s+-F\s+key=time-change\s*$' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+stime,settimeofday,adjtimex\s+-F\s+key=time-change\s*$' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b64\s+-S\s+clock_settime\s+-F\s+key=time-change\s*$' \
+&& \
+auditctl -l | grep -E '^-a\s+always,exit\s+-F\s+arch=b32\s+-S\s+clock_settime\s+-F\s+key=time-change\s*$' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/localtime\s+-p\s+wa\s+-k\s+time-change\s*$' \
+|| \
+(exit 1)
+
+
+

@@ -1,0 +1,12 @@
+---
+
+- name: 5.2.17 Ensure SSH AllowTcpForwarding is disabled (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.17"
+    block: |
+      AllowTcpForwarding no
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

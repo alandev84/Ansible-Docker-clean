@@ -1,0 +1,2 @@
+SSLScan:
+  - { remote_path: "/var/tmp/", local_path: "/ansible_tmp/", script_path_dest: "/var/tmp/getIP.sh", script_path_src: "/var/lib/awx/projects/SSL_TLS_Management/scripts/getIP.sh", owner: "svc_ansible", group: "sysadm", file_path_src: "/var/tmp/{{ inventory_hostname }}.txt", file_path_dest: "/ansible_tmp/{{ inventory_hostname }}.txt" }

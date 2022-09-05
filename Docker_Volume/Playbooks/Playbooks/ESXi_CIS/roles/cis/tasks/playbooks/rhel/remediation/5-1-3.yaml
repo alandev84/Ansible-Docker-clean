@@ -1,0 +1,25 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /etc/cron.allow
+  register: stat_result_cron_allow
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - deny"
+      file:
+        dest: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/cron.deny
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - allow"
+      file:
+        dest: /etc/cron.allow
+        mode: '0600'
+        owner: root
+        group: root
+      when: stat_result_cron_allow.stat.exists
+

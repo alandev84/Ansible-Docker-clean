@@ -1,0 +1,5 @@
+---
+- name: 2.2.8 Ensure FTP Server is not installed (Scored)
+  yum:
+    name: vsftpd
+    state: absent

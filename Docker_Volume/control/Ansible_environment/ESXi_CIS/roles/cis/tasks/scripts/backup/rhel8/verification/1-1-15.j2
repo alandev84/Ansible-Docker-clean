@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep -E '\s/dev/shm\s' | grep nodev \
+|| \
+(mount | grep -E '\s/dev/shm\s' ; exit 1)

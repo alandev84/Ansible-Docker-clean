@@ -1,0 +1,66 @@
+- debug:
+    msg:  "{{ item }}"
+  loop: "{{ user_names.split('\n') }}"
+
+- name: Get the UID and GUID of the user account
+  shell: awk -F':' '{ if ($1 ~ "^{{ name }}")  print $1}' /etc/passwd   # if ($1 == root)  * is wild card
+  loop: "{{ user_names.split('\n') }}"
+  loop_control:
+    loop_var: name
+  register: user_account_out
+
+- name: set fact
+  set_fact: 
+    user_account: "{{ user_account_out['results'] | map(attribute='stdout') | reject('equalto','') | list }}"
+    cacheable: yes
+
+- name: Get the UID 
+  shell: awk -F':' '{ if ($1 == "{{ name }}")  print $3}' /etc/passwd   # if ($1 == root) 
+  loop: "{{ user_names.split('\n') }}"
+  loop_control:
+    loop_var: name
+  register: user_account_out_uid
+
+- name: set fact
+  set_fact: 
+    user_account_uid: "{{ user_account_out_uid['results'] | map(attribute='stdout') | reject('equalto','') | list }}"
+    cacheable: yes
+
+- name: Get the UID and GUID of the user account
+  shell: awk -F':' '{ if ($1 == "{{ name }}")  print $4}' /etc/passwd   # if ($1 == root) 
+  loop: "{{ user_names.split('\n') }}"
+  loop_control:
+    loop_var: name
+  register: user_account_out_gid
+
+- name: set fact
+  set_fact: 
+    user_account_gid: "{{ user_account_out_gid['results'] | map(attribute='stdout') | reject('equalto','') | list }}"
+    cacheable: yes
+
+
+
+
+  #when: user_account_out['stdout'] is defined
+
+# - name: see what inside user_account
+#   debug: 
+#     var: user_account_test
+# - name: User Information | Get the UID of the normal user
+#   shell: awk -F':' -v min="{{ uid_min_out['stdout'] }}" -v max="{{ uid_max_out['stdout'] }}" '{ if ( $3 >= min && $3 <= max && $7 != "/sbin/nologin" ) print $3}' /etc/passwd
+#   register: user_uid_out
+
+# - name: User Information | Get the UID of the normal user | Set fact
+#   set_fact:
+#     user_uid: "{{ user_uid_out['stdout_lines'] }}"
+#     cacheable: yes
+
+# - name: User Information | Get the GID of the normal user
+#   shell: awk -F':' -v min="{{ uid_min_out['stdout'] }}" -v max="{{ uid_max_out['stdout'] }}" '{ if ( $3 >= min && $3 <= max && $7 != "/sbin/nologin" ) print $4}' /etc/passwd
+#   register: user_gid_out
+
+# - name: User Information | Get the GID of the normal user | Set fact
+#   set_fact:
+#     user_gid: "{{ user_gid_out['stdout_lines'] }}"
+#     cacheable: yes
+

@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: DisableDomainCreds
+    data: "{{ cis_win_DisableDomainCreds.data }}"
+    state: present
+    type: dword
+
+

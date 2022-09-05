@@ -1,0 +1,8 @@
+- name: Main - Generate Report
+  include_tasks: "{{ user_information_collection }}"
+  loop:
+    - generate_report.yml
+  loop_control:
+    loop_var: user_information_collection
+
+

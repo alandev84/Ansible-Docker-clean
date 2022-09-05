@@ -1,0 +1,36 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_DC.data }}"
+    state: present
+    type: multistring
+  check_mode: true
+  ignore_errors: true
+  register: result
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_MS.data }}"
+    state: present
+    type: multistring
+  check_mode: true
+  ignore_errors: true
+  register: result
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+
+

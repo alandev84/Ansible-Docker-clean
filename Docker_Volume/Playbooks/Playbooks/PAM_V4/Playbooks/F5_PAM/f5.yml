@@ -1,0 +1,16 @@
+---
+#- name: Password retrieve from Cyberark
+#  hosts: localhost
+#  gather_facts: true
+#  ignore_unreachable: yes
+#  roles:
+#    - retrieve_pass
+
+- name: f5
+  hosts: F5_servers
+  gather_facts: true
+  ignore_unreachable: yes
+  ignore_errors: yes
+  roles:
+    - getuserinfo
+

@@ -1,0 +1,24 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  cron:
+    name: 1.3.2 Ensure filesystem integrity is regularly checked (Automated)
+    weekday: "{{ cis_rhel7_aide_cron['weekday'] }}"
+    minute: "{{ cis_rhel7_aide_cron['minute'] }}"
+    hour: "{{ cis_rhel7_aide_cron['hour'] }}"
+    user: "{{ cis_rhel7_aide_cron['user'] }}"
+    job: "{{ cis_rhel7_aide_cron['job'] }}"
+    cron_file: "{{ cis_rhel7_aide_cron['cron_file'] }}"
+  check_mode: yes
+  register: aidecheck_cron__result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: not aidecheck_cron__result['changed'] 
+
+  #- debug: var=cis_result

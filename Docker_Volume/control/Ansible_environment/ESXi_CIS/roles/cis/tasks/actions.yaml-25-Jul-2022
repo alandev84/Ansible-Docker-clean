@@ -1,0 +1,42 @@
+---
+
+#- debug: var=cis_action
+#- debug: var=cis_item
+
+# RHEL8 verification shell script: roles/cis/templates/rhel8/verification/
+# RHEL8 remediation shell script: roles/cis/templates/rhel8/remediation/
+# RHEL7 verification shell script: roles/cis/templates/rhel7/verification/
+# RHEL7 remediation shell script: roles/cis/templates/rhel7/remediation/
+# RHEL8 verification playbook dir: roles/cis/files/rhel8/verification/
+# RHEL8 remediation playbook dir: roles/cis/files/rhel8/remediation/
+# RHEL7 verification playbook dir: roles/cis/files/rhel7/verification/
+# RHEL7 remediation playbook dir: roles/cis/files/rhel7/remediation/
+- name: script full path
+  set_fact:
+    execution_path: "{{ os }}/{{ cis_action }}/{{ cis_item | replace('.','-') }}"
+    method: "{{ cis_action }}_method"
+
+# execute shell script
+- name: execute {{ cis_action }}
+  block:
+    - name: trigger {{ cis_action }} shell script for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: execute_shell.yaml
+  when: cis_rules[cis_item][method] == 'script'
+ 
+
+# execute playbook
+- name: execute anisble playbook "{{ execution_path }}.yaml"
+  block:
+    - name: run {{ cis_action }} playbook for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: "./playbooks/{{ execution_path }}.yaml"
+#      ansible.builtin.include_tasks: "../files/{{ execution_path }}.yaml"
+  when: cis_rules[cis_item][method] == 'playbook'
+
+# update result for reporting purpose
+#- name: update CIS result for {{ cis_item }}
+#  set_fact:
+#    all_results: "{{ all_results | combine({cis_item:cis_result}) }}"
+#  when: cis_action == 'verification'
+
+#- debug:
+#    msg: "{{ all_results }}"

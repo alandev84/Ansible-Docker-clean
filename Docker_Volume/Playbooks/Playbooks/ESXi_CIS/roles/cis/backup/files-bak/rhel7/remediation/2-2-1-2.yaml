@@ -1,0 +1,9 @@
+---
+- name: 2.2.1.2 Ensure chrony is configured (Scored)
+  template:
+    src: rhel7/etc/chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+

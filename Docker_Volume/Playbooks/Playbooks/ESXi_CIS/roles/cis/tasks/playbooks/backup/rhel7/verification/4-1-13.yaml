@@ -1,0 +1,19 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }} - check file by file"
+  shell: auditctl -l | grep -E '^-a\s+always,exit\s+-S\s+all\s+-F\s+path={{ item }}\s+-F\s+perm=x\s+-F\s+auid>=1000\s+\-F\s+auid!=-1\s+-F\s+key=privileged\s*$'
+  loop: "{{ priv_binaries.stdout_lines }}"
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - item[0] != 0
+  loop: "{{ result.results | json_query('[].[rc]') }}"
+
+#Run the following command replacing <partition> with a list of partitions where
+#programs can be executed from on your system: 
+# find <partition> -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>='"$(awk '/^\s*UID_MIN/{print $2}' /etc/login.defs)"' -F auid!=4294967295 –k privileged" }'
+#Verify all resulting lines are a .rules file in /etc/audit/rules.d/ and the output of auditctl -l.
+#Note: The .rules file output will be auid!=-1 not auid!=4294967295

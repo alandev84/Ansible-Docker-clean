@@ -1,0 +1,25 @@
+---
+vcenter_hostname: 172.28.201.116
+vcenter_username: BCS\Ansb_Vctr_VM
+vcenter_password: kLU]gdJi%&#MV3
+vm_cpu: "2"
+net_name/group port name: "{{ vm_network.split('-')[0]|replace(' ','') }}"
+#vm_template: "RHEL84_Template"
+vm_template: test3
+vm_disk_size: 100 
+vm_disk_type: thin
+vm_disk_datastore: DC2_DF_UPIDT_DS1 
+dc_name: DCW
+cluster_name: DF-UAT
+tag_category: VMTags
+vm_cpu: 2
+vm_ram: 2048
+vm_domain: bcs.bcsgroup.com
+ip: 172.31.17.207
+vm_network_gw: 172.31.17.254
+vm_network: dPG_617_UAT-App
+vm_network_mask: 255.255.255.0
+vm_vlan: 617
+vm_dns: ['172.28.16.13', '172.18.16.13']
+vm_folder: "/DCW/vm/Ansible - UAT"
+vm_name: test_rhel

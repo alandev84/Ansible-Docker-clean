@@ -1,0 +1,24 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /etc/at.allow
+  register: stat_result_at_allow
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - deny"
+      file:
+        dest: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/at.deny
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - allow"
+      file:
+        dest: /etc/at.allow
+        mode: '0600'
+        owner: root
+        group: root
+      when: stat_result_at_allow.stat.exists
+

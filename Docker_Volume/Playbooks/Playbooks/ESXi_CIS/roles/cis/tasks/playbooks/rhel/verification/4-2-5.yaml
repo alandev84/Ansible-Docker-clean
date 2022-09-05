@@ -1,0 +1,24 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      lineinfile:
+        dest: /etc/rsyslog.conf
+        regexp: '^\s*\*\.\* .*$'
+        line: '*.* @@{{ cis_rhel_rsyslog_server }}'
+      check_mode: yes
+      register: result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: result['changed'] 
+
+  when:
+    - cis_rhel_rsyslog_server | length > 0
+

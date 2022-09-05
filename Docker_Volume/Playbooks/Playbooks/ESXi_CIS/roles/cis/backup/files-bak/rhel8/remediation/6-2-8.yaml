@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.8 Ensure users own their home directories (Scored)
+  command: /bin/true
+  changed_when: false
+

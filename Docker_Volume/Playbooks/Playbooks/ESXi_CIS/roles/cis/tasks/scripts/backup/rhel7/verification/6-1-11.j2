@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ `df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser | wc -l` == 0 ] \
+|| \
+(echo "unowned files or directories exist" ; exit 1)

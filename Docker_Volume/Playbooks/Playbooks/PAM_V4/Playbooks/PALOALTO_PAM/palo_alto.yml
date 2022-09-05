@@ -1,0 +1,16 @@
+---
+
+- name: Password retrieve from Cyberark
+  hosts: localhost
+  gather_facts: true
+  ignore_unreachable: yes
+  roles:
+    - retrieve_pass
+
+- name: PaloAlto
+  hosts: localhost
+  gather_facts: true
+  ignore_unreachable: yes
+  roles:
+    - getuserinfo
+

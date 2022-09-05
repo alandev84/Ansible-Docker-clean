@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/login.defs
+    regexp: "^\\s*PASS_MIN_DAYS\\s*.*$"
+    line: 'PASS_MIN_DAYS {{ cis_rhel7_pass_min_days }}'
+    state: present
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+

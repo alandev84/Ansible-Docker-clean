@@ -1,0 +1,9 @@
+- name: Retrieve Info
+  hosts: localhost
+  become: yes
+  gather_facts: false
+  ignore_unreachable: yes
+  roles:
+    - reports
+
+

@@ -1,0 +1,25 @@
+---
+
+- name: 1.5.2 Ensure bootloader password is set (Scored) - generate password hash
+  shell: >
+    set -o pipefail ;
+    echo -e "{{ cis_rhel8_grub_password }}\n{{ cis_rhel8_grub_password }}\n" |
+    grub2-mkpasswd-pbkdf2 | sed -e '/PBKDF2 hash/!d' -e 's/PBKDF2 hash of your password is//'
+  register: grub2_passwd
+
+
+- name: 1.5.2 Ensure bootloader password is set (Scored) - check existing confif
+  stat:
+    path: /boot/grub2/user.cfg
+  register: grub2_passwd_stat
+  changed_when: false
+
+
+- name: 1.5.2 Ensure bootloader password is set (Scored) - write config
+  copy:
+    dest: /boot/grub2/user.cfg
+    content: "GRUB2_PASSWORD={{ grub2_passwd.stdout }}"
+    owner: root
+    group: root
+    mode: 0600
+

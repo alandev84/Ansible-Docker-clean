@@ -1,0 +1,17 @@
+---
+- win_security_policy:
+    section: System Access
+    key: ResetLockoutCount
+    value: "{{ cis_win2019_ResetLockoutCount }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+
+

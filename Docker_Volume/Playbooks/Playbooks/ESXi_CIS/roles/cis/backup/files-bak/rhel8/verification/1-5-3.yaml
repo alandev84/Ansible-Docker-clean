@@ -1,0 +1,34 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: Check rescue.service content
+  lineinfile:
+    path: /usr/lib/systemd/system/rescue.service
+    state: absent
+    regexp: '^\s*ExecStart\s*=\s*-/usr/lib/systemd/systemd-sulogin-shell\s+rescue\s*$'
+  check_mode: yes
+  register: rescue_file_result
+
+- name: Check emergency.service content
+  lineinfile:
+    path: /usr/lib/systemd/system/emergency.service
+    state: absent
+    regexp: '^\s*ExecStart\s*=\s*-/usr/lib/systemd/systemd-sulogin-shell\s+emergency\s*$'
+  check_mode: yes
+  register: emergency_file_result
+
+  #- debug:
+  #    msg: "{{ rescue_file_result['changed'] }}"
+  #
+  #- debug:
+  #    msg: "{{ emergency_file_result['changed'] }}"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: rescue_file_result['changed'] and emergency_file_result['changed']
+
+#- debug: var=cis_result

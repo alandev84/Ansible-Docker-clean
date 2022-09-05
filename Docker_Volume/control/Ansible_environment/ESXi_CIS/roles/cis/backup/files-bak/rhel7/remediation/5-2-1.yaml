@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  yum:
+    name: sudo
+    state: installed
+  when: "'sudo' in ansible_facts.packages"

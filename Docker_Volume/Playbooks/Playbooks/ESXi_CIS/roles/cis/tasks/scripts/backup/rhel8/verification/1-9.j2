@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ `dnf check-update --security | awk 'NF==3' | wc -l` -eq 0 ]  \
+|| \
+(echo 'No lastest security patch' ; exit 1)

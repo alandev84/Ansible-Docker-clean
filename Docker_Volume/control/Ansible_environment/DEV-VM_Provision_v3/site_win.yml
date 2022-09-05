@@ -1,0 +1,27 @@
+---
+
+- name: VM provision test
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    - name: Job Status
+      vars:
+        msg: |
+             Username = {{ Exec_User }}
+             Change Number or SAR Number or Commissioning Number = {{ Change_Number }}
+             Reason For Change = {{ Reason }}.
+             Additional Information = {{ Additional_Info }}.
+      debug:
+        msg: "{{ msg.split('\n') }}"
+      tags:
+        - always
+
+
+  tasks:
+    - block:
+        - name: Run VM provision role
+          include_role:
+            name: vmware_vm_windows
+

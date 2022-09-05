@@ -1,0 +1,102 @@
+---
+- name: Set VM config
+  set_fact:
+    vm_disks: [] 
+    vm_net:
+      connected: true
+      start_connected: true
+      ip: "{{ ip }}"
+      name: "{{ vm_network }}"
+      netmask: "{{ vm_network_mask }}"
+      gateway: "{{ vm_network_gw }}"
+    vm_name: "{{ (proj_code + env_code + class_code +
+      app_code)|lower }}{{ '%03d' % vm_index|int }}"
+
+
+- name: Add default disk and extra disks if any
+  set_fact:
+    vm_disks: "{{ vm_disks + [{'size_gb':item,
+      'autoselect_datastore':true,'type':'thin'}] }}"
+  loop: "{{ [os_disk] if extra_disks == ''
+    else [os_disk] + extra_disks.split(',')|list }}"
+
+- name: Check if target VM already exists
+  community.vmware.vmware_guest_info:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ dc_name }}"
+    name: "{{ vm_name }}"
+    #folder: "{{ vm_folder }}"
+  ignore_errors: true
+  register: info_result
+
+- name: Fail if the VM already exists
+  fail:
+    msg: "There is a VM with the same name in this folder"
+  when: not info_result.failed
+
+- name: Manage folders
+  include_tasks: folders.yml
+
+
+- block:
+
+    - name: Provision VM
+      community.vmware.vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        datacenter: "{{ dc_name }}"
+        cluster: "{{ cluster_name }}"
+        template: "{{ vm_template }}"
+        folder: "{{ vm_folder }}"
+        name: "{{ vm_name }}"
+        disk: "{{ vm_disks }}"
+        resource_pool: "{{ resource_pool }}"
+        hardware:
+          hotadd_cpu: yes
+          hotremove_cpu: yes
+          hotadd_memory: yes
+          num_cpus: "{{ vm_cpu }}"
+          memory_mb: "{{ vm_ram|int * 1024 }}"
+        networks: "{{ [vm_net] }}"
+        customization:
+          hostname: "{{ vm_name }}"
+          dns_servers: "{{ dns_config[vm_location[:3]] }}"
+          domain: "{{ vm_domain }}"
+        state: poweredon
+        wait_for_ip_address: true
+      register: vm_result
+
+
+    - name: Assign tags to VM
+      community.vmware.vmware_tag_manager:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        object_name: "{{ vm_name }}"
+        object_type: VirtualMachine
+        tag_names: "{{ tag_category }}:{{ item }}"
+        state: add
+      loop:
+        - "{{ owner_code }}"
+        - "{{ tenant_id }}"
+        - "{{ tag_domain1 }}"
+        - "{{ tag_domain2 }}"
+        - "{{ proj_name }}"
+        - "{{ app_vendor }}"
+        - "{{ wbs_code }}"
+        - "{{ cost_center }}"
+        - "{{ system_name }}"
+        - "{{ project_owner }}"
+        - "{{ domain }}"
+        - "{{ pin_number }}"
+        - "{{ system_tier }}"
+        - "{{ type_of_deployment }}"
+        - "{{ hosting_location }}"
+        - "{{ system_alias }}"
+        - "{{ cloud_environment }}"
+        - "{{ platform_name }}"
+  when: info_result.failed
+

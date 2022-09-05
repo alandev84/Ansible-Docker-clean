@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.9 Ensure users' dot files are not group or world writable (Scored)
+  command: /bin/true
+  changed_when: false
+

@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: |
+     New-PSDrive -PSProvider registry -Root HKEY_CLASSES_ROOT -name HKCR
+     Set-Location HKCR:
+     Set-ItemProperty -Path HKCR:\regfile\shell\open\command -Name "(default)" -Value 'Notepad.exe “%1”'
+  ignore_errors: true
+
+
+
+

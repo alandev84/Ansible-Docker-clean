@@ -1,0 +1,13 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/gdm/custom.conf
+    regexp: "^(#)?\\s*Enable\\s*=\\s*true(\\s*|$)"
+    line: "Enable=true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+

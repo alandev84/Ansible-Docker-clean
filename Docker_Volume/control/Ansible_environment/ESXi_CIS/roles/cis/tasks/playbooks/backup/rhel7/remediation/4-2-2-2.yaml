@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  ini_file:
+    path: /etc/systemd/journald.conf
+    section: Journal
+    no_extra_spaces: true
+    option: Compress
+    value: "yes"
+  notify:
+    - restart journald
+

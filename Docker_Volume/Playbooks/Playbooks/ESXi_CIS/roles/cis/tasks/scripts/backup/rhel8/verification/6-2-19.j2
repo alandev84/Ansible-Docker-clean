@@ -1,0 +1,9 @@
+#!/bin/bash
+  
+grep ^shadow:[^:]*:[^:]*:[^:]+ /etc/group | while read x
+do
+   awk -F: '($4 == '$x') { print }' /etc/passwd
+   exit 1
+done
+exit 0
+

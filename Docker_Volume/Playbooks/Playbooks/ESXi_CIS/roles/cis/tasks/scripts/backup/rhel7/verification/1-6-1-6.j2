@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (ps -eZ | grep unconfined_service_t) \
+|| \
+(echo 'unconfined services exist' ; exit 1)
+

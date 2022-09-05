@@ -1,0 +1,74 @@
+---
+
+- name: Retrieve IP Address
+  set_fact:
+    ip: "{{hostvars[inventory_hostname].ansible_host}}"
+    cacheable: yes
+  register: ip
+
+
+#- name: Get Password from Cyberark 
+#  local_action: 
+#    shell ./clipasswordsdk GetPassword -p AppDescs.AppID="ansible_safe" -p Query="Safe=Ansible_safe;Folder=Root;Object-Operating-System-ansible_ssh-10.68.32.81-Administrator;Username=Administrator" -o Password
+#  args: 
+#    chdir: /opt/CARKaim/sdk/
+#  register: local_process
+
+#- name: Save password from cyberark to var 
+#  set_fact: 
+#    cyberark_password: "{{local_process.stdout}}"
+
+- name: get enable
+  ios_command: 
+    commands: show run | inc enable secret | enable password
+  register: enable
+
+- name: show u2
+  ios_command: 
+    commands: show run | inc username
+  register: output3
+
+#- name: show privilege user level 
+#  ios_command: 
+#    commands: show privilege 
+#  register: privilege_user_level
+
+#- name: show u3
+#  ios_command: 
+#    commands: show run | inc {{current_user}}
+#  loop: "{{privilage_users}}"
+#  loop_control: 
+#    loop_var: current_user
+#  register: test
+
+# Split for per customer
+- name: set value 
+  set_fact: 
+    output12: "{{output3.stdout[0].split('\n')}}"
+    cacheable: false 
+ 
+- name: Build a list of hashes from the output
+  set_fact:
+    cisco_router_user_information: "{{ cisco_router_user_information|default([]) + [ { 'user': item.split(' ')[1], 'privilege': mypriv } ] }}"
+    cacheable: yes
+  vars:
+    mypriv: "{% if item.split(' ')[3] | int <= 15 and item.split(' ')[3] | int > 0 %}True{% else %}False{% endif %}"
+  loop: "{{ output12 }}"
+  when: item is defined
+  delegate_to: localhost
+
+- name: get stdout lines
+  set_fact:
+    outputEnable: "{{enable.stdout[0].split('\n')}}"
+    cacheable: false
+
+- name: add enable
+  set_fact:
+    cisco_router_user_information: "{{ cisco_router_user_information|default([]) + [ { 'user': item.split(' ')[0],'privilege': True } ] }}"
+    cacheable: yes
+  loop: "{{ outputEnable }}"
+  when: item.split(' ')[0] == "enable"
+  delegate_to: localhost
+ 
+- debug:
+    var: cisco_router_user_information

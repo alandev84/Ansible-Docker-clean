@@ -1,0 +1,10 @@
+---
+- name: Combine all CSV Reports
+  hosts: localssh
+  connection: local
+  become: false
+  become_user: svc_ansible
+  gather_facts: false
+  ignore_unreachable: yes
+  roles:
+    - combine_reports

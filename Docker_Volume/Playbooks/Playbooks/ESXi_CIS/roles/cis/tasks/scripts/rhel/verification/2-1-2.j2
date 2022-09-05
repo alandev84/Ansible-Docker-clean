@@ -1,0 +1,5 @@
+#!/bin/sh
+
+grep -Eir '^\s*Defaults\s+([^#]+,\s*)?use_pty\s*' /etc/sudoers /etc/sudoers.d \
+|| \
+(echo "No 'Defaults use_pty' setting" ; exit 1)

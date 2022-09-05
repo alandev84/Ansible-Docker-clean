@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: LockoutDuration
+    value: "{{ cis_win2019_LockoutDuration }}"
+  register: result
+  ignore_errors: true
+
+- debug: var=result

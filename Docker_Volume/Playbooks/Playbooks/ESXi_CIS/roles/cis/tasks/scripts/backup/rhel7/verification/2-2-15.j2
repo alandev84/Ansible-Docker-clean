@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q telnet-server)  \
+|| \
+(echo 'telnet-server is installed' ; exit 1)
+

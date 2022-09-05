@@ -1,0 +1,19 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^\s*X11Forwarding\s+yes\s*'
+    state: absent
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel 5.1.10"
+    block: |
+      MaxAuthTries {{ cis_rhel_sshd_max_auth_tries }}
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+
+

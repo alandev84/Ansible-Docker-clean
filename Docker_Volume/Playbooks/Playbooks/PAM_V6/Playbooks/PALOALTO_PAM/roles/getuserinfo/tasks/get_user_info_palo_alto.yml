@@ -1,0 +1,68 @@
+---
+- debug:
+    msg: "test"
+
+- name: Retrieve the key to be use in the next api 
+  uri:
+    #the password is hard coded because the cyberarc password is not working with this link
+    url: https://172.28.200.40/api/?type=keygen&user=svc_ansible&password=y*A$GV_&2{xci)a
+    dest: ./response.xml
+    method: GET
+    validate_certs: no
+    return_content: yes
+  register: result
+
+
+- name: Set key value and put it in array.
+  set_fact:
+    key_values: "{{ result.content |regex_findall('<key>(.*?)</key>') }}"
+  register: key_value
+
+
+- name: Procceed to next api
+  uri:
+    url: https://172.28.200.40/api/?type=config&action=get&xpath=/config/mgt-config/users&key={{item}}
+    dest: ./information.xml
+    method: GET
+    validate_certs: no
+    return_content: yes
+  with_items: "{{key_values}}"
+  register: user_information 
+
+- debug: 
+    var: user_information['result']
+ 
+- name: set up xml 
+  xml:
+    path: ./information.xml
+#    xpath: /response/result/users/entry
+    xpath: /response
+    content: attribute
+#    content: text
+  register: user_information_xml
+
+- name: Convert XML to JSON format 
+  set_fact: 
+    xml_json_data: "{{ user_information['stdout'] | xml_to_json }}"
+
+- name: Set fact for the data that going to be use 
+  set_fact:
+    data: "{{user_information_xml.matches}}"
+  register: data 
+
+     
+- name: Filter the data to just collect the name 
+  set_fact: 
+    names: "{{data | json_query(jmesquery)}}"
+    cacheable: yes
+  vars:
+    jmesquery: "ansible_facts.data[*].entry.name"
+
+
+- name: The names that math with the privilege user name 
+  set_fact: 
+    priv_users_list: "{{ names | intersect(acc_name) }}"
+    cacheable: yes
+  delegate_to: localhost
+
+

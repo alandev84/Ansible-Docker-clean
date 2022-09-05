@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: check firewalld status (enabled & started)
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: firewalld_service_result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not firewalld_service_result['changed'] 
+
+  #- debug: var=cis_result

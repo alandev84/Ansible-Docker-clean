@@ -1,0 +1,11 @@
+#!/bin/sh
+
+( \
+! (modprobe -n -v sctp) \
+|| \
+modprobe -n -v sctp | grep -E '^\s*install\s+/bin/true\s*$' \
+) \
+&& \
+! (lsmod | grep sctp) \
+|| \
+(echo 'sctp settings are wrong' ; exit 1)

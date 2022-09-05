@@ -1,0 +1,51 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: auth
+      control: required
+      module_path: pam_env.so
+      new_type: auth
+      new_control: required
+      new_module_path: pam_faillock.so
+      module_arguments: 'preauth silent audit deny={{ cis_rhel7_pam_failllock_deny }} unlock_time={{ cis_rhel7_pam_failllock_timeout }}'
+      state: after
+  with_items:
+  - system-auth
+  - password-auth
+  register: result
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: auth
+      control: requisite
+      module_path: pam_succeed_if.so
+      new_type: auth
+      new_control: '[default=die]'
+      new_module_path: pam_faillock.so
+      module_arguments: 'authfail audit deny={{ cis_rhel7_pam_failllock_deny }} unlock_time={{ cis_rhel7_pam_failllock_timeout }}'
+      state: before
+  with_items:
+  - system-auth
+  - password-auth
+  register: result
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  pamd:
+      name: "{{item}}"
+      type: account
+      control: required
+      module_path: pam_unix.so
+      new_type: account
+      new_control: required
+      new_module_path: pam_faillock.so
+      state: before
+  with_items:
+  - system-auth
+  - password-auth
+  register: result
+
+

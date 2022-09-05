@@ -1,0 +1,98 @@
+---
+#Always export for HPOVM INSTALLATION
+  - name: Initialisation LocalHost [RH]
+    become: false
+    run_once: yes
+    delegate_to: localhost
+    shell: "rm -rf /Ansible_Event_Report/Hpovm_output_*.log"
+
+  - name: Pull Result [1/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_before }}"
+      insertbefore: BOF
+      line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [2/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_before }}"
+      insertbefore: BOF
+      line: "HOSTNAME: {{ inventory_hostname }} -- BEFORE --"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [3/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_before }}"
+      insertbefore: BOF
+      line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [4/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_after }}"
+      insertbefore: BOF
+      line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [5/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_after }}"
+      insertbefore: BOF
+      line: "HOSTNAME: {{ inventory_hostname }} -- AFTER --"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Pull Result [6/6] [RH]
+    lineinfile:
+      path: "{{ item.file_path_src_after }}"
+      insertbefore: BOF
+      line: "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Merge file [RH]
+    shell: "cat {{ item.file_path_src_before }} {{ item.file_path_src_after }} > {{ item.file_path_src_hpovm }}"
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Extraction Processing [RH]
+    fetch:
+      src: "{{ item.file_path_src_hpovm }}"
+      dest: "{{ item.file_path_dest }}"
+      flat: yes
+    loop: "{{ collection }}"
+
+  - name: Clean-Up [1/3] [RH]
+    file:
+      path: "{{ item.file_path_src_hpovm }}"
+      state: absent
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Clean-Up [2/3] [RH]
+    file:
+      path: "{{ item.file_path_src_before }}"
+      state: absent
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0
+
+  - name: Clean-Up [3/3] [RH]
+    file:
+      path: "{{ item.file_path_src_after }}"
+      state: absent
+    loop: "{{ collection }}"
+    async: 60
+    poll: 0

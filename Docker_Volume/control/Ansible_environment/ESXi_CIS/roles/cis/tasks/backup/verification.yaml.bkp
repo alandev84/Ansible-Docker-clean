@@ -1,0 +1,26 @@
+---
+
+- name: script full path
+  set_fact:
+    execution_path: "verification/{{ cis_item | replace('.','-') }}"
+ 
+- name: execute verification
+  block:
+    - name: trigger verification shell script for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: verification_shell.yaml
+
+  when: cis_rules[cis_item]['verification_method'] == 'script'
+ 
+
+- name: execute anisble playbook
+  block:
+
+    - name: run verification playbook for "{{ cis_rules[cis_item]['name'] }}"
+      include_tasks: "{{ execution_path }}.yaml"
+
+  when: cis_rules[cis_item]['verification_method'] == 'playbook'
+
+
+- set_fact:
+    all_results: "{{ all_results | combine({cis_item:cis_result}) }}"
+

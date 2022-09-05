@@ -1,0 +1,51 @@
+---
+# FOR RH
+  - name: Copy SIT HostFile To Destination For RedHat
+    copy:
+      src: "{{ sit }}"
+      dest: /etc/hosts
+      owner: root
+      group: root
+    ignore_errors: yes
+    tags:
+      - OSUpdateHostFileSIT
+      - OSUpdateHostFileALL
+    when: ansible_os_family == "RedHat" and server_environment == "SIT"
+
+  - name: Copy UAT HostFile To Destination For RedHat
+    copy:
+      src: "{{ uat }}"
+      dest: /etc/hosts
+      owner: root
+      group: root
+    ignore_errors: yes
+    tags:
+      - OSUpdateHostFileUAT
+      - OSUpdateHostFileALL
+    when: ansible_os_family == "RedHat" and server_environment == "UAT"
+
+  - name: Copy IDT HostFile To Destination For RedHat
+    copy:
+      src: "{{ idt }}"
+      dest: /etc/hosts
+      owner: root
+      group: root
+    ignore_errors: yes
+    tags:
+      - OSUpdateHostFileIDT
+      - OSUpdateHostFileALL
+    when: ansible_os_family == "RedHat" and server_environment == "IDT"
+
+  - name: Copy PROD HostFile To Destination For RedHat
+    copy:
+      src: "{{ prod }}"
+      dest: /etc/hosts
+      owner: root
+      group: root
+    ignore_errors: yes
+    tags:
+      - OSUpdateHostFilePROD
+      - OSUpdateHostFileALL
+    when: ansible_os_family == "RedHat" and server_environment == "PROD"
+
+# For Solaris

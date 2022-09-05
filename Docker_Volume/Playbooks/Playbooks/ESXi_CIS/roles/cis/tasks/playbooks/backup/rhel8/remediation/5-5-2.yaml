@@ -1,0 +1,31 @@
+---
+
+- name: 5.5.2 Ensure system accounts are secured (Scored)
+  block:
+    - name: 5.5.2 Ensure system accounts are secured (Scored) - find users
+      shell: "awk -F: '($3 < {{ cis_rhel8_min_uid }}) {print $1 }' /etc/passwd"
+      changed_when: false
+      check_mode: false
+      register: system_account
+
+    - name: 5.5.2 Ensure system accounts are secured (Scored) - lock users
+      user:
+        name: "{{ item }}"
+        password_lock: true
+      with_items:
+        - "{{ system_account.stdout_lines }}"
+      when:
+        - item != "root"
+
+    - name: 5.5.2 Ensure system accounts are secured (Scored) - set shell to nologin
+      user:
+        name: "{{ item }}"
+        shell: /sbin/nologin
+      with_items:
+        - "{{ system_account.stdout_lines }}"
+      when:
+        - item != "root"
+        - item != "sync"
+        - item != "shutdown"
+        - item != "halt"
+

@@ -1,0 +1,22 @@
+#!/usr/bin/bash -x
+
+#!/bin/bash
+
+grep -E "audit_backlog_limit\s*=\s*{{ cis_rhel_audit_backlog_limit }}\s*" /boot/grub2/grub.cfg \
+|| \
+grep -E "audit_backlog_limit\s*=\s*{{ cis_rhel_audit_backlog_limit }}\s*" /boot/efi/EFI/redhat/grub.cfg \
+|| \
+(echo "audit_backlog_limit is misconfigured" ; exit 1)
+
+
+# grep "^\s*linux" /boot/grub2/grub.cfg | grep -v "audit_backlog_limit="
+#Output Result: <No output> 
+# grep "audit_backlog_limit=" /boot/grub2/grub.cfg
+#Output Result: 320
+#OR 
+# grep "^\s*linux" /boot/efi/EFI/redhat/grub.cfg | grep -v "audit_backlog_limit="
+#Output Result: <No output> # grep "audit_backlog_limit=" /boot/efi/EFI/redhat/grub.cfg
+#Output Result: 320
+
+
+

@@ -1,0 +1,58 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name:   "{{ cis_rules[cis_item]['name'] }} - Find all rsyslog conf files in /etc/rsyslog.d"
+      find:
+        paths: "/etc/rsyslog.d"
+        patterns: "*.conf"
+      register: rsyslog_module_found
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Disable imtcp loading module on non log hosts (rsyslog.d conf files)"
+      lineinfile:
+        dest: "{{ item.path }}"
+        regexp: '^\$ModLoad\s+imtcp'
+        state: absent
+      loop: "{{ rsyslog_module_found.files }}"
+
+      #    - debug: var=rsyslog_module_found
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Disable imtcp loading module on non log hosts (main rsyslog conf file)"
+      lineinfile:
+        dest: "/etc/rsyslog.conf"
+        regexp: '^\$ModLoad\s+imtcp'
+        state: absent
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Disable TCP port listening on non log hosts (rsylog.d conf files)"
+      lineinfile:
+        dest: "{{ item.path }}"
+        regexp: '^\$InputTCPServerRun'
+        state: absent
+      loop: "{{ rsyslog_module_found.files }}"
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Disable TCP port listening on non log hosts (main rsyslog conf file)"
+      lineinfile:
+        dest: "/etc/rsyslog.conf"
+        regexp: '^\$InputTCPServerRun'
+        state: absent
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Enable loading of imtcp module on log hosts"
+      lineinfile:
+        dest: /etc/rsyslog.d/CIS.conf
+        regexp: '^\$ModLoad\s+imtcp'
+        line: "$ModLoad imtcp"
+        create: yes
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - Enable TCP Port listening on port {{ cis_rhel_rsyslog_port }}"
+      lineinfile:
+        dest: /etc/rsyslog.d/CIS.conf
+        regexp: '^\$InputTCPServerRun '
+        line: "$InputTCPServerRun {{ cis_rhel_rsyslog_port }}"
+        create: yes
+        owner: root
+        group: root
+        mode: 0644
+  when: cis_rhel_rsyslog_server|length > 0

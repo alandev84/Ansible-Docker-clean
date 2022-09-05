@@ -1,0 +1,11 @@
+#!/bin/sh
+
+authselect current | grep custom/{{ cis_rhel8_authselect_profile }} \
+&& \
+authselect current | grep with-sudo \
+&& \
+authselect current | grep with-faillock \
+&& \
+authselect current | grep without-nullok \
+|| \
+(echo "authselect profile is not right" ; exit 1)

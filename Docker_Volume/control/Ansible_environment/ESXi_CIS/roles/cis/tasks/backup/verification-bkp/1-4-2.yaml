@@ -1,0 +1,28 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: check aidecheck status (enabled & started)
+  service:
+    name: aidecheck.service
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: aidecheck_service__result
+
+- name: check aidecheck status (enabled & started)
+  service:
+    name: aidecheck.timer
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: aidecheck_timer_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not aidecheck_service__result['changed'] and not aidecheck_timer_result['changed']
+
+  #- debug: var=cis_result

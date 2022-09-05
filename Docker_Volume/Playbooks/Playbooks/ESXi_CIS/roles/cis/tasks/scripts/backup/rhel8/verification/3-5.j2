@@ -1,0 +1,5 @@
+#!/bin/sh
+
+nmcli radio all | grep -E '^enabled\s+disabled\s+enabled\s+disabled\s*' \
+|| \
+(echo 'wireless interfaces are not disabled' ; exit 1)

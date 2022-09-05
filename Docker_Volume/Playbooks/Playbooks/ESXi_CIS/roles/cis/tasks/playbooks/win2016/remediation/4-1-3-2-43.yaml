@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Securepipeservers\Winreg\Allowedpaths
+    name: Machine
+    data: "{{ cis_win_2_43.data }}"
+    state: present
+    type: multistring
+
+

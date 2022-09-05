@@ -1,0 +1,14 @@
+
+- name:  copy standard /etc/motd
+  copy:
+    src: section01/standard/etc_motd
+    dest: /etc/motd
+  check_mode: yes
+  register: motd_file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not motd_file_result['changed']
+
+

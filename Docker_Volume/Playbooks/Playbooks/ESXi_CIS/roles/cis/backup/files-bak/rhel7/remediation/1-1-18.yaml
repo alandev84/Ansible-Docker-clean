@@ -1,0 +1,6 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: mount -o remount,nodev /home
+  failed_when: false
+

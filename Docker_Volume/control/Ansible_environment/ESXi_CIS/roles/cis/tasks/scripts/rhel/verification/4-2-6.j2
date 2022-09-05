@@ -1,0 +1,16 @@
+#!/bin/sh
+
+grep -E "$ModLoad\s+imtcp\s*$" /etc/rsyslog.conf /etc/rsyslog.d/*.conf \
+&& \
+grep -E "$InputTCPServerRun\s+514\s*$" /etc/rsyslog.conf /etc/rsyslog.d/*.conf \
+|| \
+(echo "remote rsyslog is not correct" ; exit 1)
+
+
+#Run the following commands and verify the resulting lines are uncommented on
+#designated log hosts and commented or removed on all others: # grep '$ModLoad imtcp' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+#Output Result:
+#$ModLoad imtcp
+## grep '$InputTCPServerRun' /etc/rsyslog.conf /etc/rsyslog.d/*.conf
+#Output Result:
+#$InputTCPServerRun 514

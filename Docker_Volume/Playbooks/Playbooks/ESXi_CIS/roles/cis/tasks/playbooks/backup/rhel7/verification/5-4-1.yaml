@@ -1,0 +1,31 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  # TODO: deal with authselect
+  lineinfile:
+    regexp: "\\s*{{ item.key }}\\s*=\\s*.*"
+    line: "{{ item.key }} = {{ item.value }}"
+    dest: /etc/security/pwquality.conf
+  with_dict: "{{ cis_rhel7_pwquality }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+  #loop: "{{ result.results }}"
+
+
+

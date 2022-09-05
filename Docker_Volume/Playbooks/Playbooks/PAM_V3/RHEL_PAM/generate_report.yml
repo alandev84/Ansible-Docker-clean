@@ -1,0 +1,10 @@
+---
+- name: report
+  hosts: localhost
+  become: yes
+  become_user: svc_ansible
+  #password: Qwer1234Qwer1234
+  gather_facts: false
+  ignore_unreachable: yes
+  roles:
+    - reports

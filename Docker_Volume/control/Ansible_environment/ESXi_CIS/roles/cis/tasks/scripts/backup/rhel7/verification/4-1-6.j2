@@ -1,0 +1,26 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/etc/group\s+-p\s+wa\s+-k\s+identity\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/passwd\s+-p\s+wa\s+-k\s+identity\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/gshadow\s+-p\s+wa\s+-k\s+identity\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/shadow\s+-p\s+wa\s+-k\s+identity\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/security/opasswd\s+-p\s+wa\s+-k\s+identity\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/group\s+-p\s+wa\s+-k\s+identity\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/passwd\s+-p\s+wa\s+-k\s+identity\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/gshadow\s+-p\s+wa\s+-k\s+identity\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/shadow\s+-p\s+wa\s+-k\s+identity\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/security/opasswd\s+-p\s+wa\s+-k\s+identity\s*' \
+|| \
+(echo "audit rule problem" ; exit 1)
+
+
+

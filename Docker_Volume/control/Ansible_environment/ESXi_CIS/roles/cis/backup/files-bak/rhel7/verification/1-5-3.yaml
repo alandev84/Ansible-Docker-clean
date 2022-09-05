@@ -1,0 +1,18 @@
+---
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: grep -Er '^\s*kernel\.randomize_va_space\s*=\s*2\s*$' /etc/sysctl.conf /etc/sysctl.d/
+  register: aslr_enabled
+  changed_when: false
+  failed_when: false
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: 
+    - aslr_enabled.rc == 0
+

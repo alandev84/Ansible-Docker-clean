@@ -1,0 +1,22 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: check httpd status (enabled & started)
+  block:
+    - name: check httpd status (enabled & started)
+      service:
+        name: httpd
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: httpd_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: httpd_service_result['changed'] 
+
+  when: "'httpd' in ansible_facts.packages"

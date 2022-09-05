@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: PasswordHistorySize
+    value: 24
+  check_mode: true
+  ignore_errors: true
+
+
+

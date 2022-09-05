@@ -1,0 +1,6 @@
+#!/bin/sh
+  
+grep -Ei '^\s*SELINUX\s*=\s*(enforcing|Permissive)\s*' /etc/selinux/config \
+|| \
+(echo 'SELinux state is not enforcing.' ; exit 1)
+

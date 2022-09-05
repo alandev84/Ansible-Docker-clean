@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Control\Lsa
+    name: SCENoApplyLegacyAuditPolicy
+    data: "{{ cis_win_SCENoApplyLegacyAuditPolicy.data }}"
+    state: present
+    type: dword
+
+
+- debug: var=result

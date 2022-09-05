@@ -1,0 +1,5 @@
+
+- name: Main - Generate Report
+  import_tasks: generate_report.yml
+
+

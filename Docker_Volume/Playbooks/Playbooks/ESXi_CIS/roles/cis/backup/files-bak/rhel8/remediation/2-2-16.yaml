@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.16 Ensure CUPS is not enabled (Scored)
+  service:
+    name: cups
+    state: stopped
+    enabled: false
+  when: "'cups' in ansible_facts.packages"
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mount | grep -E '\s/tmp\s' | grep -E '^tmpfs\s+on\s+/tmp\s+type\s+tmpfs\s+\(rw,nosuid,nodev,noexec\)$' \
+&& \
+grep -E '\s/tmp\s' /etc/fstab | grep -E -v '^\s*#' |grep -E '^tmpfs\s+/tmp\s+tmpfs\s+defaults,noexec,nosuid,nodev\s+0\s\+0\s*$' \
+|| \
+(mount | grep -E '\s/tmp\s' ; grep -E '\s/tmp\s' /etc/fstab ; exit 1)

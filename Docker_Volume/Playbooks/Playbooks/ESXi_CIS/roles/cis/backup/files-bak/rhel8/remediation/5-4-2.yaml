@@ -1,0 +1,11 @@
+---
+
+- name: 5.4.2 Ensure lockout for failed password attempts is configured (Scored) - unlock_time
+  replace:
+    path: /etc/authselect/custom/{{ cis_rhel8_authselect_profile }}/{{ item }}
+    regexp: '^(\s*auth\s+required\s+pam_faillock.so\s+.*unlock_time=)\S+(\s*.*)$'
+    replace: '\g<1>{{ cis_rhel8_pam_failllock_timeout }}\g<2>'
+  with_items:
+    - password-auth
+    - system-auth
+

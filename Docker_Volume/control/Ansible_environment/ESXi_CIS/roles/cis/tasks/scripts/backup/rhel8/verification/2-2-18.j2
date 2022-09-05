@@ -1,0 +1,9 @@
+#!/bin/sh
+
+( \
+! (ss -lntu | grep -E ':25\s')   \
+|| \
+[ `ss -lntu | grep -E ':25\s' && ss -lntu | grep -E ':25\s' | grep -E -v '\s(127.0.0.1|::1):25\s' | wc -l` -eq 0 ] \
+) \
+|| \
+(echo 'mail transfer agent is not configured for local' ; exit 1)

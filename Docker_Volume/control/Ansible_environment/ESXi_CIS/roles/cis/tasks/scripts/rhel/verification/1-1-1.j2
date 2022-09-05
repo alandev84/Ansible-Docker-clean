@@ -1,0 +1,21 @@
+#!/bin/sh 
+
+check_mod()
+{
+    key=$1
+    # (successful senario) || (failure senario)
+    
+    modprobe -n -v $key | grep -E '^install\s+/bin/true\s+$' >/dev/null 2>&1 \
+    && \
+    ! /usr/sbin/lsmod | grep $key >/dev/null 2>&1 \
+    || \
+    (modprobe -n -v $key ; /usr/sbin/lsmod | grep $key ; exit 1)
+}
+
+# Main body
+
+for mod in fat vfat msdos 
+do
+    check_mod $mod || exit 1
+done
+

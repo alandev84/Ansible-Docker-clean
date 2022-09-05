@@ -1,0 +1,8 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  selinux:
+    conf: /etc/selinux/config
+    policy: "{{ cis_rhel7_selinux_policy }}"
+    state: "{{ cis_rhel7_selinux_state }}"
+

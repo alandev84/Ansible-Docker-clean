@@ -1,0 +1,5 @@
+collectionRH:
+  - { remote_path: "/home/svc_ansible/", local_path: "/Ansible_Event_Report/", owner: "svc_ansible", group: "sysadm", file_path_src_Group: "/home/svc_ansible/Group_Report_{{ inventory_hostname }}.txt", file_path_dest: "/Ansible_Event_Report/{{ inventory_hostname }}.txt", file_path_src_User: "/home/svc_ansible/User_Report_{{ inventory_hostname }}.txt", file_path_src_UserStatus: "/home/svc_ansible/UserStatus_Report_{{ inventory_hostname }}.txt" }
+
+collectionSOL:
+  - { remote_path: "/export/home/svc_ansible/", local_path: "/Ansible_Event_Report/", owner: "svc_ansible", group: "sysadm", file_path_src_Group: "/export/home/svc_ansible/Group_Report_{{ inventory_hostname }}.txt", file_path_dest: "/Ansible_Event_Report/{{ inventory_hostname }}.txt", file_path_src_User: "/export/home/svc_ansible/User_Report_{{ inventory_hostname }}.txt", file_path_src_UserStatus: "/export/home/svc_ansible/UserStatus_Report_{{ inventory_hostname }}.txt" }

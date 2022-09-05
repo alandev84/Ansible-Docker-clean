@@ -1,0 +1,30 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  ini_file:
+    path: /usr/lib/systemd/system/{{ item }}.service
+    section: Service
+    no_extra_spaces: true
+    option: ExecStart
+    value: -/bin/sh -c \"/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"
+  with_items:
+    - rescue
+    - emergency
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+

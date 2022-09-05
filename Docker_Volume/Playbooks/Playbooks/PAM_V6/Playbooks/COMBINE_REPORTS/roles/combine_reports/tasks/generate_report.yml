@@ -1,0 +1,28 @@
+- name: Create directory for reports
+  file:
+    path: "{{ report_directory_all }}"
+    state: directory
+    owner: "{{ user_ownership }}"
+    group: "{{ user_group_ownership }}"
+  delegate_to: "{{ ansible_server_ip }}"
+
+#- name: Open CSV files
+#  command: cat "{{ report_directory }}"/*.csv
+#  register: contents
+#  delegate_to: "{{ ansible_server_ip }}"
+
+- name: Open CSV Files
+  local_action: command cat "{{ report_directory }}"/*.csv
+  register: contents
+
+- name: Print a file and saved to a variable
+  debug:
+    msg: "{{ contents }}"
+
+- name: Generate and combine all the CSV report to /home/svc_ansible/reports/combined_reports
+  template:
+    src: "./files/generate_csv.j2"
+    dest: "{{ report_directory_all }}/combined_reports.csv"
+    owner: "{{ user_ownership }}"
+    group: "{{ user_group_ownership }}"
+  delegate_to: "{{ ansible_server_ip }}"

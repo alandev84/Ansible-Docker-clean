@@ -1,0 +1,6 @@
+---
+
+- name: 1.1.11 Ensure separate partition exists for /var/log (Scored)
+  command: /bin/true
+  changed_when: false
+

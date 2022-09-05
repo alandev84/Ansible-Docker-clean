@@ -1,0 +1,20 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Ldap
+    name: LDAPClientIntegrity
+    data: "{{ cis_win2019_2_3_11_8.data }}"
+    state: "{{ cis_win2019_2_3_11_8.state|default('present') }}"
+    type: dword
+  register: result
+  check_mode: true
+  ignore_errors: true
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+
+

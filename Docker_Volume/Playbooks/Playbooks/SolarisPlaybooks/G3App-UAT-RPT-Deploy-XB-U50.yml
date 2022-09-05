@@ -1,0 +1,71 @@
+---
+- name: G3 Report Server Deployment
+  gather_facts: false
+  hosts: G3_UAT_RPT
+  user: apmgr
+  ignore_errors: true
+  vars:
+    new_ver: RF-G3SYS-XB_U01.00.50
+    old_ver: RF-G3SYS-XB_U01.00.49
+    report_templates: false
+
+  tasks:
+    - name: Copy deployment Package to Server
+      copy:
+        src: /var/tmp/{{ new_ver }}.tar
+        dest: /G3App/appshare/deployment/{{ new_ver }}.tar
+
+    - name: Unzip Deployment Package
+      unarchive:
+        src: /G3App/appshare/deployment/{{ new_ver }}.tar
+        dest: /var/tmp/
+        remote_src: yes
+
+    - name: Create backup files 
+      file:
+        path: /G3App/appshare/deployment/Archived/{{ old_ver }}/{{ item }}
+        state: directory
+      loop:
+        - appfc_program_rptsvr
+        - appfc_conf_rptsvr
+
+    - name: Backup RPT Server Configuration
+      copy:
+        src: /G3App/appfc/conf
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_conf_rptsvr
+        remote_src: yes
+
+    - name: Backup Program in Report Server
+      copy:
+        src: /G3App/appfc/program
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_program_rptsvr
+        remote_src: yes
+
+    - name: Remove Old Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3RPTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/ReportService
+        - G3RPTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/ReportService.war
+
+    - name: Copy New Report Servvice Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3/G3RPTService/ReportService.war
+        dest: /opt/jboss/G3RPTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes
+
+    - name: Copy New Report Server Templates 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3/Templates/{{ item }}
+        dest: /G3App/appfc/conf/G3RPTService/Templates/
+        remote_src: yes
+      loop:
+        - RTSGDstm423.jrxml
+        - RTSGDstm422.jrxml
+        - SYSGDsta607.jrxml
+        - RTSGDstm423.jasper
+        - RTSGDstm422.jasper
+        - SYSGDsta607.jasper
+      when:
+        - report_templates

@@ -1,0 +1,265 @@
+---
+- name: G3 SACHweb Bankweb RT Deployment Server
+  gather_facts: no
+  hosts: G3_IDT_WEB
+  user: apmgr
+  ignore_errors: true
+  vars:
+    new_ver: RF-G3SYS-XB_I01.00.10
+    old_ver: RF-G3SYS-XB_I01.00.09
+    G3SACHWeb_deploy: false
+    G3SACHWeb_Meps_deploy: false
+    G3Contingency_deploy: false
+    G3BankWeb_deploy: false
+    G3BPService_deploy: false
+    G3common_deploy: true
+    G3RTService_deploy: true
+    G3RTService_IPSBO_deploy: false
+    G3RT_xml: false
+    AxwayUtil_deploy: false
+
+  tasks:
+    - name: Copy deployment Package to Server
+      copy:
+        src: /var/tmp/{{ new_ver }}.tar
+        dest: /G3App/appshare/deployment/{{ new_ver }}.tar
+
+    - name: Unzip Deployment Package
+      unarchive:
+        src: /G3App/appshare/deployment/{{ new_ver }}.tar
+        dest: /var/tmp/
+        remote_src: yes
+
+    - name: Create Folders and Directory
+      file:
+        path: /G3App/appshare/deployment/Archived/{{ old_ver }}/{{ item }}
+        state: directory
+      loop:
+         - appshare_lib
+         - appfc_conf_svr1
+         - appfc_conf_svr2
+         - appfc_program_svr1
+         - appfc_program_svr2
+         - appfc_script1
+         - appfc_script2
+         - appshare_conf
+      when: "'UPIG3TCSVR1' in inventory_hostname"
+
+    - name: Backup Common JARS
+      copy:
+        src: /G3App/appshare/program/base/lib
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appshare_lib
+        remote_src: yes
+      when: "'UPIG3TCSVR1' in inventory_hostname"
+
+    - name: Backup Common Configuration 
+      copy:
+        src: /G3App/appshare/conf
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appshare_conf
+        remote_src: yes
+      when: "'UPIG3TCSVR1' in inventory_hostname"
+
+    - name: Backup Configuration in Server Instance 1
+      copy:
+        src: /G3App/appfc/conf
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_conf_svr1
+        remote_src: yes
+      when: "'UPIG3TCSVR1' in inventory_hostname"
+
+    - name: Backup Program in Server Instance 1
+      copy:
+        src: /G3App/appfc/program
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_program_svr1
+        remote_src: yes
+      when: "'UPIG3TCSVR1' in inventory_hostname"
+
+    - name: Backup Configuration in Server Instance 2
+      copy:
+        src: /G3App/appfc/conf
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_conf_svr2
+        remote_src: yes
+      when: "'UPIG3TCSVR2' in inventory_hostname"
+
+    - name: Backup Program in Server Instance 2
+      copy:
+        src: /G3App/appfc/program
+        dest: /G3App/appshare/deployment/Archived/{{ old_ver }}/appfc_program_svr2
+        remote_src: yes
+      when: "'UPIG3TCSVR2' in inventory_hostname"
+
+####### G3 Service common Deployment ##############
+
+    - name: Remove G3 common service jar
+      file:
+        path: /G3App/appshare/program/base/lib/g3-services-common.jar
+        state: absent  
+      when:
+        - "'UPIG3TCSVR1' in inventory_hostname"
+        - G3common_deploy
+
+    - name: Copy New G3 common service jar 
+      copy:
+        src: /var/tmp/{{ new_ver }}/libraries/appshare_lib/g3-services-common.jar
+        dest: /G3App/appshare/program/base/lib/
+        remote_src: yes
+      when:
+        - "'UPIG3TCSVR1' in inventory_hostname"
+        - G3common_deploy
+
+########### G3 RT xml file deployment  ##################
+
+    - name: Remove G3RTService xml file
+      file:
+        path: /G3App/appfc/conf/G3RTService/com/bcsis/g3/realtime/resources/collateraltxnl-orchestration-config.xml
+        state: absent
+      when: G3RT_xml
+
+    - name: Copy G3RTService xml file
+      copy:
+        src: /var/tmp/{{ new_ver }}/Collateral_Orchestration/collateraltxnl-orchestration-config.xml
+        dest: /G3App/appfc/conf/G3RTService/com/bcsis/g3/realtime/resources
+        remote_src: yes
+      when: G3RT_xml
+
+######### G3 Axway Utility Deployment ###############
+
+    - name: Delete old Axway Lib
+      file:
+        path: /G3App/appfc/program/external/lib_api/AxwayUtil-1.1.6.jar
+        state: absent
+      when: AxwayUtil_deploy
+      
+    - name: Copy New Application Lib API file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/lib_api/AxwayUtil-1.1.7.jar
+        dest: /G3App/appfc/program/external/lib_api
+        remote_src: yes
+      when: AxwayUtil_deploy
+
+########### G3 SACHWeb deployment  ##################
+
+    - name: Remove Old G3SACHWeb Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/ROOT
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/ROOT.war
+      when: G3SACHWeb_deploy
+
+    - name: Copy New G3SACHWeb Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3SACHWeb/ROOT.war
+        dest: /opt/jboss/G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes	
+      when: G3SACHWeb_deploy
+
+########### G3 SACHWeb Meps deployment  ##################
+
+    - name: Remove Old MepsSettlementService Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/MepsSettlementService
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/MepsSettlementService.war
+      when: G3SACHWeb_Meps_deploy
+
+    - name: Copy New  MepsSettlementService Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3SACHWeb/MepsSettlementService.war
+        dest: /opt/jboss/G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes	
+      when: G3SACHWeb_Meps_deploy
+
+########### G3 SACHWeb Contigency deployment  ##################
+
+    - name: Remove Old G3Contingency Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3Contingency
+        - G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3Contingency.war
+      when: G3Contingency_deploy
+
+    - name: Copy New G3Contingency Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3SACHWeb/G3Contingency.war
+        dest: /opt/jboss/G3SACHWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes	
+      when: G3Contingency_deploy
+
+########### G3 BankWeb deployment  ##################
+
+    - name: Remove Old G3BankWeb Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3BankWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/ROOT
+        - G3BankWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/ROOT.war
+      when: G3BankWeb_deploy
+
+    - name: Copy New G3Bankweb Deployment war file 
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3BankWeb/ROOT.war
+        dest: /opt/jboss/G3BankWeb/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes
+      when: G3BankWeb_deploy
+
+########### G3 BPService deployment  ##################
+
+    - name: Remove Old G3BPService Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3BPService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3BPService
+        - G3BPService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3BPService.war
+      when: G3BPService_deploy
+
+    - name: Copy New G3BPService Deployment war file
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3BPService/G3BPService.war
+        dest: /opt/jboss/G3BPService/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes
+      when: G3BPService_deploy
+
+########### G3 RT deployment  ##################
+
+    - name: Remove Old G3RTService Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3RTService
+        - G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3RTService.war
+      when: G3RTService_deploy
+
+    - name: Copy New G3RTService Deployment war file
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3RTService/G3RTService.war
+        dest: /opt/jboss/G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes
+      when: G3RTService_deploy
+
+########### G3 RT IPSBO deployment  ##################
+
+    - name: Remove Old G3RTService_IPSBO Deployment folder and war
+      file:
+        path: /opt/jboss/{{ item }}
+        state: absent
+      loop:
+        - G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3IPSBOIntegration
+        - G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/G3IPSBOIntegration.war
+      when: G3RTService_IPSBO_deploy
+
+    - name: Copy New RT IPS BO Deployment war file
+      copy:
+        src: /var/tmp/{{ new_ver }}/G3RTService/G3IPSBOIntegration.war
+        dest: /opt/jboss/G3RTService/jws-3.1/share/apache-tomcat-8.0.36/webapps/
+        remote_src: yes
+      when: G3RTService_IPSBO_deploy
+
+...

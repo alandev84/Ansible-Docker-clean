@@ -1,0 +1,8 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  ansible.builtin.package:
+    name: rsyslog
+    state: present
+  when: "'rsyslog' not in ansible_facts.packages"
+

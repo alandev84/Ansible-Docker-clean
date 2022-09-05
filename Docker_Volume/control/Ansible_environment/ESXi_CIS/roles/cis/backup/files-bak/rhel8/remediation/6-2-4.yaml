@@ -1,0 +1,8 @@
+---
+
+- name: 6.2.4 Ensure no legacy "+" entries exist in /etc/shadow (Scored)
+  lineinfile:
+    dest: /etc/shadow
+    regexp: '^\+.*'
+    state: absent
+

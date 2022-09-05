@@ -1,0 +1,14 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: Get-LocalUser|Select-Object "Name","Enabled"|Select-String -NotMatch False
+  register: output
+
+
+- debug:
+    msg: |
+     "{{ output.stdout_lines }}"
+
+- debug:
+    msg: |
+     Please manually disable all administrator accounts
+  

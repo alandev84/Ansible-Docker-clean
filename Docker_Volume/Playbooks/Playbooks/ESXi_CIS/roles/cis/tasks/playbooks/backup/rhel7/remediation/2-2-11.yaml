@@ -1,0 +1,8 @@
+---
+- name: 2.2.11 Ensure Samba is not installed (Scored)
+  yum:
+    name: samba
+    state: absent
+
+
+

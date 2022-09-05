@@ -1,0 +1,12 @@
+---
+- name: 1.1.1.2 Ensure mounting of vFAT filesystems is limited (Not Scored)
+  lineinfile:
+    dest: /etc/modprobe.d/cis.conf
+    regexp: "^(#)?\\s*install\\s+vfat(\\s*|$)"
+    line: "install vfat /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+

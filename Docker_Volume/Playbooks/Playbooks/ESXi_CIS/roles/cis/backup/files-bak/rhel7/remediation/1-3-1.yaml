@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  yum:
+    name: aide
+    state: installed
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: /sbin/aide --init && mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  args:
+    creates: /var/lib/aide/aide.db.gz
+

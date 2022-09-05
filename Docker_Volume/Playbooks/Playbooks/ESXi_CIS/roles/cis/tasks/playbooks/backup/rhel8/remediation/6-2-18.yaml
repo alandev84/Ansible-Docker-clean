@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.14 Ensure all groups in /etc/passwd exist in /etc/group (Scored)
+  command: /bin/true
+  changed_when: false
+

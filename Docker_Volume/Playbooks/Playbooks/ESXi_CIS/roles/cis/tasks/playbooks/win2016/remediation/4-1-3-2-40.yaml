@@ -1,0 +1,56 @@
+---
+
+- name: test
+  win_shell: (Get-Service -Name "Browser" | Select-Object "Status" | Select-String -NotMatch Running).Length
+  register: browser
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_DC1.data }}"
+    state: present
+    type: multistring
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+    - browser != ["0"]
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_DC2.data }}"
+    state: present
+    type: multistring
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+    - browser == ["0"]
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_MS1.data }}"
+    state: present
+    type: multistring
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"
+    - browser != ["0"]
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: NullSessionPipes
+    data: "{{ cis_win_NullSessionPipes_MS2.data }}"
+    state: present
+    type: multistring
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"
+    - browser == ["0"]
+
+
+

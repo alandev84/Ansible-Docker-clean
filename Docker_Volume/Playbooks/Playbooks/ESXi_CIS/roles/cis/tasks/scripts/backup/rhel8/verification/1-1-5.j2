@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep -E '\s/tmp\s' | grep noexec \
+|| \
+(mount | grep -E '\s/tmp\s' ; exit 1)

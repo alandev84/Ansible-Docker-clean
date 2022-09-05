@@ -1,0 +1,9 @@
+---
+
+
+- name: 1.1.18 Disable Automounting (Scored)
+  service:
+    name: autofs
+    enabled: false
+    state: stopped
+  when: "'autofs' in ansible_facts.packages"

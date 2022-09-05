@@ -1,0 +1,29 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 6.2.11 Ensure no users have .netrc files (Scored)
+  file:
+    state: absent
+    dest: "~{{ item }}/.netrc"
+  with_items: "{{ cis_users }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+
+
+
+
+

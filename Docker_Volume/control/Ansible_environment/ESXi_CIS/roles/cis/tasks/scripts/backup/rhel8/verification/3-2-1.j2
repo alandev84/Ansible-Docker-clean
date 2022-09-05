@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sysctl net.ipv4.conf.all.accept_source_route | grep -E '^\s*net.ipv4.conf.all.accept_source_route\s*=\s*0\s*$' \
+&& \
+sysctl net.ipv4.conf.default.accept_source_route | grep -E '^\s*net.ipv4.conf.default.accept_source_route\s*=\s*0\s*$' \
+&& \
+grep -E '^\s*net.ipv4.conf.all.accept_source_route\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+&& \
+grep -E '^\s*net.ipv4.conf.default.accept_source_route\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+|| \
+(echo 'source routed packets settings are wrong' ; exit 1)

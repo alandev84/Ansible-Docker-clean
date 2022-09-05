@@ -1,0 +1,37 @@
+---
+- name: show u2
+  ios_command: 
+    commands: show run | inc username
+  register: output3
+
+- name: show privilege user level 
+  ios_command: 
+    commands: show privilege 
+  register: privilege_user_level
+
+- name: show u3
+  ios_command: 
+    commands: show run | inc {{current_user}}
+  loop: "{{privilage_users}}"
+  loop_control: 
+    loop_var: current_user
+  register: test
+
+# Split for per customer
+- name: set value 
+  set_fact: 
+    output12: "{{output3.stdout[0].split('\n')}}"
+    cacheable: false 
+
+
+- name: Build a list of hashes from the output
+  set_fact:
+    cisco_switch_user_information: "{{ cisco_switch_user_information|default([]) + [ { 'user': item.split(' ')[1], 'privilege': mypriv } ] }}"
+    cacheable: yes
+  vars:
+    mypriv: "{% if item.split(' ')[2] == 'privilege' %}True{% else %}False{% endif %}"
+  loop: "{{ output12 }}"
+  delegate_to: localhost
+
+- debug:
+    var: cisco_switch_user_information

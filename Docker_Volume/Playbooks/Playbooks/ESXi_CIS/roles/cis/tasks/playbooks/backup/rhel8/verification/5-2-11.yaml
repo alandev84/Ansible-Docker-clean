@@ -1,0 +1,24 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.2.11 Ensure SSH PermitEmptyPasswords is disabled (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.11"
+    block: |
+      PermitEmptyPasswords no
+    validate: /usr/sbin/sshd -T -f %s
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+

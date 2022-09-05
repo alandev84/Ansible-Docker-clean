@@ -1,0 +1,5 @@
+#!/bin/sh
+
+mount | grep -E '\s/tmp\s' | grep nosuid >/dev/null 2>&1 \
+|| \
+exit 1

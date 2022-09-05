@@ -1,0 +1,16 @@
+- name: Get the user last password change
+  shell: |
+    chage -l {{ item }} | grep "^Last password change" | awk -F " " '{print $6, $5}' | sed 's\,\\g' | sed 's\never--\never\g'
+
+  loop: "{{ user_account }}"
+  register: user_last_password_change_out
+
+
+- name: Get the user last password change | Set fact
+  set_fact:
+    last_password_change: "{{ user_last_password_change_out['results'] | map(attribute='stdout') | reject('equalto','') | list }}"
+    cacheable: yes
+
+- name: debug testing
+  debug:
+    var: last_password_change

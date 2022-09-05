@@ -1,0 +1,11 @@
+#!/bin/sh
+
+( \
+! (modprobe -n -v rds) \
+|| \
+modprobe -n -v rds | grep -E '^\s*install\s+/bin/true\s*$' \
+) \
+&& \
+! (lsmod | grep rds) \
+|| \
+(echo 'rds settings are wrong' ; exit 1)

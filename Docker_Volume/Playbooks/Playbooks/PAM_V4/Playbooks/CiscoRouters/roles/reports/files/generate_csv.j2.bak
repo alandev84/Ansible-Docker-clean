@@ -1,0 +1,5 @@
+{% for host in groups[group_name] -%} 
+{% for is_priv in hostvars[host]['cisco_router_user_information'] %}
+{{host}};Cisco IOS Router;nil;nil;{{is_priv['privilege']}};nil;nil;{{is_priv['user']}}
+{% endfor %}
+{%- endfor %}

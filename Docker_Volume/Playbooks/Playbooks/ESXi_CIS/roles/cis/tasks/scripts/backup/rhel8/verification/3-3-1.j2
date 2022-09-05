@@ -1,0 +1,11 @@
+#!/bin/sh
+
+( \
+! (modprobe -n -v dccp) \
+|| \
+modprobe -n -v dccp | grep -E '^\s*install\s+/bin/true\s*$' \
+) \
+&& \
+! (lsmod | grep dccp) \
+|| \
+(echo 'DCCP settings are wrong' ; exit 1)

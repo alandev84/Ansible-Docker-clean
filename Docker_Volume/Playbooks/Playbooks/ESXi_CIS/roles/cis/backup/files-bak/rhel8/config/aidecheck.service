@@ -1,0 +1,10 @@
+[Unit]
+Description=Aide Check
+
+[Service]
+Type=simple
+SuccessExitStatus=7
+ExecStart=/usr/sbin/aide --check
+
+[Install]
+WantedBy=multi-user.target

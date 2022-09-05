@@ -1,0 +1,73 @@
+---
+
+- name: Get start time
+  set_fact:
+    start_time: "{{ lookup('pipe','date \"+%T %Z %F\"') }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: set result
+  set_fact:
+    cis_result: "NA"
+
+# fact variable ansible_all_ipv4_addresses on RHEL
+# fact variable ansible_ip_addresses on Windows
+# Use the common variable ansible_ip_addresses for both RHEL and Windows
+- name: generate the common ip variable for rhel and win
+  set_fact:
+    ansible_ip_addresses: "{{ ansible_all_ipv4_addresses }}"
+  when: ansible_all_ipv4_addresses is defined
+
+# import CIS standard varaiable based on OS
+# the variable fils under roles/cis/vars dir
+- name: import cis rules
+  include_vars: "{{ item }}"
+  loop:
+    - cis_{{ os }}_globe_vars.yaml
+    - cis_{{ os }}_parms.yaml
+
+# Collect RHEL server information
+- block:
+  - name: Gather package facts
+    ansible.builtin.package_facts:
+      manager: auto
+    changed_when: false
+
+  - name: List users accounts
+    command: cut -d":" -f1 /etc/passwd
+    register: cis_users
+    changed_when: false
+
+  - name: List users uids
+    command: cut -d":" -f3 /etc/passwd
+    register: cis_uids
+    changed_when: false
+
+  - name: List groups accounts
+    command: cut -d":" -f1 /etc/group
+    register: cis_groups
+    changed_when: false
+
+  - name: List groups gids
+    command: cut -d":" -f3 /etc/group
+    register: cis_gids
+    changed_when: false
+
+  - name: Find privileged binary
+    shell: |
+      set -o pipefail
+      df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev \( -perm -4000 -o -perm -2000 \) -type f
+    register: priv_binaries
+    changed_when: false
+
+  - name: Find out UID_MIN
+    shell: awk '/^\s*UID_MIN/{print $2}' /etc/login.defs
+    register: result
+
+  - name: set cis_rhel_min_uid
+    set_fact:
+      cis_rhel_min_uid: "{{ result.stdout }}"
+
+  when: os is match("rhel*")
+
+

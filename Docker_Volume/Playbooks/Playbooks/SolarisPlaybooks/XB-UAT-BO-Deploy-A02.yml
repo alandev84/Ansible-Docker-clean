@@ -1,0 +1,76 @@
+---
+- name: XB UAT BO Deployment
+  gather_facts: no
+  hosts: XB_UAT_BO
+  user: apmgr
+  ignore_errors: true
+  vars:
+    zip_dir: PPPNSYS-21001A02
+    new_ver: PPPNSY-21001-A02 
+    old_ver: PPPNSY-21001-A01 
+    copy_deploy_bo: true
+    deploy_bo_CF: true 
+    deploy_bo_bkp: true 
+    deploy_bo: true 
+
+  tasks:
+    - name: Copy deployment Package to Server
+      copy:
+        src: /var/tmp/{{ zip_dir }}/XBGW/XBGW_{{ new_ver }}.tar
+        dest: /var/tmp/XB_BO/backoffice-{{ new_ver }}.tar
+      when:
+        - copy_deploy_bo
+
+######## Create backup folders ###########
+
+    - name: Create BO Directory
+      file:
+        path: /XBapp/appfc/deployment/archive/{{ old_ver }}/backoffice/{{ item }}
+        state: directory
+      loop:
+         - appfc_program
+         - appfc_conf
+      when:
+        - deploy_bo_CF
+######## Take backup ###########
+
+    - name: Backup Program BO
+      archive:
+        path:
+          - /XBapp/appfc/backoffice
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/backoffice/appfc_program/backoffice.tar
+      when:
+        - deploy_bo_bkp
+
+    - name: Backup Conf BO
+      archive:
+        path:
+          - /XBapp/appfc/conf/backoffice
+        dest: /XBapp/appfc/deployment/archive/{{ old_ver }}/backoffice/appfc_conf/backoffice.tar
+      when:
+        - deploy_bo_bkp
+####### XB Deployment ##############
+
+    - name: Remove BO
+      command: /bin/mv /XBapp/appfc/backoffice /XBapp/appfc/backoffice-{{ old_ver }}
+      when:
+        - deploy_bo
+
+    - name: Deploy BO
+      unarchive:
+        src: /var/tmp/XB_BO/backoffice-{{ new_ver }}.tar
+        dest: /XBapp/appfc/
+        remote_src: yes
+      when:
+        - deploy_bo
+
+    - name: Rename BO
+      command: /bin/mv /XBapp/appfc/XBGW_{{ new_ver }} /XBapp/appfc/backoffice
+      when:
+        - deploy_bo
+
+    - name: change permission
+      command: chmod -R 750 /XBapp/appfc/backoffice
+      when:
+        - deploy_bo
+...

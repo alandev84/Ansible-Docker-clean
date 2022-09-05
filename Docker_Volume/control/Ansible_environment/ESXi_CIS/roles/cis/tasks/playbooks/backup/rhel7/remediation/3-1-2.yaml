@@ -1,0 +1,86 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/grub2/grub.cfg
+  register: stat_result_grub2_grub
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /boot/efi/EFI/redhat/grub.cfg
+  register: stat_result_EFI_grub
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: |
+    set -o pipefail
+    grep "^\s*GRUB_CMDLINE_LINUX=" /etc/default/grub | grep ipv6.disable=1 
+  register: result
+  changed_when: false
+  failed_when: false
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+    dest: /etc/default/grub
+    regexp: '^(?P<part1>GRUB_CMDLINE_LINUX=\".*)\"$'
+    replace: '\g<part1> ipv6.disable=1"'
+  when:
+    - result.rc != 0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg
+  when:
+    - stat_result_grub2_grub.stat.exists
+    - not stat_result_EFI_grub.stat.exists
+    - result.rc != 0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: /usr/sbin/grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+  when:
+    - not stat_result_grub2_grub.stat.exists
+    - stat_result_EFI_grub.stat.exists
+    - result.rc != 0
+
+# net.ipv6.conf.all.disable_ipv6 = 1 net.ipv6.conf.default.disable_ipv6 = 1
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: grep -Er '^\s*net\.ipv6\.conf\.all\.disable_ipv6\s*=\s*1\s*$' /etc/sysctl.conf /etc/sysctl.d/
+  register: result
+  changed_when: false
+  failed_when: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      sysctl:
+        name: "net.ipv6.conf.all.disable_ipv6"
+        value: '1'
+        state: present
+        reload: true
+        sysctl_file: /etc/sysctl.d/cis.conf
+
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      command: sysctl -w net.ipv6.conf.all.disable_ipv6=1 
+  when:
+    - result != 0
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: grep -Er '^\s*net\.ipv6\.conf\.default\.disable_ipv6\s*=\s*1\s*$' /etc/sysctl.conf /etc/sysctl.d/
+  register: result
+  changed_when: false
+  failed_when: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      sysctl:
+        name: "net.ipv6.conf.default.disable_ipv6"
+        value: '1'
+        state: present
+        reload: true
+        sysctl_file: /etc/sysctl.d/cis.conf
+
+    - name: "{{ cis_rules[cis_item]['name'] }}"
+      command: sysctl -w net.ipv6.conf.default.disable_ipv6=1 
+  when:
+    - result != 0
+

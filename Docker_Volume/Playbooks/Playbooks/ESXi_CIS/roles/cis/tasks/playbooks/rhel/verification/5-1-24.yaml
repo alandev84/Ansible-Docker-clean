@@ -1,0 +1,46 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  # TODO: deal with authselect
+  lineinfile:
+    regexp: "\\s*{{ item.key }}\\s*=\\s*.*"
+    line: "{{ item.key }} = {{ item.value }}"
+    dest: /etc/security/pwquality.conf
+  with_dict: "{{ cis_rhel_pwquality }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: grep -E "^password\s+requisite\s+pam_pwquality\.so\s+try_first_pass\s+local_users_only\s+retry=3\s+authtok_type=\s*$" /etc/pam.d/system-auth
+  ignore_errors: true
+  register: result_01
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: grep -E "^password\s+requisite\s+pam_pwquality\.so\s+try_first_pass\s+local_users_only\s+retry=3\s+authtok_type=\s*$" /etc/pam.d/password-auth
+  ignore_errors: true
+  register: result_02
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+  #loop: "{{ result.results }}"
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: result_01.rc != 0 or result_02.rc != 0
+

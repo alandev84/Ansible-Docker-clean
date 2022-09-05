@@ -1,0 +1,266 @@
+---
+#all the dest for item.home_path to be rename to /export/home/user based on their OS type
+#For CAS
+  - name: Append Profile To User Account [CAS]
+    block:
+      - name: Append Profile To CAS Web [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cas_web_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CAS' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CAS Web [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.cas_web_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CAS' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To CAS BP PROC [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cas_bp_proc_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CAS' in inventory_hostname) and ('BPPROC' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CAS BT PROC [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cas_bt_proc_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CAS' in inventory_hostname) and ('BTPROC' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CAS DB [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cas_db_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CAS' in inventory_hostname) and ('DB' in inventory_hostname) and (item.profile_user == "apop")
+    tags:
+      - AppendUserProfile
+
+#For CTS
+  - name: Append Profile To User Account 
+    block:
+      - name: Append Profile To CTS Web [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_tc_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CTS Web [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_tc_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To CTS DB [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_db_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('DB' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CTS DB [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_db_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('DB' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To CTS GW [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_gw_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('GW' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To CTS GW [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.cts_gw_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('CTS' in inventory_hostname) and ('GW' in inventory_hostname) and (item.profile_user == "apsu")
+    tags:
+      - AppendUserProfile
+
+#For G3
+  - name: Append Profile To User Account
+    block:
+      - name: Append Profile To G3 Web [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_tc_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 Web [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_tc_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('TC' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 DB [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_db_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('DB' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 RPT [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_rpt_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('RPT' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 CD [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_cd_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('CD' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 CD [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_cd_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('CD' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 MQ [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_mq_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('MQ' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 MQ [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_mq_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('MQ' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 SW [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_sw_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('SW' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 SW [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_sw_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('SW' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 DMZ CD [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_dmz_cd_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('DMZCD' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 DMZ CD [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_dmz_cd_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('DMZCD' in inventory_hostname) and (item.profile_user == "apsu")
+
+      - name: Append Profile To G3 DMZ MQ [apop]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_dmz_mq_op }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('DMZMQ' in inventory_hostname) and (item.profile_user == "apop")
+
+      - name: Append Profile To G3 DMZ MQ [apsu]
+        copy:
+          src: "{{ item.file_src }}{{ item.g3_dmz_mq_su }}"
+          dest: "/export/home/{{ item.name }}/.profile"
+          owner: "{{ item.owner }}"
+          group: "{{ item.group }}"
+          mode: '0644'
+        loop: "{{ userprofile }}"
+        when: ('G3' in inventory_hostname) and ('DMZMQ' in inventory_hostname) and (item.profile_user == "apsu")
+    tags:
+      - AppendUserProfile

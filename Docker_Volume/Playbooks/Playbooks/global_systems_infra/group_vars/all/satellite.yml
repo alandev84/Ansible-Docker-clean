@@ -1,0 +1,2 @@
+satellite:
+        - { uninstallname: "katello-ca-consumer-pocsyssat1.bcs.bcsgroup.com-1.0-1.noarch", installname: "https://pkcsyssat1.bcs.bcsgroup.com/pub/katello-ca-consumer-latest.noarch.rpm", org: "Banking_Computer_Services_Private_Limited", activationkey: "ghWEh432LJYfyvx0" }

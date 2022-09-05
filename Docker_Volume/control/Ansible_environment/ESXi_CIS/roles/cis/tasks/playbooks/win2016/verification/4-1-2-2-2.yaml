@@ -1,0 +1,21 @@
+---
+- win_security_policy:
+    section: System Access
+    key: LockoutBadCount
+    value: "{{ cis_win_LockoutBadCount }}"
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- debug:
+    msg: "{{ result.value }}"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+#   - not result['failed']
+#    - result['changed']
+    - result.value > 5
+
+

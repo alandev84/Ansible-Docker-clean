@@ -1,0 +1,6 @@
+---
+
+- name: 1.1.6 Ensure separate partition exists for /var (Scored)
+  command: /bin/true
+  changed_when: false
+

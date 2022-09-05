@@ -1,0 +1,64 @@
+---
+#for RH
+  - name: Delete User And User in Group
+    block:
+      - name: Delete User For RedHat/Debian [RH]
+        user:
+          name: "{{ item.name }}"
+          state: absent
+          remove: true
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always: 
+      - import_tasks: outputUserRecord_RH.yml
+        when: ansible_os_family != "Solaris"
+    tags:
+      - DeleteUser
+
+  - name: Delete Group
+    block:
+      - name: Delete User From Group For RedHat/Debian [RH]
+        group:
+          name: "{{ item.groups }}"
+          gid: "{{ item.gid }}"
+          state: absent
+        loop: "{{ newgroup }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family != "Solaris"
+    always: 
+      - import_tasks: outputGroupRecord_RH.yml
+        when: ansible_os_family != "Solaris"
+    tags:
+      - DeleteGroup
+
+#for solaris
+  - name: Delete User And User in Group
+    block:
+      - name: Delete User For Solaris [Solaris]
+        command: 'userdel -r {{ item.name }}'
+        loop: "{{ users }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always: 
+      - import_tasks: outputUserRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
+    tags:
+      - DeleteUser
+
+  - name: Delete Group
+    block:
+      - name: Delete User From Group For Solaris [Solaris]
+        command: 'groupdel {{ item.groups }}'
+        loop: "{{ newgroup }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "Solaris"
+    always: 
+      - import_tasks: outputGroupRecord_SOL.yml
+        when: ansible_os_family == "Solaris"
+    tags:
+      - DeleteGroup

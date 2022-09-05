@@ -1,0 +1,13 @@
+---
+
+- name: 3.3.1 Ensure DCCP is disabled (Scored)
+  lineinfile:
+    dest: /etc/modprobe.d/cis.conf
+    regexp: "^(#)?\\s*install\\s+dccp(\\s*|$)"
+    line: "install dccp /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+

@@ -1,0 +1,17 @@
+---
+
+- name: 4.1.1.1 Ensure auditd is installed (Scored)
+  yum:
+    name: audit
+    state: installed
+
+- name: 4.1.2.2 Ensure audit logs are not automatically deleted (Scored)
+  lineinfile:
+    dest: /etc/audit/auditd.conf
+    regexp: '^max_log_file_action = .*'
+    line: 'max_log_file_action = keep_logs'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true

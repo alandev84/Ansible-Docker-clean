@@ -1,0 +1,33 @@
+---
+
+#- name: 2.2.1.3 Ensure ntp is configured
+#  lineinfile:
+#    state: present
+#    dest: '/etc/ntp.conf'
+#    line: 'restrict -4 default kod nomodify notrap nopeer noquery'
+#
+#
+#- name: 2.2.1.3 Ensure ntp is configured
+#  lineinfile:
+#    state: present
+#    dest: '/etc/ntp.conf'
+#    line: 'restrict -6 default kod nomodify notrap nopeer noquery'
+
+
+- name: 2.2.1.3 Ensure ntp is configured
+  template:
+    src: "{{ os }}/etc/chrony.conf.j2"
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: 2.2.1.3 Ensure ntp is configured
+  lineinfile:
+    state: present
+    dest: /etc/sysconfig/ntpd
+    create: true
+    regexp: '^OPTIONS='
+    line: 'OPTIONS="-u ntp:ntp"'
+

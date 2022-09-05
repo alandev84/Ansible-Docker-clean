@@ -1,0 +1,7 @@
+{% for host in groups[group_name] %}
+{% for is_priv in hostvars[host]['is_privilege'] %}
+{{host}},{{ is_priv }}
+{% endfor %}
+{% endfor %}
+
+

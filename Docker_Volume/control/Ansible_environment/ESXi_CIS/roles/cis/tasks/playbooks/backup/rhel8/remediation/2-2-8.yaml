@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.8 Ensure IMAP and POP3 server is not enabled (Scored)
+  service:
+    name: dovecot
+    state: stopped
+    enabled: false
+  when: "'dovecot' in ansible_facts.packages"
+

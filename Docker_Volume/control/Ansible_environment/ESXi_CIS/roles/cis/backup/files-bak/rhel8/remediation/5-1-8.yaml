@@ -1,0 +1,23 @@
+---
+
+- name: 5.1.8 Ensure at/cron is restricted to authorized users (Scored)
+  block:
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - deny
+      file:
+        dest: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/at.deny
+        - /etc/cron.deny
+
+    - name: 5.1.8 Ensure at/cron is restricted to authorized users - allow
+      template:
+        dest: /etc/{{ item }}
+        src: "{{ os }}/etc/{{ item }}.j2"
+        mode: '0600'
+        owner: root
+        group: root
+      with_items:
+        - cron.allow
+        - at.allow
+

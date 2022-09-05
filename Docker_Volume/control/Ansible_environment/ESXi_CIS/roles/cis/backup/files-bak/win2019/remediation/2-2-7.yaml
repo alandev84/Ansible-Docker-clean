@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeInteractiveLogonRight
+    users: "{{ item.users }}"
+    action: "{{ item.action|default('set') }}"
+  loop: "{{ cis_win2019_SeInteractiveLogonRight }}"
+  register: result
+
+

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+firewall-cmd --get-default-zone | grep -w {{ cis_rhel8_firewall_default_zone }} \
+|| \
+(echo 'Default zone is not public' ; exit 1)

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q dhcp)  \
+|| \
+(echo 'dhcp is installed' ; exit 1)

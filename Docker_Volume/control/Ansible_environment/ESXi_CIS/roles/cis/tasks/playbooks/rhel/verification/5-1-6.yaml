@@ -1,0 +1,38 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - search file"
+      command: find /etc/ssh -xdev -type f -name 'ssh_host_*_key'
+      register: host_key_files
+      changed_when: false
+      failed_when: false
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - fix permission"
+      file:
+        dest: "{{ item }}"
+        owner: root
+        group: root
+        mode: 0600
+      with_items: "{{ host_key_files.stdout_lines }}"
+      check_mode: true
+      ignore_errors: true
+      register: result
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not item[1]
+        - item[0]
+        - (result.skipped is not defined)  or
+          not result.skipped
+      loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+      #loop: "{{ result.results }}"
+
+
+

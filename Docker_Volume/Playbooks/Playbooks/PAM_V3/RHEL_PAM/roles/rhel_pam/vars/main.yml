@@ -1,0 +1,18 @@
+---
+group_name: redhat_servers
+
+user_names: "{{ list_user }}"
+#[
+  
+  # "root", "apmgr", "rootbkup", "csrdba"
+#]
+
+# user_account:
+  # - root
+  # - apmgr
+  # - rootbkup
+  # - csrdba
+#ansible_become_user: "ansible"
+#ansible_user: "ansible"
+#ansible_password: "{{ password }}"
+#ansible_sudo_pass: "{{ password }}"

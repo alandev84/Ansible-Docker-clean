@@ -1,0 +1,34 @@
+---
+
+- name: Ensure the tag category exists
+  community.vmware.vmware_category:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    category_name: "{{ tag_category }}"
+  when: cat_id is undefined
+
+- name: Get tag categories info
+  community.vmware.vmware_category_facts:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+  register: cat_info
+  when: cat_id is undefined
+
+- name: Set category ID
+  set_fact:
+    cat_id: "{{ cat_info.tag_category_facts|
+      selectattr('category_name','equalto',tag_category)|
+      map(attribute='category_id')|list|first }}"
+  when: cat_id is undefined
+
+
+- name: Ensure that VM tags exist
+  community.vmware.vmware_tag:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    category_id: "{{ cat_id }}" 
+    tag_name: "{{ item }}"
+  loop: "{{ tag_list }}"

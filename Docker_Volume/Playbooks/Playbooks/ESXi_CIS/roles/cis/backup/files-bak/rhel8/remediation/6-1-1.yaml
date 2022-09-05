@@ -1,0 +1,10 @@
+---
+
+- name: 6.1.1 Audit system file permissions (Not Scored)
+  cron:
+    name: CIS 6.1.1 Audit system file permissions
+    weekday: "*"
+    minute: "0"
+    hour: "3"
+    user: root
+    job: "rpm -Va --nomtime --nosize --nomd5 --nolinkto > {{ cis_rhel8_audit_rpms_permissions_output }}"

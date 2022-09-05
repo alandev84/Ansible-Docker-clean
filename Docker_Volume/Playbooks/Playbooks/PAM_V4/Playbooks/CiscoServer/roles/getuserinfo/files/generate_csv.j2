@@ -1,0 +1,4 @@
+Device Name,Device Type,GID,UID,Creation Data,Last Login Date,Last Password Change,Privilege Accounts
+{% for host in groups[group_name] -%}
+{{ host }},{{ hostvars[host]['os_type'] }},{% for user_sid_list in hostvars[host]['user_sid_list'] %}{{ user_sid_list }}{% endfor %},{% for user_guid_list in hostvars[host]['user_guid_list'] %}{{ user_guid_list }}{% endfor %},Not Applicable,{% for user_creation_date_list in hostvars[host]['user_creation_date_list'] %}{{ user_creation_date_list }}{% endfor %},{% for user_status_list in hostvars[host]['user_status_list'] %}{{ user_status_list }}{% endfor %},{% for user_status_last_login_date in hostvars[host]['user_status_last_login_date'] %}{{ user_status_last_login_date }}{% endfor %}{{ "\n" }}
+{%- endfor %}

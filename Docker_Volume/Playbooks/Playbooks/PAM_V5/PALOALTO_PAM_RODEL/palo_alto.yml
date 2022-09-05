@@ -1,0 +1,19 @@
+---
+- name: PaloAlto
+  hosts: localhost
+  gather_facts: true
+  ignore_unreachable: yes
+  become: false 
+  roles:
+    - getuserinfo
+
+
+- name: Retrieve Info 
+  hosts: localhost 
+  become: false
+  become_user: svc_ansible 
+  gather_facts: false 
+  ignore_unreachable: yes 
+  roles: 
+    - reports 
+

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sysctl net.ipv4.conf.all.secure_redirects | grep -E '^\s*net.ipv4.conf.all.secure_redirects\s*=\s*0\s*$' \
+&& \
+sysctl net.ipv4.conf.default.secure_redirects | grep -E '^\s*net.ipv4.conf.default.secure_redirects\s*=\s*0\s*$' \
+&& \
+grep -E '^\s*net.ipv4.conf.all.secure_redirects\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+&& \
+grep -E '^\s*net.ipv4.conf.default.secure_redirects\s*=\s*0\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+|| \
+(echo 'secure ICMP redirects settings are wrong' ; exit 1)

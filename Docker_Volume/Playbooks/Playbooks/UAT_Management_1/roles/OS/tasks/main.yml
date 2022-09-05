@@ -1,0 +1,12 @@
+---
+# tasks file for systems
+  - import_tasks: UpdateOS.yml
+  - import_tasks: RemoveSW.yml
+  - import_tasks: InstallSW.yml
+  - import_tasks: RebootOS.yml
+  - import_tasks: DSAAgent.yml
+  - import_tasks: SatelliteRegistration.yml
+  - import_tasks: UpdateHostFile.yml
+  - import_tasks: Hpovm.yml
+  - import_tasks: DisableRootPath.yml
+  - import_tasks: Networker.yml

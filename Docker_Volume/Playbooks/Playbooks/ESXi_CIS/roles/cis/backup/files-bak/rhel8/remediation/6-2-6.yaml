@@ -1,0 +1,20 @@
+---
+
+- name: 6.2.6 Ensure root is the only UID 0 account (Scored)
+  block:
+    - name: 6.2.6 Ensure root is the only UID 0 account (Scored) - find users
+      shell: |
+        set -o pipefail
+        awk -F':' '($3 == 0) { print $1 }' /etc/passwd
+      register: users_uid_zero
+      changed_when: false
+      failed_when: false
+
+    - name: 6.2.6 Ensure root is the only UID 0 account (Scored) - lock users
+      user:
+        name: "{{ item }}"
+        password_lock: true
+      with_items: "{{ users_uid_zero.stdout_lines }}"
+      when:
+        - item != 'root'
+

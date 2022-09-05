@@ -1,0 +1,230 @@
+---
+# For RedHat
+  - name: Phase1 Of HPOVM Installation [RH]
+    block:
+      #phase1
+      - name: Initial Facts [ALL]
+        ansible.builtin.set_fact: pocinfsysomw1_exist="false" pdwinfsysomw1_exist="false"
+
+      - name: Copy HPOVM ISO To Host For RedHat [RH]
+        copy:
+          src: "{{ item.localHostPath }}{{ item.iso }}"
+          dest: "{{ item.tmpStoragePath }}{{ item.iso }}"
+          owner: root
+          group: root
+          mode: '0644'
+        loop: "{{ hpovm_mountdetails }}"
+        when: ansible_os_family == "RedHat"
+
+      - name: Ensure Dependencies Before Installation HPOVM For RedHat [RH]
+        yum:
+          name: "{{ item }}"
+          state: latest
+        loop: "{{ hpovm_package }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Backup Hosts File [RH]
+        shell: "cp /etc/hosts /etc/hosts_{{ ansible_date_time.date }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Add IP To /etc/hosts [1/5] [RH]
+        shell: "cat /etc/hosts"
+        register: etc_hosts
+
+      - name: Add IP To /etc/hosts [2/5] [RH]
+        when: (etc_hosts.stdout.find('172.16.192.35') != -1) and (ansible_os_family == "RedHat")
+        ansible.builtin.set_fact: pocinfsysomw1_exist="True"
+
+      - name: Add IP To /etc/hosts [3/5] [RH]
+        when: (etc_hosts.stdout.find('172.28.180.23') != -1) and (ansible_os_family == "RedHat")
+        ansible.builtin.set_fact: pdwinfsysomw1_exist="True"
+
+      - name: Add IP To /etc/hosts [4/5] [RH]
+        shell: "echo {{ item.ip1 }} >> /etc/hosts"
+        loop: "{{ hpovm_hostsdetails }}"
+        async: 60
+        poll: 0
+        when: (ansible_os_family == "RedHat") and (pocinfsysomw1_exist|bool == false)
+
+      - name: Add IP To /etc/hosts [5/5] [RH]
+        shell: "echo {{ item.ip2 }} >> /etc/hosts"
+        loop: "{{ hpovm_hostsdetails }}"
+        async: 60
+        poll: 0
+        when: (ansible_os_family == "RedHat") and (pdwinfsysomw1_exist|bool == false)
+
+      - name: Ping Test 5 Seconds [RH]
+        shell: "timeout 5 bash -c 'echo | ping {{ item }}' >> /tmp/Hpovm_output_{{ inventory_hostname }}_Before.txt"
+        loop: "{{ hpovm_pingtest }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+    
+      - name: Create Mount Point Path [RH]
+        file:
+          path: "{{ item.mountPath }}"
+          state: directory
+          mode: "0755"
+        loop: "{{ hpovm_mountdetails }}"
+        when: ansible_os_family == "RedHat"
+
+      - name: Mount ISO [RH]
+        shell: "mount -o loop {{ item.tmpStoragePath }}{{ item.iso }} {{ item.mountPath }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_Before.txt"
+        loop: "{{ hpovm_mountdetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Output Opcagt Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase1_step2 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Installation And Output Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase1_step1 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Cert Request [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase1_step3 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+    always:
+      - name: Result
+        ansible.builtin.debug:
+          msg: "Phase 1 Installation Step Completed, Please Proceed To Check In HPOVM Manually"
+        when: ansible_os_family == "RedHat"
+    tags:
+      - HpovmFreshInstallPhase1
+
+  - name: Phase2 Of HPOVM Installation [RH]
+    block:
+      #phase2
+      - name: Ovcert List And Output Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step1 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Configure Ovconfchg [1/2] [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step2 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Configure Ovconfchg [2/2] [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step3 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Opcagt List All Version And Output Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step4 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Restart Process [1/2] [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step5 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Pause, Wait For Proc To Down Completely.
+        pause:
+          seconds: 5
+        when: ansible_os_family == "RedHat"
+
+      - name: Restart Process [2/2] [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step6 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Output Opcagt Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step7 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Output Opconfget Status To File [RH]
+        become: true
+        become_user: root
+        shell: "{{ item.phase2_step8 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+    always:
+      - name: Result
+        ansible.builtin.debug:
+          msg: "Phase 2 Installation Step Completed"
+        when: ansible_os_family == "RedHat"
+    tags:
+      - HpovmFreshInstallPhase2
+
+  - name: Phase3 Of HPOVM Installation [RH]
+    block:
+      #phase3
+      - name: Output Ovpolicy List Status To File [RH]
+        become: true
+        shell: "{{ item.phase3_step1 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+
+      - name: Send Message To HPOV Server [RH]
+        become: true
+        shell: "{{ item.phase3_step2 }} >> /tmp/Hpovm_output_{{ inventory_hostname }}_After.txt"
+        loop: "{{ hpovm_executiondetails }}"
+        async: 60
+        poll: 0
+        when: ansible_os_family == "RedHat"
+    always:
+      - import_tasks: outputHpovmReport_RH.yml
+        when: ansible_os_family == "RedHat"
+
+      - name: Generate Report
+        ansible.builtin.debug:
+          msg: "Phase 3 Installation Step Completed, Please Verify Output in /Ansible_Event_Report/Hpovm_output_{{ inventory_hostname }}.log"
+        when: ansible_os_family == "RedHat"
+    tags:
+      - HpovmFreshInstallPhase3

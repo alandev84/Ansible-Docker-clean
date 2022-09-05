@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.10 Ensure FTP Server is not enabled (Scored)
+  service:
+    name: vsfptd
+    state: stopped
+    enabled: false
+  when: "'vsftpd' in ansible_facts.packages"
+

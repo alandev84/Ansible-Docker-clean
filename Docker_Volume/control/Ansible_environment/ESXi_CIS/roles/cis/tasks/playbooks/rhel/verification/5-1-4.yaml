@@ -1,0 +1,42 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  stat:
+    path: /etc/at.allow
+  register: stat_result_at_allow
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} - deny"
+      file:
+        dest: /etc/at.deny
+        state: absent
+      check_mode: yes
+      register: result_1
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - allow"
+      file:
+        dest: /etc/at.allow
+        mode: '0600'
+        owner: root
+        group: root
+      check_mode: yes
+      register: result_4
+      when: stat_result_at_allow.stat.exists
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: result_1['changed'] 
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - result_4['changed']
+        - stat_result_at_allow.stat.exists
+

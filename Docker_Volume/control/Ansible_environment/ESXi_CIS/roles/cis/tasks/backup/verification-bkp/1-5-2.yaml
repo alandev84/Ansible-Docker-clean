@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: 'FAIL'
+
+- name: Check user.cfg content
+  lineinfile:
+    path: /boot/grub2/user.cfg
+    state: absent
+    regexp: '^\s*GRUB2_PASSWORD\s*=\s*grub.pbkdf2.'
+  check_mode: yes
+  register: user_file__result
+
+- debug:
+    msg: "{{ user_file__result['changed'] }}"
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: user_file__result['changed'] 
+
+#- debug: var=cis_result

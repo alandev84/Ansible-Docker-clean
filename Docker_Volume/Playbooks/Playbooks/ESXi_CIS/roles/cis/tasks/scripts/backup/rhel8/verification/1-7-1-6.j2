@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q setroubleshoot 2>/dev/null 1>&2) \
+|| \
+(echo 'setroubleshoot package is installed.' ; exit 1)

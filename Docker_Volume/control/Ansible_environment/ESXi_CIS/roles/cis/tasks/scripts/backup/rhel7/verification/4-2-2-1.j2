@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+grep -e '^\s*ForwardToSyslog\s*=\s*yes\s*$' /etc/systemd/journald.conf \
+|| \
+(echo "journald is not configured to send logs to rsyslog" ; exit 1)

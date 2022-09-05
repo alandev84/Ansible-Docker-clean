@@ -1,0 +1,9 @@
+---
+
+- name: 6.1.6 Ensure permissions on /etc/passwd- are configured (Scored)
+  file:
+    dest: /etc/passwd-
+    owner: root
+    group: root
+    mode: 0600
+

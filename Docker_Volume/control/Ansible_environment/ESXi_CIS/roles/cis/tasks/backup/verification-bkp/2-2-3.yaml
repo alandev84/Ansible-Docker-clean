@@ -1,0 +1,21 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: check rsyncd status (enabled & started)
+  service:
+    name: rsyncd
+    enabled: yes
+    state: started
+  check_mode: yes
+  register: rsyncd_service__result
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: rsyncd_service__result['changed'] 
+
+  #- debug: var=cis_result

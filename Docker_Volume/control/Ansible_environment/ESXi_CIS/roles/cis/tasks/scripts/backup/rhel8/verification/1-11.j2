@@ -1,0 +1,5 @@
+#!/bin/sh
+
+grep -E -i '^\s*(FUTURE|FIPS)\s*(\s+#.*)?$' /etc/crypto-policies/config  \
+|| \
+(echo 'crypto policy is not FUTURE or FIPS' ; exit 1)

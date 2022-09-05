@@ -1,0 +1,14 @@
+
+- name:  copy standard /etc/issue
+  copy:
+    src: section01/standard/etc_issue
+    dest: /etc/issue
+  check_mode: yes
+  register: motd_file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: 'PASS'
+  when: not motd_file_result['changed']
+
+

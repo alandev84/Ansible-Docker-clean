@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q cups)  \
+|| \
+(echo 'cups is installed' ; exit 1)
+

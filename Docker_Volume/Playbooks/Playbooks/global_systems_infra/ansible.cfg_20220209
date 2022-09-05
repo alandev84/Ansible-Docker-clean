@@ -1,0 +1,7 @@
+[defaults]
+log_path = /ansible_log/ansible-infra
+remote_tmp     = ~/.ansible/tmp
+local_tmp      = ~/.ansible/tmp
+
+[ssh_connection]
+ssh_args = -o ServerAliveInterval=10

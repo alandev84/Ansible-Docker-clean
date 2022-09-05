@@ -1,0 +1,10 @@
+---
+- name: 1.11. Create a pagefile(4.1.3.)
+  win_user_right:
+    name: SeCreatePagefilePrivilege
+    users: "{{ item.users }}"
+    action: set
+  loop: "{{ cis_win_SeCreatePagefilePrivilege }}"
+
+
+

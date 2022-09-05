@@ -1,0 +1,22 @@
+- name: Get user last login date
+  shell: lastlog -u "{{ last_user_login.split()[0] }}" | tail -n1 | awk -F " " '{print $6, $5, $9}' | sed 's\,\\g' | sed 's\never--\never\g'
+  loop: "{{ user_account }}"
+  loop_control:
+    loop_var: last_user_login
+  register: user_last_user_login_out
+
+- name: Get user last login date | Set fact
+  set_fact:
+    last_login_date: "{{ user_last_user_login_out['results'] | map(attribute='stdout') | reject('equalto','') | list }}"
+    cacheable: yes
+  when: user_last_user_login_out['results'] | map(attribute='stdout') | reject('equalto','') | list | length > 0
+  
+
+- name: Get user last login date | Set fact
+  set_fact:
+    last_login_date: "Never logged in"
+    cacheable: yes
+  when: user_last_user_login_out['results'] | map(attribute='stdout') | reject('equalto','') | list | length == 0
+
+- debug:
+    msg: "{{ user_last_user_login_out }}"

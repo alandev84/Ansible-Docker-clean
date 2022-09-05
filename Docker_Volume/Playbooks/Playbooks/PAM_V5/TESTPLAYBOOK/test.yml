@@ -1,0 +1,15 @@
+
+- name: Retrieve User 
+  hosts: localhost
+  gather_facts: true 
+  become: false 
+  roles: 
+    - retrieve_test 
+
+
+- name: Test 
+  hosts: localhost
+  gather_facts: true 
+  become: false 
+  roles: 
+    - report_test 

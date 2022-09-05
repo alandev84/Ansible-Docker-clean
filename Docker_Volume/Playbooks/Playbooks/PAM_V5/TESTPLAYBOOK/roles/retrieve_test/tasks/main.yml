@@ -1,0 +1,9 @@
+---
+
+- name: Retrieve User 
+  set_fact: 
+    username: "{{ names }}" 
+    cacheable: yes 
+
+
+

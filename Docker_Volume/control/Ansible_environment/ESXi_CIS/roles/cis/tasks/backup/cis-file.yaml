@@ -1,0 +1,11 @@
+---
+
+    
+#- debug:
+#    msg: "{{ cis_item['descrip'].split()[0] }},{{ cis_item['descrip'].split()[1:] | join(' ') }},Level 1,Level 1"
+#
+- shell: echo  "{{ cis_item['descrip'].split()[0] }},{{ cis_item['descrip'].split()[1:] | join(' ') }},Level 1,Level 1" >> rhel8-cis-benchmarks.csv
+  loop: "{{ cis }}"
+  loop_control:
+    loop_var: cis_item
+

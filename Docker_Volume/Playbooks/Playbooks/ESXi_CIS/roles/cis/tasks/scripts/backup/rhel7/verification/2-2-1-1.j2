@@ -1,0 +1,10 @@
+#!/bin/sh
+
+rpm -q chrony  \
+|| \
+(echo 'package chrony is not installed' ; exit 1)
+
+rpm -q ntp  \
+|| \
+(echo 'package ntp is not installed' ; exit 1)
+

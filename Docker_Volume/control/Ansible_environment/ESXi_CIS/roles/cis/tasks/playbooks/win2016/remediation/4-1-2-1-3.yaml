@@ -1,0 +1,47 @@
+---
+
+- name: check account type
+  win_shell: Get-LocalUser |Select-Object "Name"|Select-String 'apop'
+  register: user_list_local
+
+- name: check account type
+  win_shell: |
+     (Get-LocalGroupMember -Group "Administrators" |Select-Object "Name"|Select-String 'BCS')
+  register: user_list_ad
+
+
+- set_fact:
+    user: "{{ user_list_local.stdout_lines| replace('@', '')|  replace('{Name=', '')|  replace('}', '') }}"
+    user_ad: "{{ user_list_ad.stdout_lines |   replace('@', '')|  replace('{Name=', '')|  replace('}', '')| replace('BCS\', '') }}"
+    ansible_user: "\\{{ ansible_user_id }}"
+
+- debug:
+    msg: "{{ ansible_user }}"
+
+
+- debug:
+    msg: "{{  user_ad }}"
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: MinimumPasswordAge
+    value: "{{ cis_win_MinimumPasswordAge_pv }}"
+  when:
+    - (ansible_user_id in user) or
+      ansible_user in user_ad
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: MinimumPasswordAge
+    value: "{{ cis_win_MinimumPasswordAge }}"
+  when:
+    - (ansible_user_id not in user) and
+      ansible_user not in user_ad
+
+

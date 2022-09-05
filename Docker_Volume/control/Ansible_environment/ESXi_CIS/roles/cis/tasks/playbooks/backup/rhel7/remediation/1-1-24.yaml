@@ -1,0 +1,15 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/modprobe.d/usb_storage.conf
+    regexp: "^(#)?\\s*install\\s+usb-storage(\\s*|$)"
+    line: "install usb-storage /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  shell: rmmod usb-storage
+  failed_when: false

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q dovecot)  \
+|| \
+(echo 'dovecot is installed' ; exit 1)
+

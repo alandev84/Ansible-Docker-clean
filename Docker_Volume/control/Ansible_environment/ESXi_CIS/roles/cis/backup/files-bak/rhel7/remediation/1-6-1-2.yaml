@@ -1,0 +1,12 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  replace:
+    dest: /etc/default/grub
+    regexp: "{{ item }}"
+    replace: ""
+  with_items:
+    - selinux=0
+    - enforcing=0
+  notify: update grub2
+

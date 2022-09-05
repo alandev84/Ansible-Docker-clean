@@ -1,0 +1,33 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    state: present
+    dest: "{{ item }}"
+    create: true
+    regexp: '^TMOUT='
+    line: "TMOUT={{ cis_rhel7_shell_timeout }} ; export TMOUT"
+  with_items:
+    - /etc/bashrc
+    - /etc/profile
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not item[1]
+    - item[0]
+    - (result.skipped is not defined)  or
+      not result.skipped
+  loop: "{{ result.results | json_query('[].[changed,failed]') }}"
+  #loop: "{{ result.results }}"
+
+
+

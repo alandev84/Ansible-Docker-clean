@@ -1,0 +1,6 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  command: mount -o remount,nosuid /var/tmp
+  failed_when: false
+

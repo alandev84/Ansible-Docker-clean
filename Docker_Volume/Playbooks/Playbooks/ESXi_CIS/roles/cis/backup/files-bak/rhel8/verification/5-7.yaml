@@ -1,0 +1,40 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.7 Ensure access to the su command is restricted (Scored)
+  block:
+    - name: 5.7 Ensure access to the su command is restricted (Scored) - pam config
+      lineinfile:
+        state: present
+        dest: /etc/pam.d/su
+        regexp: '^(#)?auth\s+required\s+pam_wheel\.so'
+        line: 'auth required pam_wheel.so use_uid'
+      check_mode: true
+      ignore_errors: true
+      register: result
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not result['failed']
+        - result['changed']
+          
+    - name: 5.7 Ensure access to the su command is restricted (Scored) - add role to wheel group
+      user:
+        name: root
+        groups: wheel
+      check_mode: true
+      ignore_errors: true
+      register: result
+
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when:
+        - not result['failed']
+        - result['changed']
+

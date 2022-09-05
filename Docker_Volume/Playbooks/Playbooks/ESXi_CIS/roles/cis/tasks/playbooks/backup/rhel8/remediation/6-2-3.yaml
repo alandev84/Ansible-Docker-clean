@@ -1,0 +1,6 @@
+---
+
+- name: 6.2.3 Ensure root PATH Integrity (Scored)
+  command: /bin/true
+  changed_when: false
+

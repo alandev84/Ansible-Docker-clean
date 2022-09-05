@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: EnableInstallerDetection
+    data: "{{ cis_win2019_2_3_17_4.data }}"
+    state: "{{ cis_win2019_2_3_17_4.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result
+

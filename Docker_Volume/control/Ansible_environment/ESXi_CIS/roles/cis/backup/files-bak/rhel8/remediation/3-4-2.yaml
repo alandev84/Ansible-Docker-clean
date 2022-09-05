@@ -1,0 +1,53 @@
+---
+
+- name: 3.4.2 Configure firewalld
+  block:
+    - name: 3.4.2.1 Ensure firewalld service is enabled and running (Scored)
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: check if there is iptables-services pkg
+      shell: rpm -q iptables-services
+      register: pkg_result
+      changed_when: false
+      failed_when: false
+
+    - name: 3.4.2.2 Ensure iptables is not enabled (Scored)
+      service:
+        name: iptables
+        state: stopped
+        enabled: false
+      when: pkg_result.rc == 0
+
+    - name: check if there is nftables pkg
+      shell: rpm -q nftables
+      register: pkg_result
+      changed_when: false
+      failed_when: false
+
+    - name: 3.4.2.3 Ensure nftables is not enabled (Scored)
+      systemd:
+        name: nftables
+        masked: true
+        state: stopped
+        enabled: false
+      when: pkg_result.rc == 0
+
+    - name: 3.4.2.4 Ensure default zone is set (Scored)
+      command: firewall-cmd --set-default-zone {{ cis_rhel8_firewall_default_zone }}
+      register: set_default_zone
+      changed_when: "'Warning: ZONE_ALREADY_SET' not in set_default_zone.stderr"
+
+    - name: 3.4.2.5 Ensure network interfaces are assigned to appropriate zone (Not Scored)
+      command: /bin/true
+      changed_when: false
+
+    - name: 3.4.2.6 Ensure unnecessary services and ports are not accepted (Not Scored)
+      command: /bin/true
+      changed_when: false
+
+  when:
+    cis_rhel8_firewall_package == "firewalld"
+

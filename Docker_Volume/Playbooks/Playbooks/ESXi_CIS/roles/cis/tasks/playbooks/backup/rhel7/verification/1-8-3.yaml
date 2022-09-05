@@ -1,0 +1,36 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  multi_lines_matching:
+    file_path: /etc/dconf/db/gdm.d/01-banner-message
+    lines:
+      - '^\[\s*org/gnome/login-screen\s*\]\s*$'
+      - '^\s*disable-user-list\s*=\s*true\s*$'
+      - '^\s*banner-message-enable\s*=\s*true\s*$'
+      - "^\\s*banner-message-text\\s*=\\s*{{ cis_rhel7_warning_banner }}\\s*$"
+  failed_when: false
+  register: file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: file_result['found'] is defined and file_result['found']  
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  multi_lines_matching:
+    file_path: /etc/dconf/profile/gdm
+    lines:
+      - '^\s*user-db:user\s*$'
+      - '^\s*system-db:gdm\s*$'
+      - '^\s*file-db:/usr/share/gdm/greeter-dconf-defaults\s*$'
+  failed_when: false
+  register: file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: file_result['found'] is defined and file_result['found'] 

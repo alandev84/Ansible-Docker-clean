@@ -1,0 +1,16 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  lineinfile:
+    dest: /etc/audit/auditd.conf
+    regexp: '^max_log_file = \d+'
+    line: 'max_log_file = {{ cis_rhel7_audit_max_log_file }}'
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    backrefs: true
+  when: "'audit' in ansible_facts.packages"
+  notify:
+    - restart auditd
+

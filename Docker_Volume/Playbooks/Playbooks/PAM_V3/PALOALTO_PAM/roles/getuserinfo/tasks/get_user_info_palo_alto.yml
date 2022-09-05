@@ -1,0 +1,69 @@
+---
+# - name: Get Password from Cyberark
+#   local_action: 
+#     shell ./clipasswordsdk GetPassword -p AppDescs.AppID="ansible_safe" -p Query="Safe=Ansible_safe;Folder=Root;Object=Operating-System-ansible_ssh-10.68.32.81-Administrator;Username=Administrator" -o Password
+#   args:
+#     chdir: /opt/CARKaim/sdk/
+#   register: local_process
+
+# - name: Save password from cyberark to var
+#   set_fact: 
+#     cyberark_password: "{{local_process.stdout}}"
+
+
+- name: Retrieve the key to be use in the next api 
+  uri:
+    #the password is hard coded because the cyberarc password is not working with this link
+    url: https://172.28.200.20/api/?type=keygen&user=admin&password=admin
+    dest: ./response.xml
+    method: GET
+    validate_certs: no
+    return_content: yes
+  register: result
+
+
+- name: Set key value and put it in array.
+  set_fact:
+    key_values: "{{ result.content |regex_findall('<key>(.*?)</key>') }}"
+  register: key_value
+
+
+- name: Procceed to next api
+  uri:
+    url: https://172.28.200.20/api/?type=config&action=get&xpath=/config/mgt-config/users&key={{item}}
+    dest: ./information.xml
+    method: GET
+    validate_certs: no
+    return_content: yes
+  with_items: "{{key_values}}"
+  register: user_information 
+
+- name: set up xml 
+  xml:
+    path: ./information.xml
+    xpath: /response/result/users/entry
+    content: attribute
+  register: user_information_xml
+
+
+- name: Set fact for the data that going to be use 
+  set_fact:
+    data: "{{user_information_xml.matches}}"
+  register: data 
+
+     
+- name: Filter the data to just collect the name 
+  set_fact: 
+    names: "{{data | json_query(jmesquery)}}"
+    cacheable: yes
+  vars:
+    jmesquery: "ansible_facts.data[*].entry.name"
+
+
+- name: The names that math with the privilege user name 
+  set_fact: 
+    priv_users_list: "{{ names | intersect(acc_name) }}"
+    cacheable: yes
+  delegate_to: localhost
+
+

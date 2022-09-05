@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q squid)  \
+|| \
+(echo 'squid is installed' ; exit 1)

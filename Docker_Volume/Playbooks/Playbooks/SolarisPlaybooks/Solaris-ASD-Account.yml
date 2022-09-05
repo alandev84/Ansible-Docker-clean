@@ -1,0 +1,54 @@
+---
+- name: create solaris asd user
+  gather_facts: no
+  ignore_errors: true
+  hosts: IDT_CAS_DB
+  vars:
+    ips_asd_create: false
+    oracle_asd_create: true
+    apmgr_asd_create: false
+    new_passwd: $6$NVhCE0ZQznuDIR/L$4zgymrumK7hXFAe.nzQNIdmHIB8WbgJRVYYGyRSoxUaiLotct3N5HsRV1VaZtoGsKTpKWSFACtr25NhH2485g1
+
+# password : P@ssw0rd@0820
+
+  tasks:
+    - name: create ips user
+      user: 
+        name: ips_asd
+        uid: 3013
+        group: ipsgrp
+        append: yes
+        shell: /usr/bin/bash
+        home: /export/home/ips_asd
+        password: "{{ new_passwd }}"
+        state: present
+      when: 
+        - ips_asd_create
+
+    - name: create apmgr asd user
+      user:
+        name: apmgr_asd
+        uid: 3072
+        group: apgrp
+        shell: /usr/bin/bash
+        home: /export/home/apmgr_asd
+        create_home: true
+        comment: ASD account
+        password: "{{ new_passwd }}"
+        state: present
+      when:
+        - apmgr_asd_create
+
+    - name: create oracle_asd user
+      user:
+        name: oradba_asd
+        uid: 1003
+        group: dba
+        shell: /usr/bin/bash
+        home: /export/home/oradba_asd
+        create_home: true
+        comment: ASD Oracle Account
+        password: "{{ new_passwd }}"
+        state: present
+      when:
+        - oracle_asd_create

@@ -1,0 +1,9 @@
+---
+
+- name: 2.2.6 Ensure HTTP Proxy Server is not enabled (Scored)
+  service:
+    name: squid
+    state: stopped
+    enabled: false
+  when: "'squid' in ansible_facts.packages"
+

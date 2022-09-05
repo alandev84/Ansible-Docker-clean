@@ -1,0 +1,10 @@
+{% for host in groups[group_name] -%}
+{% if hostvars[host]['cisco_switch_user_information'] is defined and hostvars[host]['ip'] is defined  %}
+{% for is_priv in hostvars[host]['cisco_switch_user_information'] %}
+{% if is_priv['privilege'] == True %}
+{{host}};Cisco IOS Switch;nil;nil;{{is_priv['privilege']}};nil;nil;{{is_priv['user']}};{{hostvars[host]['ip'
+]}}
+{% endif %}
+{% endfor %}
+{% endif %}
+{%- endfor %}

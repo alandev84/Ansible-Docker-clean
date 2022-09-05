@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ `getent shadow | grep -Po '^[^:]*(?=::)' | wc -l` == 0 ] \
+|| \
+(echo "some password fields is empty" ; exit 1)

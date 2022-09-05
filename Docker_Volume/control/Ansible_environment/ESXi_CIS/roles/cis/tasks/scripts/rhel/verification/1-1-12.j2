@@ -1,0 +1,5 @@
+#!/bin/sh
+
+findmnt /home \
+|| \
+(echo '/home is not separate partition' ; exit 1)

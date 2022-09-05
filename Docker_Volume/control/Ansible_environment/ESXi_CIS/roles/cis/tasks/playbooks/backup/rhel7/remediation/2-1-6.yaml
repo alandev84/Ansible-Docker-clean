@@ -1,0 +1,50 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} -- search core config"
+      command: grep -Erl '^\s*\*\s+hard\s+core\s+0\s*$' /etc/security/limits.conf /etc/security/limits.d
+      register: hard_core
+      failed_when: false
+      changed_when: false
+
+    - name: "{{ cis_rules[cis_item]['name'] }} -- search suid dumpable config"
+      command: grep -Erl '^\s*fs\.suid_dumpable\*=\s*0$' /etc/sysctl.conf /etc/sysctl.d
+      register: suid_dumpable
+      failed_when: false
+      changed_when: false
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - create config core dump"
+      lineinfile:
+        dest: /etc/security/limits.d/cis.conf
+        line: "* hard core 0"
+        state: present
+        owner: root
+        group: root
+        mode: 0644
+        create: true
+      when:
+        - hard_core.rc != 0
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - create config suid dumpable"
+      sysctl:
+        name: "fs.suid_dumpable"
+        value: '0'
+        state: present
+        reload: true
+        sysctl_file: /etc/sysctl.d/cis.conf
+      when:
+        - suid_dumpable.rc != 0
+
+    - name: "{{ cis_rules[cis_item]['name'] }} - configure systemd-coredump"
+      ini_file:
+        path: /etc/systemd/coredump.conf
+        section: Coredump
+        no_extra_spaces: true
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+      with_dict:
+        Storage: none
+        ProcessSizeMax: 0
+      notify: systemctl daemon-reload
+

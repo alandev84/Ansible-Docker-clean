@@ -1,0 +1,26 @@
+---
+# FOR RH
+  - name: Copy RPM To Destination For RedHat
+    copy:
+      src: "./files/{{ item }}"
+      dest: '/tmp/{{ item }}'
+      owner: root
+      group: root
+      mode: '0644'
+    ignore_errors: yes
+    loop: "{{ networker }}"
+    tags:
+      - OSInstallNetworker
+    when: ansible_os_family == "RedHat"
+
+  - name: Install Networker Agent For RedHat
+    shell: "yum localinstall {{ item }} -y"
+    args:
+      chdir: /tmp
+    ignore_errors: yes
+    loop: "{{ networker }}"
+    tags:
+      - OSInstallNetworker
+    when: ansible_os_family == "RedHat"
+
+# For Solaris

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+
+grep -E '^space_left_action\s*=\s*{{ section04_parms['space_left_action'] }}\s*$' /etc/audit/auditd.conf \
+&& \
+grep -E '^action_mail_acct\s*=\s*{{ section04_parms['action_mail_acct'] }}\s*$' /etc/audit/auditd.conf \
+&& \
+grep -E '^admin_space_left_action\s*=\s*{{ section04_parms['admin_space_left_action'] }}\s*$' /etc/audit/auditd.conf \
+|| \
+(echo "audit is not enable as kernel params" ; exit 1)

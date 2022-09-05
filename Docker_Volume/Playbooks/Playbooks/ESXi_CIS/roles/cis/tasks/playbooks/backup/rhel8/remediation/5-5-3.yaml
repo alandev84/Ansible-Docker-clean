@@ -1,0 +1,13 @@
+---
+
+- name: 5.5.3 Ensure default user shell timeout is 900 seconds or less (Scored)
+  lineinfile:
+    state: present
+    dest: "{{ item }}"
+    create: true
+    regexp: '^TMOUT='
+    line: "TMOUT={{ cis_rhel8_shell_timeout }} ; export TMOUT"
+  with_items:
+    - /etc/bashrc
+    - /etc/profile
+

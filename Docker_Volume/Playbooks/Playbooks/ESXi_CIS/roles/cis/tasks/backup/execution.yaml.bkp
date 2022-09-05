@@ -1,0 +1,32 @@
+---
+
+#- debug: var=cis_item['descrip']
+#- debug: var=cis_item['verification_method']
+#- debug: var=cis_item['verification_file']
+
+- name: set result
+  set_fact:
+    cis_result: "PASS"
+
+- debug: 
+    msg: "{{ selection }}"
+
+- name: execute anisble playbook
+  block:
+    - name: start playbook
+      include_tasks: "{{ cis_item['verification_file'] }}"
+
+    - name: set result
+      set_fact:
+        cis_result: "FAIL"
+      when: cis_result['changed']
+
+    - debug: var=cis_result
+
+  when: cis_item['verification_method'] == 'playbook'
+ 
+
+- shell: "echo {{ ansible_hostname }},{{ ansible_default_ipv4.address }},{{ ansible_date_time.date }},{{ cis_item['descrip'] }},{{ cis_result }} >> {{ csv_file }}"
+  when: ( cis_result == 'FAIL' ) or ( cis_result == 'PASS' ) or ( cis_result == 'Manual Verification needed' )
+
+

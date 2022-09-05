@@ -1,0 +1,15 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  cron:
+    name: "{{ cis_rules[cis_item]['name'] }}"
+    weekday: "{{ cis_rhel7_aide_cron['weekday'] }}"
+    minute: "{{ cis_rhel7_aide_cron['minute'] }}"
+    hour: "{{ cis_rhel7_aide_cron['hour'] }}"
+    user: "{{ cis_rhel7_aide_cron['user'] }}"
+    job: "{{ cis_rhel7_aide_cron['job'] }}"
+    cron_file: "{{ cis_rhel7_aide_cron['cron_file'] }}"
+  ignore_errors: true
+  register: result
+
+

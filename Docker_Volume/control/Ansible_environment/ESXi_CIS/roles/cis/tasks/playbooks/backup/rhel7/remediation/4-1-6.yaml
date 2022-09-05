@@ -1,0 +1,11 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  template:
+    dest: /etc/audit/rules.d/user-group-info.rules
+    src: rhel/etc/audit_rules/user-group-info.rules
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart auditd
+

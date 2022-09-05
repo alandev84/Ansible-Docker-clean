@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Netlogon\Parameters
+    name: signsecurechannel
+    data: "{{ cis_win_signsecurechannel.data }}"
+    state: present
+    type: dword
+

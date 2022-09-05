@@ -1,0 +1,11 @@
+#!/bin/sh
+
+sysctl net.ipv4.conf.all.log_martians | grep -E '^\s*net.ipv4.conf.all.log_martians\s*=\s*1\s*$' \
+&& \
+sysctl net.ipv4.conf.default.log_martians | grep -E '^\s*net.ipv4.conf.default.log_martians\s*=\s*1\s*$' \
+&& \
+grep -E '^\s*net.ipv4.conf.all.log_martians\s*=\s*1\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+&& \
+grep -E '^\s*net.ipv4.conf.default.log_martians\s*=\s*1\s*$' /etc/sysctl.conf /etc/sysctl.d/* \
+|| \
+(echo 'suspicious packets loggoed settings are wrong' ; exit 1)

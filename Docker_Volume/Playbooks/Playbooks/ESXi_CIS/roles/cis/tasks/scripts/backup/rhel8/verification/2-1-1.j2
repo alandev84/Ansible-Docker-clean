@@ -1,0 +1,5 @@
+#!/bin/sh
+
+! (rpm -q xinetd)  \
+|| \
+(echo 'xinetd is installed' ; exit 1)

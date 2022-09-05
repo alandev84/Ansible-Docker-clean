@@ -1,0 +1,22 @@
+---
+
+- name: 6.1.12 Ensure no ungrouped files or directories exist (Scored)
+  block:
+    - name: 6.1.12 Ensure no ungrouped files or directories exist (Scored) - find files
+      shell: |
+        set -o pipefail
+        df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup
+      args:
+        executable: /bin/bash
+      changed_when: false
+      failed_when: false
+      register: ungrouped_files
+
+    - name: 6.1.12 Ensure no ungrouped files or directories exist (Scored) - fix permission
+      file:
+        path: "{{ item }}"
+        group: "{{ cis_rhel8_group_ungrouped_file }}"
+      with_items: "{{ ungrouped_files.stdout_lines }}"
+      when:
+        - ungrouped_files.stdout_lines | length > 0
+

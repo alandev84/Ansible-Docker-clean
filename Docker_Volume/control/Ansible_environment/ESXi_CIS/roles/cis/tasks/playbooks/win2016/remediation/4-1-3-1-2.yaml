@@ -1,0 +1,21 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeTrustedCredManAccessPrivilege
+    users: "{{ item.users }}"
+    action: "{{ item.action|default('set') }}"
+  loop: "{{ cis_win_SeTrustedCredManAccessPrivilege_DC }}"
+  when:
+    - ansible_windows_domain_role == "Primary domain controller"
+
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_user_right:
+    name: SeTrustedCredManAccessPrivilege
+    users: "{{ item.users }}"
+    action: "{{ item.action|default('set') }}"
+  loop: "{{ cis_win_SeTrustedCredManAccessPrivilege_MS }}"
+  when:
+    - not ansible_windows_domain_role == "Primary domain controller"
+

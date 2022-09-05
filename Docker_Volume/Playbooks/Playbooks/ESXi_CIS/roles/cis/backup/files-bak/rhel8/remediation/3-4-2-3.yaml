@@ -1,0 +1,11 @@
+---
+
+- name: 3.4.2.3 Ensure nftables is not enabled (Scored)
+  systemd:
+    name: nftables
+    masked: true
+    state: stopped
+    enabled: false
+  when:
+    - cis_rhel8_firewall_package == "firewalld"
+    - "'nftables' in ansible_facts.packages"

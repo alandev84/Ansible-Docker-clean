@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q ypserv)  \
+|| \
+(echo 'ypserv is installed' ; exit 1)
+

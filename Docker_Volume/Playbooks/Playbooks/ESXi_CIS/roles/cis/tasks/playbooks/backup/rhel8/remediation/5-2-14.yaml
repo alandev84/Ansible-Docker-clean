@@ -1,0 +1,12 @@
+---
+
+- name: 5.2.14 Ensure SSH LoginGraceTime is set to one minute or less (Scored)
+  blockinfile:
+    dest: /etc/ssh/sshd_config
+    marker: "# {mark} cis-rhel8 5.2.14"
+    block: |
+      LoginGraceTime {{ cis_rhel8_sshd_login_grace_time }}
+    validate: /usr/sbin/sshd -T -f %s
+  notify:
+    - restart sshd
+

@@ -1,0 +1,11 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Netlogon\Parameters
+    name: RequireStrongKey
+    data: "{{ cis_win2019_RequireStrongKey.data }}"
+    state: "{{ cis_win2019_RequireStrongKey.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result

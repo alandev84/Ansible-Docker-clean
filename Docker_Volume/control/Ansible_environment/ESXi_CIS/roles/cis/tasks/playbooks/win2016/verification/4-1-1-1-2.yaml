@@ -1,0 +1,21 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_shell: |
+     Get-WindowsUpdate > tmp.txt
+     (Get-Content tmp.txt).Length
+  ignore_errors: true
+  register: result
+
+
+- set_fact:
+    number: "{{ result.stdout_lines }}"
+
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - number > ["4"]
+
+
+

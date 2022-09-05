@@ -1,0 +1,20 @@
+PATH=/CTS/cbin/common:/opt/CA/eTrustAccessControl/bin:/usr/bin:/usr/sbin
+export PATH
+
+
+ORACLE_HOME=/opt/oracle/product/19.0.0/db_1; export ORACLE_HOME
+PATH=$PATH:$ORACLE_HOME/bin; export PATH
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME/lib; export LD_LIBRARY_PATH
+
+if [ -f /usr/bin/less ]; then
+    export PAGER="/usr/bin/less -ins"
+elif [ -f /usr/bin/more ]; then
+    export PAGER="/usr/bin/more -s"
+fi
+
+case ${SHELL} in
+*bash)
+    typeset +x PS1="\u@\h:\w\\$ "
+    ;;
+esac
+umask 007

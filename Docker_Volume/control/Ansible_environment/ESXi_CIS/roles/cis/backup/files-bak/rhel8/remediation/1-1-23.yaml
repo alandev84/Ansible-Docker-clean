@@ -1,0 +1,14 @@
+---
+
+- name: 1.1.23 Disable USB Storage (Scored)
+  lineinfile:
+    dest: /etc/modprobe.d/cis.conf
+    regexp: "^(#)?\\s*install\\s+usb-storage(\\s*|$)"
+    line: "install usb-storage /bin/true"
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+    create: true
+
+

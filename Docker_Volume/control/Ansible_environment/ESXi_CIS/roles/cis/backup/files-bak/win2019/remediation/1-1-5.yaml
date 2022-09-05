@@ -1,0 +1,9 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_security_policy:
+    section: System Access
+    key: PasswordComplexity
+    value: "{{ cis_win2019_PasswordComplexity }}"
+  register: result
+
+- debug: var=result

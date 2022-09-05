@@ -1,0 +1,23 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: check slapd status (enabled & started)
+  block:
+    - name: check slapd status (enabled & started)
+      service:
+        name: slapd
+        enabled: false
+        state: stopped
+      check_mode: yes
+      register: slapd_service_result
+    
+    - name: Reset cis_result value
+      set_fact:
+        cis_result: false
+      when: slapd_service_result['changed'] 
+
+  when: "'slapd' in ansible_facts.packages"
+  #- debug: var=cis_result

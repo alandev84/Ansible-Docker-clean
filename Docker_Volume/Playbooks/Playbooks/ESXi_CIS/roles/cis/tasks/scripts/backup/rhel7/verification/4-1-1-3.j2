@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# https://access.redhat.com/solutions/3710121
+grubby --info DEFAULT | grep -E 'args=(\S+\s+)*audit=1\b' \
+|| \
+(echo "audit is not enable as kernel params" ; exit 1)

@@ -1,0 +1,8 @@
+---
+
+- name: 6.2.2 Ensure no legacy "+" entries exist in /etc/passwd (Scored)
+  lineinfile:
+    dest: /etc/passwd
+    regexp: '^\+.*'
+    state: absent
+

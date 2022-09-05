@@ -1,0 +1,6 @@
+---
+- name: 2.3.5 Ensure LDAP client is not installed (Scored)
+  yum:
+    name: openldap-clients
+    state: absent
+

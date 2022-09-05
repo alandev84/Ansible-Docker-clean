@@ -1,0 +1,158 @@
+---
+# FOR CAS Services - Backup - Step 1
+  - name: Step 1 - Backup All Path On AppShare [1/5]
+    become_user: apmgr
+    file:
+      path: '{{ backup_tmp_path }}/{{ oldname }}/{{ item }}'
+    ignore_errors: yes
+    register: backup_folder
+    loop: "{{ backup }}"
+    tags:
+      - CASDeployFull
+      - CASDeployBackup
+
+  - name: Step 1 - Config File Backup [2/5]
+    become_user: apmgr
+    copy:
+      src: '{{ casapp_path }}/conf'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_conf_svr1'
+      remote_src: yes
+    ignore_errors: yes
+    register: backup_conf
+    tags:
+      - CASDeployFull
+      - CASDeployBackup
+    when: backup_folder.changed
+
+  - name: Step 1 - Script File Backup [3/5]
+    become_user: apmgr
+    copy:
+      src: '{{ casapp_path }}/script'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_script_svr1'
+      remote_src: yes
+    ignore_errors: yes
+    register: backup_script
+    tags:
+      - CASDeployFull
+      - CASDeployBackup
+    when: backup_conf.changed
+
+  - name: Step 1 - HTML File & Home Folder Backup [4/5]
+    become_user: apmgr
+    copy:
+      src: '{{ casapp_path }}/htmlhome'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_htmlhome_svr1'
+      remote_src: yes
+    ignore_errors: yes
+    register: backup_htmlhome
+    tags:
+      - CASDeployFull
+      - CASDeployBackup
+    when: backup_script.changed
+
+  - name: Step 1 - Program File Backup [5/5]
+    become_user: apmgr
+    archive:
+      path: 
+        - '{{ backup_prog_path }}/*'
+      dest: '{{ archive_path }}/{{ oldname }}/appfc_program_svr1/program_svr.tgz'
+    ignore_errors: yes
+    register: backup_complete
+    tags:
+      - CASDeployFull
+      - CASDeployBackup
+    when: backup_htmlhome.changed
+
+# FOR CAS Services - Copy New Files To Host - Step 2
+  - name: Step 2 - Copy CPGS Deployment Packages To Host [1/2]
+    become_user: apmgr
+    copy:
+      src: './files/{{ newname }}.tar'
+      dest: '{{ tmp_path }}/{{ newname }}.tar'
+    ignore_errors: yes
+    register: step2_part1
+    tags:
+      - CASDeployFull
+    when: backup_complete.changed
+
+  - name: Step 2 - Copy CPGS Deployment Packages To Host [2/2]
+    become_user: apmgr
+    unarchive:
+      src: '{{ tmp_path }}/{{ newname }}.tar'
+      dest: /var/tmp/
+      remote_src: yes
+    ignore_errors: yes
+    register: step2_complete
+    tags:
+      - CASDeployFull
+    when: backup_completed.changed and step2_part1.changed
+
+# FOR CAS Services - Remove Sachweb and Bankweb Files - Step 3
+  - name: Step 3 - Remove Old Sachweb App Deployment Folder [1/2]
+    become_user: apmgr
+    file:
+      path: "{{ sachweb_oldpath }}"
+      state: absent
+    ignore_errors: yes
+    register: step3_part1
+    tags:
+      - CASDeployFull
+    when: step2_complete.changed
+
+  - name: Step 3 - Remove Old Sachweb App Deployment Folder [2/2]
+    become_user: apmgr
+    file:
+      path: "{{ sachweb_oldfile }}"
+      state: absent
+    ignore_errors: yes
+    register: step3_part2
+    tags:
+      - CASDeployFull
+    when: step3_part1.changed
+
+  - name: Step 3 - Remove Old Bankweb App Deployment Folder [1/2]
+    become_user: apmgr
+    file:
+      path: "{{ bankweb_oldpath }}"
+      state: absent
+    ignore_errors: yes
+    register: step3_part3
+    tags:
+      - CASDeployFull
+    when: step3_part2.changed
+
+  - name: Step 3 - Remove Old Bankweb App Deployment Folder [2/2]
+    become_user: apmgr
+    file:
+      path: "{{ bankweb_oldfile }}"
+      state: absent
+    ignore_errors: yes
+    register: step3_complete
+    tags:
+      - CASDeployFull
+    when: step3_part3.changed
+
+# FOR CAS Services - Update Deployment New Files To Host - Step 4
+  - name: Step 4 - Update New Sachweb Deployment WAR File [1/2]
+    become_user: apmgr
+    copy:
+      src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/SACHWeb/ROOT.war'
+      dest: '{{ sachweb_newpath }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: step4_part1
+    tags:
+      - CASDeployFull
+    when: step3_complete.changed
+
+  - name: Step 4 - Update New Bankweb Deployment WAR File [2/2]
+    become_user: apmgr
+    copy:
+      src: '.{{ tmp_path }}/{{ newname }}/{{ newfilepath }}/BankWeb/ROOT.war'
+      dest: '{{ bankweb_newpath }}'
+      remote_src: yes
+    ignore_errors: yes
+    register: step4_complete
+    tags:
+      - CASDeployFull
+    when: step4_part1.changed

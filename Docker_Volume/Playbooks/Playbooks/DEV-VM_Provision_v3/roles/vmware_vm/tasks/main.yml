@@ -1,0 +1,34 @@
+---
+
+- name: retriev_pwd role
+  include_role:
+    name: retrieve_pwd
+    apply:
+      delegate_to: 127.0.0.1
+      become: false
+  vars:
+    username:  "{{ vcenter_username.split('@')[0] }}"
+
+- set_fact:
+    vcenter_password: "{{ pwd }}"
+
+
+- name: Set common config
+  set_fact:
+    vm_cpu: "2"
+    vm_ram: "2gb"
+    net_name/group port name: "{{ vm_network.split('-')[0]|replace(' ','') }}"
+    vm_template: ""
+    os_disk: "" 
+
+- debug: 
+    msg: "Gloden Image: {{ vm_template }}"
+
+
+- name: Manage folders
+  include_tasks: folders.yml
+
+- name: Create VMs
+  include_tasks: create_vm.yml
+
+

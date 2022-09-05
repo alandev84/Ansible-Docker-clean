@@ -1,0 +1,6 @@
+---
+- name: 2.3.3 Ensure talk client is not installed (Scored)
+  yum:
+    name: talk
+    state: absent
+

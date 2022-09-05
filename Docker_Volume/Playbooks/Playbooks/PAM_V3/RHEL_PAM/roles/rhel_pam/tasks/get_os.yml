@@ -1,0 +1,4 @@
+- name: Get the OS Family
+  set_fact:
+    os_type: "{{ ansible_facts['os_family'] }}"
+    cacheable: yes

@@ -1,0 +1,10 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\System\Currentcontrolset\Services\Lanmanserver\Parameters
+    name: RestrictNullSessAccess
+    data: "{{ cis_win2019_2_3_10_10.data }}"
+    state: "{{ cis_win2019_2_3_10_10.state|default('present') }}"
+    type: dword
+  register: result
+

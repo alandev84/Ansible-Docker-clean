@@ -1,0 +1,7 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  package:
+    name: setroubleshoot
+    state: present
+  when: "'setroubleshoot' not in ansible_facts.packages"

@@ -1,0 +1,16 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  service:
+    name: auditd
+    enabled: yes
+    state: started
+  check_mode: yes
+  failed_when: false
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: result['changed']
+

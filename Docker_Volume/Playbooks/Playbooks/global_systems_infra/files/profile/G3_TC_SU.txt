@@ -1,0 +1,3 @@
+PATH=/usr/sbin:/usr/bin:/usr/bin:/opt/CA/eTrustAccessControl/bin:/usr/ccs/bin:/usr/openwin/bin:/usr/dt/bin:/opt/CA/eTrustAccessControl:/usr/platform/sun4v/sbin:/opt/sun/bin:/opt/SUNWexplo/bin:/opt/SUNWsneep/bin:/opt/CTEact/bin:/usr/sbin:/usr/bin:/usr/local/bin:/opt/groovy/bin:/opt/sqlplus
+export PATH
+umask 007

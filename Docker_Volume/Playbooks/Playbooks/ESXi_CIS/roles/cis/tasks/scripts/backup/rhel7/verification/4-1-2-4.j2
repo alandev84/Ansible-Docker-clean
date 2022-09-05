@@ -1,0 +1,8 @@
+#!/usr/bin/bash -x
+
+
+grubby --info DEFAULT | grep -E 'args=(\S+\s+)*audit_backlog_limit={{ section04_parms['audit_backlog_limit'] }}\b' \
+|| \
+(echo "audit_backlog_limit is misconfigured" ; exit 1)
+
+

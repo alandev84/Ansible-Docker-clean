@@ -1,0 +1,157 @@
+---
+- name: CAS Deployment 
+  gather_facts: no
+  hosts: CAS_UAT_WEB
+  user: apmgr
+  ignore_errors: true
+  vars:
+    new_ver: RF-CASSY-XB_U01.00.35
+    old_ver: RF-CASSY-XB_U01.00.34
+    SACHWeb_deploy: false
+    BankWeb_deploy: false
+    CASBatch_deploy: true
+    ReportTemplate_deploy: true
+
+  tasks:
+    - name: Copy Package to Server
+      copy:
+        src: /var/tmp/{{ new_ver }}.tar
+        dest: /casapp/appshare/deployment/UAT/{{ new_ver }}.tar
+
+    - name: Unzip Deployment Package
+      unarchive:
+        src: /casapp/appshare/deployment/UAT/{{ new_ver }}.tar
+        dest: /var/tmp/
+        remote_src: yes
+
+    - name: Create Folders and Directory
+      file:
+        path: /casapp/appshare/deployment/archive/{{ old_ver }}/{{ item }}
+        state: directory
+      loop:
+         - appfc_conf_svr1
+         - appfc_conf_svr2
+         - appfc_program_svr1
+         - appfc_program_svr2
+         - appfc_script_svr1
+         - appfc_script_svr2
+         - appfc_htmlhome_svr1
+         - appfc_htmlhome_svr2
+      when: "'UPCASWEBSVC1' in inventory_hostname"
+
+    - name: Backup Appfc Configurations server 1 
+      copy:
+        src: /casapp/appfc/conf
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_conf_svr1
+        remote_src: yes
+      when: "'UPCASWEBSVC1' in inventory_hostname"
+
+    - name: Backup Appfc Configurations server 2 
+      copy:
+        src: /casapp/appfc/conf
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_conf_svr2
+        remote_src: yes
+      when: "'UPCASWEBSVC2' in inventory_hostname"
+
+    - name: Backup Program Configurations server 1
+      archive:
+        path:
+          - /casapp/appfc/program
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_program_svr1/program_svr1.tgz
+      when: "'UPCASWEBSVC1' in inventory_hostname"
+
+    - name: Backup Program Configurations server 2
+      archive:
+        path:
+          - /casapp/appfc/program
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_program_svr2/program_svr2.tgz
+      when: "'UPCASWEBSVC2' in inventory_hostname"
+
+    - name: Backup Scripts in Server Instance 1
+      copy:
+        src: /casapp/appfc/script
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_script_svr1
+        remote_src: yes
+      when: "'UPCASWEBSVC1' in inventory_hostname"
+
+    - name: Backup Scripts in Server Instance 2
+      copy:
+        src: /casapp/appfc/script
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_script_svr2
+        remote_src: yes
+      when: "'UPCASWEBSVC2' in inventory_hostname"
+
+    - name: Backup HTML in Server Instance 1
+      copy:
+        src: /casapp/appfc/htmlhome
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_htmlhome_svr1
+        remote_src: yes
+      when: "'UPCASWEBSVC1' in inventory_hostname"
+
+    - name: Backup HTML in Server Instance 2
+      copy:
+        src: /casapp/appfc/htmlhome
+        dest: /casapp/appshare/deployment/archive/{{ old_ver }}/appfc_htmlhome_svr2
+        remote_src: yes
+      when: "'UPCASWEBSVC2' in inventory_hostname"
+
+    - name: Remove Old Sachweb App Deployment folder
+      file:
+        path: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/ROOT
+        state: absent
+      when: SACHWeb_deploy
+
+    - name: Remove Old Sachweb App Deployment war file
+      file:
+        path: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/ROOT.war
+        state: absent
+      when: SACHWeb_deploy
+
+    - name: Remove Old Bankweb App Deployment folder
+      file:
+        path: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/ROOT
+        state: absent
+      when: BankWeb_deploy
+
+    - name: Remove Old Bankweb App Deployment war file
+      file:
+        path: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/ROOT.war
+        state: absent
+      when: BankWeb_deploy
+
+    - name: Copy New Sachweb Deployment war file
+      copy:
+        src: /var/tmp/{{ new_ver }}/SACHWeb/ROOT.war
+        dest: /opt/appserver/sachweb/jws-3.1/share/tomcat8/webapps/
+        remote_src: yes
+      when: SACHWeb_deploy
+
+    - name: Copy New Bankweb Deployment war file
+      copy:
+        src: /var/tmp/{{ new_ver }}/BankWeb/ROOT.war
+        dest: /opt/appserver/bankweb/jws-3.1/share/tomcat8/webapps/
+        remote_src: yes
+      when: BankWeb_deploy
+
+    - name: Remove old batch utils
+      file:
+        path: /casapp/appfc/conf/casbatch/CASBatchJob-2.0.jar
+        state: absent
+      when: CASBatch_deploy
+
+    - name: Copy New Batch jar file
+      copy:
+        src: /var/tmp/{{ new_ver }}/CASBatch/CASBatchJob-2.0.jar
+        dest: /casapp/appfc/conf/casbatch/
+        remote_src: yes
+      when: CASBatch_deploy
+
+    - name: Copy New Report Template file
+      copy:
+        src: /var/tmp/{{ new_ver }}/reportTemplates/{{ item }}
+        dest: /casapp/appfc/conf/casbatch/reportTemplates/
+        remote_src: yes
+      loop:
+        - CASBill353.jasper
+      when: ReportTemplate_deploy
+...

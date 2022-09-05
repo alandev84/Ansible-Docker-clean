@@ -1,0 +1,42 @@
+---
+
+# set the task result as failed
+- name: init cis_result value as false
+  set_fact:
+    cis_result: false
+ 
+# create work diretory on the managed server
+- name: Create temporary file
+  tempfile:
+    state: file
+    suffix: temp
+  register: tempfile_1
+
+# create the shell script under work diretory on the managed server
+- name: Create script
+  template:
+    src: "./scripts/{{  execution_path }}.j2"
+    dest: "{{ tempfile_1.path }}"
+    mode: 0755
+
+# run the shell script on the managed server
+- name: run verification script for "{{ cis_rules[cis_item]['name'] }}"
+  shell: "{{ tempfile_1.path }}"
+  become: yes
+  changed_when: false
+  failed_when: false
+  register: script_result
+
+# set task result as successful when return code is zero
+- name: set result
+  set_fact:
+    cis_result: true
+  when: script_result['rc'] == 0
+
+# delete work diretory on the managed server
+- name: Delete temparory file
+  file:
+    path: "{{ tempfile_1.path }}"
+    state: absent
+
+

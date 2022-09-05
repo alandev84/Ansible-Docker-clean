@@ -1,0 +1,82 @@
+---
+- name: show u2
+  ios_command: 
+    commands: show run | inc username
+  register: output3
+
+- name: show u3
+  ios_command: 
+    commands: show run | inc {{current_user}}
+  loop: "{{privilage_users}}"
+  loop_control: 
+    loop_var: current_user
+  register: test
+
+# Split for per customer
+- name: set value 
+  set_fact: 
+    output12: "{{output3.stdout[0].split('\n')}}"
+    cacheable: false 
+
+
+- name: Check if customer is privilage or not. 
+  set_fact:
+    user_username: "{{[item.split(' ')[1]] }}"
+    priv: "{{ mypriv }}"
+    is_privilege: "{{is_privilege}} + [ '{{item.split(' ')[1]}}, {% if mypriv == 'privilege' %}True{% else %}False{% endif %}'] "
+    cacheable: yes
+  vars:
+    mypriv: "{{ item.split(' ')[2] }}"
+  loop: "{{ output12 }}"
+  delegate_to: localhost
+
+- debug: 
+    var: is_privilege
+
+- debug: 
+    var: output_lines
+
+- name: Build a list of hashes from the output
+  set_fact:
+    cisco_user_information: "{{ [ { 'user': item.split(' ')[1], 'privilege': mypriv } ] }}"
+    cacheable: false
+  vars:
+    mypriv: "{% if item.split(' ')[2] == 'privilege' %}True{% else %}False{% endif %}"
+  loop: "{{ output_lines }}"
+  delegate_to: localhost
+
+- debug: 
+    var: cisco_user_information
+
+# - name: Build a list of hashes from the output
+#   set_fact:
+#     users_listofhashes: "{{ users_listofhashes|default([]) + [ { 'user': item.split(' ')[1], 'privilege': mypriv } ] }}"
+#     cacheable: false
+#   vars:
+#     mypriv: "{% if item.split(' ')[2] == 'privilege' %}True{% else %}False{% endif %}"
+#   loop: "{{ output_lines }}"
+#   delegate_to: localhost
+
+
+
+
+
+
+
+- name: Get individual user name 
+  set_fact:
+    name_individual:  "{{ [item.split(' ')[1]] }}"
+    cacheable: false 
+  loop: "{{output12}}"
+
+
+
+# - name: Print the entire list of hashes
+#   debug:
+#    var: users_listofhashes
+    
+# - name: Print host,user,privilege from list of hashes
+#   debug:
+#     msg: "{{ inventory_hostname }},{{ item.user }},{{ item.privilege }}"
+#   when: privilage_users is defined
+#   loop: "{{ users_listofhashes |list}}"

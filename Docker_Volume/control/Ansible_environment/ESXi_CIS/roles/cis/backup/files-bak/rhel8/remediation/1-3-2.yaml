@@ -1,0 +1,22 @@
+---
+
+- name: 1.3.2 Ensure sudo commands use pty (Scored)
+  block:
+  - name: 1.3.2 Ensure sudo commands use pty (Scored) - search config
+    command: grep -Er '^\s*Defaults\s+([^#]+,\s*)?use_pty\s*=' /etc/sudoers /etc/sudoers.d
+    register: use_pty
+    changed_when: false
+    failed_when: false
+
+  - name: 1.3.2 Ensure sudo commands use pty (Scored) - write config
+    lineinfile:
+      dest: /etc/sudoers.d/{{ cis_rhel8_sudoers_file }}
+      line: "Defaults use_pty"
+      state: present
+      owner: root
+      group: root
+      mode: 0400
+      create: true
+    when:
+      - use_pty.rc == 1
+

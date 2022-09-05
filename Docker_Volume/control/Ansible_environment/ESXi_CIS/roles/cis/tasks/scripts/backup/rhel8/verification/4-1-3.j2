@@ -1,0 +1,14 @@
+#!/bin/sh
+
+grep -Er '^-w\s+/etc/sudoers\s+-p\s+wa\s+-k\s+scope\s*' /etc/audit/rules.d/*.rules \
+&& \
+grep -Er '^-w\s+/etc/sudoers.d/\s+-p\s+wa\s+-k\s+scope\s*' /etc/audit/rules.d/*.rules \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/sudoers\s+-p\s+wa\s+-k\s+scope\s*' \
+&& \
+auditctl -l | grep -E '^-w\s+/etc/sudoers.d\s+-p\s+wa\s+-k\s+scope\s*' \
+|| \
+(echo "did not audit sudo files" ; exit 1)
+
+
+

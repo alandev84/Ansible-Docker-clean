@@ -1,0 +1,7 @@
+---
+
+
+- name: Create VMs
+  include_tasks: create_vm.yml
+
+

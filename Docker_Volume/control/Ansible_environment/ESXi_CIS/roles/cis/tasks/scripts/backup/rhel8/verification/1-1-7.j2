@@ -1,0 +1,6 @@
+#!/bin/sh
+
+
+mount | grep '\s/var/tmp\s' | grep "^/dev/\S\+\s\+on\s\+/var/tmp\s\+type\s\+xfs\s\+(rw,nosuid,nodev,noexec,relatime)$" \
+|| \
+(mount | grep '\s/var/tmp\s' ; exit 1)

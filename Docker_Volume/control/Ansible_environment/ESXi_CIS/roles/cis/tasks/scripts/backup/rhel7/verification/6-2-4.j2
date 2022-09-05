@@ -1,0 +1,12 @@
+#!/bin/bash
+  
+line1=`awk -F: -v GID="$(awk -F: '($1=="shadow") {print $3}' /etc/group)" '($4==GID) {print $1}' /etc/passwd | sed '/^\s*$/d'`
+
+
+line2=`awk -F: '($1=="shadow") {print $NF}' /etc/group | sed '/^\s*$/d'`
+
+[ `echo -n ${line1} | wc -l` -gt 0 ] && exit 1 
+[ `echo -n ${line2} | wc -l` -gt 0 ] && exit 1
+
+exit 0
+

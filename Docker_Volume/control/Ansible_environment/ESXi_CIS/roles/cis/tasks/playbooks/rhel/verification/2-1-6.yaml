@@ -1,0 +1,27 @@
+---
+  
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: false
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  block:
+    - name: "{{ cis_rules[cis_item]['name'] }} -- search core config"
+      command: grep -Erl '^\s*\*\s+hard\s+core\s+0\s*$' /etc/security/limits.conf /etc/security/limits.d
+      register: hard_core
+      failed_when: false
+      changed_when: false
+
+    - name: "{{ cis_rules[cis_item]['name'] }} -- search suid dumpable config"
+      command: grep -Erl '^\s*fs\.suid_dumpable\s*=\s*0$' /etc/sysctl.conf /etc/sysctl.d
+      register: suid_dumpable
+      failed_when: false
+      changed_when: false
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: true
+  when: 
+    - hard_core.rc == 0
+    - suid_dumpable.rc == 0
+

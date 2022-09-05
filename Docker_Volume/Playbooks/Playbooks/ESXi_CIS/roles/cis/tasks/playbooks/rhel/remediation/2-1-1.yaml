@@ -1,0 +1,10 @@
+---
+
+#- debug:
+#    msg: "{{ ansible_facts.packages }}"
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  yum:
+    name: sudo
+    state: installed
+  when: "'sudo' not in ansible_facts.packages"

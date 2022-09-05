@@ -1,0 +1,8 @@
+---
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  service:
+    name: rsyslog
+    state: started
+    enabled: true
+  when: "'rsyslog' in ansible_facts.packages"

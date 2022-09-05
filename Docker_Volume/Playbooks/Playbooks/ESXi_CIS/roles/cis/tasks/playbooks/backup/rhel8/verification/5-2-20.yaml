@@ -1,0 +1,22 @@
+---
+
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+- name: 5.2.20 Ensure system-wide crypto policy is not over-ridden (Scored)
+  lineinfile:
+    dest: /etc/sysconfig/sshd
+    regexp: "^\\s*CRYPTO_POLICY\\s*=\\s*.*$"
+    state: absent
+  check_mode: true
+  ignore_errors: true
+  register: result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when:
+    - not result['failed']
+    - result['changed']
+

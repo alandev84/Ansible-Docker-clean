@@ -1,0 +1,9 @@
+hpovo_src: ./files/OA_12.12_Linux_rezip.zip
+hpovo_dest: /root/OA_12.12_Linux_rezip.zip
+hpovo_unzip_path: /root/OA_12.12_Linux_rezip
+hpovo_root_path: /root
+cmd_hpovo_remove: /opt/OV/bin/OpC/install/oainstall.sh -r -a -clean
+cmd_hpovo_install: /root/OA_12.12_Linux_rezip/OA_12.12_Linux/oainstall.sh -i -a -srv pdwinfsysomw1
+cmd_hpovo_gen_cert: /opt/OV/bin/ovcert -certreq
+cmd_hpovo_setpara1: /opt/OV/bin/ovconfchg -ns sec.cm -set ASYMMETRIC_KEY_LENGTH 4096
+cmd_hpovo_setpara2: /opt/OV/bin/ovconfchg -ns sec.core -set HASH_ALGO eSHA256

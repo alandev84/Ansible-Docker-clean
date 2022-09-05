@@ -1,0 +1,5 @@
+#!/bin/sh
+
+grep -E "^(server|pool)" /etc/chrony.conf  \
+|| \
+(echo 'There is no pool or server in /etc/chrony.conf' ; exit 1)

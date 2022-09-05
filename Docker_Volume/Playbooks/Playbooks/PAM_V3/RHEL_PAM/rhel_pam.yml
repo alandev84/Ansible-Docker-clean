@@ -1,0 +1,19 @@
+---
+- name: RHEL 7 Privilege Account Management System
+  hosts: redhat_servers
+  gather_facts: true
+  ignore_unreachable: yes
+  roles:
+    - rhel_pam
+
+
+
+
+
+
+
+
+
+
+
+

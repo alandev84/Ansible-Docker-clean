@@ -1,0 +1,7 @@
+---
+- name: 2.2.2 Ensure X Window System is not installed (Scored)
+  yum:
+    name: xorg-x11-server*
+    state: absent
+  failed_when: false
+

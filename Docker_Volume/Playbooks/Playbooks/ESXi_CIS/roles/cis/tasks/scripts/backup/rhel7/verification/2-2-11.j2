@@ -1,0 +1,6 @@
+#!/bin/sh
+
+! (rpm -q samba)  \
+|| \
+(echo 'samba is installed' ; exit 1)
+

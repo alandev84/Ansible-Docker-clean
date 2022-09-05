@@ -1,0 +1,9 @@
+---
+
+- name: 6.1.7 Ensure permissions on /etc/shadow- are configured (Scored)
+  file:
+    dest: /etc/shadow-
+    owner: root
+    group: root
+    mode: 0600
+

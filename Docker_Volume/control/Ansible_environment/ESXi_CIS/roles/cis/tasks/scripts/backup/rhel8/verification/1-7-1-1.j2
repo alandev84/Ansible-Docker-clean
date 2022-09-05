@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rpm -q libselinux \
+|| \
+(echo 'libselinux package is not installed.' ; exit 1)

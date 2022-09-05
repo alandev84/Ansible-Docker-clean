@@ -1,0 +1,8 @@
+---
+
+- name: 2.2.7 Ensure DNS Server is not installed (Scored)
+  yum:
+    name: bind
+    state: absent
+
+

@@ -1,0 +1,12 @@
+---
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  win_regedit:
+    path: HKLM:\Software\Microsoft\Windows\Currentversion\Policies\System
+    name: EnableVirtualization
+    data: "{{ cis_win2019_2_3_17_8.data }}"
+    state: "{{ cis_win2019_2_3_17_8.state|default('present') }}"
+    type: dword
+  register: result
+
+- debug: var=result
+

@@ -1,0 +1,19 @@
+---
+env: dev
+
+get_cisco_user_data: 
+ gid: []
+ sid: []
+ creation_date: []
+ acc_status: []
+ last_login_date: []
+ last_pwd_change: []
+ privilege_status: []
+ os_type: []
+
+
+#cisco_switch_user_information: []
+
+
+
+

@@ -1,0 +1,22 @@
+---
+- name: init cis_result value as FAIL
+  set_fact:
+    cis_result: true
+
+
+- name: "{{ cis_rules[cis_item]['name'] }}"
+  template:
+    src: "{{ os }}/etc/motd.j2"
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+  check_mode: yes
+  failed_when: false
+  register: motd_file_result
+
+- name: Reset cis_result value
+  set_fact:
+    cis_result: false
+  when: motd_file_result['changed']
+
